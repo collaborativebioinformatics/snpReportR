@@ -1,0 +1,17 @@
+---
+title: "Expressed Variant Reporting"
+author: "Jenny Leopoldina Smith"
+date: "1/6/2021"
+html_document:
+    toc: true
+    toc_depth: 3
+    number_sections: true
+---
+
+# Set-up 
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
