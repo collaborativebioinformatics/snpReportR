@@ -33,3 +33,7 @@ Flow Chart
 
 Working flow chart link
 https://docs.google.com/presentation/d/1GwtkY6gtXj9l-k23cuZHhgFGPFtRZ0RkTLCqfZa2p-o/edit?usp=sharing
+
+SNPReprter creates two reports. The first report is aimed at patients, non-specialist clinicians. The second report is aimed for genetic researchers.
+
+
