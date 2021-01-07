@@ -1,6 +1,6 @@
 # expressed-variant-reporting
 
-![](image.png)
+![](https://github.com/collaborativebioinformatics/expressed-variant-reporting/blob/main/snpReportR_logo.tif)
 
 # Contributors
 
