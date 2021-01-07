@@ -23,10 +23,10 @@ The SNP-ReportR tool was developed to be implemented in a clinical setting to in
   
 SNP-ReportR is available on GitHub(https://github.com/collaborativebioinformatics/expressed-variant-reporting). The repository provides detailed instructions for tool usage and installation. 
 
-Inputs
+## Inputs
 https://docs.google.com/spreadsheets/d/1pcB_bI_83B__sJ_Qw3tYDUhAYTz7Bh9SBvxjMzd8L4U/edit?usp=sharing
 
-Outputs
+## Outputs
 Example clinical/patient report
 https://github.com/collaborativebioinformatics/expressed-variant-reporting/blob/main/genetic-report-2.pdf
 
