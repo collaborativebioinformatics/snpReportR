@@ -26,7 +26,9 @@ SNP-ReportR is available on GitHub(https://github.com/collaborativebioinformatic
 Inputs
 https://docs.google.com/spreadsheets/d/1pcB_bI_83B__sJ_Qw3tYDUhAYTz7Bh9SBvxjMzd8L4U/edit?usp=sharing
 
-
+Outputs
+Example clinical/patient report
+https://github.com/collaborativebioinformatics/expressed-variant-reporting/blob/main/genetic-report-2.pdf
 
 # Operation
 
