@@ -1,10 +1,10 @@
 # expressed-variant-reporting
 
-## SNP ReportR
+# SNP ReportR
 
 
 # Flow Chart
-![](image.png)
+![](https://github.com/collaborativebioinformatics/expressed-variant-reporting/blob/main/Screen%20Shot%202021-01-06%20at%207.56.11%20PM.png)
 
 # Inputs
 https://docs.google.com/spreadsheets/d/1pcB_bI_83B__sJ_Qw3tYDUhAYTz7Bh9SBvxjMzd8L4U/edit?usp=sharing
