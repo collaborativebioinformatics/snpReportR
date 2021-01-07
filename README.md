@@ -3,6 +3,9 @@
 ![](https://github.com/collaborativebioinformatics/expressed-variant-reporting/blob/main/snpReportR.png)
 
 # Contributors
+Jenny Smith
+Brandon Michael Blobner
+Ahmad Al Khleifat
 
 
 # Goal
