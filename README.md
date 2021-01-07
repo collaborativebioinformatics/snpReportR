@@ -6,7 +6,7 @@
 
 
 # Goal
-Develop a tool to facilitate genetic reporting, which takes as input a gene name or id and produces a report file that informs the user of all genetic variants overlapping the gene, including any non-coding regulatory elements affecting expression of the gene.
+Develop a tool to facilitate genetic reporting, which takes as input a vcf file and gene name or id (optional) and produces a report file that informs the user of all genetic variants overlapping the gene, including any non-coding regulatory elements affecting expression of the gene.
 
 The tool generates two reports, one is aimed for clinical use and the second aimed for researchers, informing the interpretation of genetic variants pertaining to the gene provided by the user.
 
@@ -19,7 +19,7 @@ There are several practical challenges when processing NGS data. For example, 40
 # Methods
 
 # Implementation
-The SNP-ReportR tool was developed to be implemented in a clinical setting to inform the interpretation of genetic variants. SNP-ReportR software is an open access, gene centric data browser for genetic analysis. SNP-ReportR is a package developed using R. After entering the gene name (HGNC, Ensembl gene (ENSG), or transcript SNP-ReprteR will produce a comprehensive genetic report.  SNP-ReportR output includes a summary of expressed variants found in the gene, RIN score, allowing both clinicians and researchers to assess the accuracy of the report. Furthermore, SNP-ReportR provides visualisation of associated haplotype, gene location, and the reported chromosomal abnormalities.  
+The SNP-ReportR tool was developed to be implemented in a clinical setting to inform the interpretation of genetic variants. SNP-ReportR software is an open access, gene centric data browser for genetic analysis. SNP-ReportR is a package developed using R. After entering the gene name (HGNC, Ensembl gene (ENSG), or transcript SNP-ReportR will produce a comprehensive genetic report.  SNP-ReportR output includes a summary of expressed variants found in the gene, RIN score, allowing both clinicians and researchers to assess the accuracy of the report. Furthermore, SNP-ReportR provides visualisation of associated haplotype, gene location, and the reported chromosomal abnormalities.  
   
 SNP-ReportR is available on GitHub(https://github.com/collaborativebioinformatics/expressed-variant-reporting). The repository provides detailed instructions for tool usage and installation. 
 
