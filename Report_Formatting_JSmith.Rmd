@@ -8,10 +8,107 @@ html_document:
     number_sections: true
 ---
 
+
 # Set-up 
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+require(knitr)
+knitr::opts_knit$set(root.dir = here::here())
+
+
+knitr::opts_chunk$set(tidy.opts=list(width.cutoff=50),
+                      tidy=TRUE,
+                      fig.align='center',
+                      fig.width = 5, fig.height = 5)
+
+getwd()
 ```
 
+```{r}
+library(dplyr)
+library(magrittr)
+library(tidyr)
+library(stringr)
+library(here)
+suppressPackageStartupMessages(library(VariantAnnotation))
+```
+
+#About the test
+
+
+
+
+# Variant Calls 
+
+grch38, and the annotation I used is gencode v22
+duplicate keys in header will be forced to unique rownamesduplicate keys in header will be forced to unique rownames
+```{r}
+vcf <- readVcf(here("Data/variants.HC_hard_cutoffs_applied.cancer.vcf"))
+
+
+# head(vcf)
+str(vcf)
+```
+
+#Results Table 
+
+Gene ID
+Phenotype
+Frequency in controls
+Frequency in cases
+Gene variants
+Classification
+
+
+```{r}
+
+```
+
+
+#Chromosome and Gene Vizualization of Mutations
+
+```{r}
+
+```
+
+
+#Expression of Genes with Mutations 
+
+```{r}
+
+```
+
+
+# What this results means for you 
+
+```{r}
+
+```
+
+# More information 
+
+Add QR code
+where does it go?
+
+# Important Considerations
+
+Need to protect PII/PHI!
+How to add security?? 
+
+de-identified information critical 
+
+# Genome References and Software
+
+Can we automate this somehow?
+
+```{r}
+
+```
+
+
+#SessionInfo
+
+```{r}
+sessionInfo()
+```
 
