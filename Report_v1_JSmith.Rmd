@@ -1,18 +1,18 @@
 ---
 title: "Expressed Variant Reporting"
 author: "Brandon Michael Blobner, Jenny Leopoldina Smith, Ahmad Al Khleifat"
-date: "1/6/2021"
+date: "1/8/2021"
 output:
   html_document:
+    theme: yeti
+    highlight: breezedark
     always_allow_html: yes
     toc: true
     toc_float: true
     toc_depth: 3
     number_sections: true
     fig_caption: true
-    theme: darkly
-    highlight: tango
-    df_print: paged
+
 runtime: shiny
 ---
 
@@ -50,26 +50,30 @@ suppressPackageStartupMessages(library(VariantAnnotation))
 
 # About The Test: Variant Detection from RNA-seq
 
+
+![snpReportR](snpReporter_logo.png)
+
+
+
 ```{r echo=FALSE, message=FALSE, warning=FALSE}
-knitr::kable(data.frame("Information"=c("Name:", 
+pt.info <- data.frame("Information"=c("Name:", 
                                         "DOB:",
                                         "Sex:",
                                         "Sample Type:"), 
-                        "Value"=c("Jane Doe","01/01/1900","F","RNA")), 
-             caption = "Patient details:", align = "l") %>% 
-  kableExtra::kable_paper("hover", full_width = F, position = "float_left")
-```
-
-```{r echo=FALSE, message=FALSE, warning=FALSE}
-knitr::kable(data.frame("Information"=c("Name:", 
+                        "Value"=c("Jane Doe","01/01/1900","F","RNA"))
+dr.info <- data.frame("Information"=c("Name:", 
                                         "Doctor identification number:",
                                         "Hospital:"), 
-                        "Value"=c("Dr.X", "12345", "NCI")), 
-             caption = "Test ordered by:", align="l") %>% 
-  kableExtra::kable_paper("hover", full_width = F, position = "float_right")
+                        "Value"=c("Dr.X", "12345", "NCI"))
+                      
+                      
+knitr::kable(pt.info, caption = "Patient details:",align="l") %>% 
+  kableExtra::kable_paper(full_width = F, position = "left")
+
+knitr::kable(dr.info, caption = "Test ordered by:", align="l") %>% 
+  kableExtra::kable_paper(full_width = F, position = "float_left")
 ```
 
-![Caption for the picture.](snpReporter_logo.png)
 
 ```{r echo=FALSE, message=FALSE, results="hide"}
 #https://gist.github.com/sephraim/3d352ba4893df07a2c35d8f227ab17ac
@@ -95,25 +99,25 @@ header_data <- suppressMessages(VariantAnnotation::header(vcf.s4))
 SampleName <- header_data@samples
 ```
 
-```{r echo=F}
-cat(paste0("Hi ", SampleName, ","), "This document will help you to understand the more important findings from a gene variant screening. The common definitions of the type of genetic variants (mutations) are described in the figure. While a variant may have been detected, the associations with the variant are not perfectly causal and their complex interactions between biology and the environment.")
-```
+This document will help you to understand the more important findings from a gene variant screening. The common definitions of the type of genetic variants (mutations) are described in the figure and in the table in section `Chromosome and Gene Vizualization of Mutations`. 
 
-`insert link to diagram here`
+While a variant may have been detected, the associations with the variant are not perfectly causal and their complex interactions between biology and the environment.
+
 
 ***
 
 # About the Dataset
 
 ```{r echo=FALSE, fig.cap="Table 1. Column names and Descriptions"}
-header_info <- info(header(vcf.s4)) %>% 
+header_info <- info(header_data) %>% 
   as.data.frame()
 
 # class(header_info)
 # str(header_info)
 # header_info
 
-DT::datatable(header_info)
+DT::datatable(header_info, class = 'cell-border stripe', 
+              caption="Table 1. Column names and descriptions for the CTAT Mutation Pipeline Results.")
 ```
 
 ```{r echo=FALSE, results='hide'}
@@ -127,6 +131,28 @@ functional_annots_names <- functional_annots_names[-length(functional_annots_nam
 # functional_annots_names
 # length(functional_annots_names) #15
 ```
+
+In addition there are functional annotations for the variants per  transcript from snpEFF. These include:
+
+* "Annotation_Impact"   
+* "Feature_Type"        
+* "Transcript_BioType"   
+* "Rank"                
+* "HGVS.c"
+* "HGVS.p"
+* "cDNA.pos/cDNA.length"
+* "CDS.pos/CDS.length"  
+* "AA.pos/AA.length"
+* "Distance" 
+
+
+The top variants were ranked by the following attributes:
+
+* FATHMM predicted pathogenicty or splice adjacent
+* genes with larger number of SNVs prioritized
+* high or moderate impact on the structure of the gene 
+* CADD Score/Polyphen Score (not done yet)
+
 
 ```{r echo=FALSE, results='hide', warning=FALSE}
 # https://www.biostars.org/p/226965/
@@ -159,8 +185,10 @@ variants.df <- vcf.df %>%
          coding_DNA_change_1=HGVS.c_1, 
          protein_change_1=HGVS.p_1,
          -ANN, everything(), ANN) %>% 
-  dplyr::filter(!is.na(FATHMM) | !is.na(SPLICEADJ) | grepl("High|Moderate",Annotation_Impact_1)) %>%
-  dplyr::filter(grepl("coding", ignore.case = T, Transcript_BioType_1)) %>%
+  dplyr::filter(grepl("PATHOGENIC", FATHMM) | !is.na(SPLICEADJ)) %>%  
+  dplyr::filter(grepl("HIGH|MODERATE",Annotation_Impact_1) | !is.na(SPLICEADJ)) %>%
+
+
   dplyr::filter(VEST_FDR > 0.5 | is.na(VEST_FDR )) %>%
   dplyr::filter(CHASM_FDR > 0.5 | is.na(CHASM_FDR )) %>%
   arrange(desc(FATHMM), desc(Number_SNVs_per_Gene), Annotation_Impact_1)
@@ -169,16 +197,91 @@ variants.df <- vcf.df %>%
 
 
 head(variants.df)
-dim(variants.df) #1411   89
+dim(variants.df) #34
+length(unique(variants.df$GENE))
 # write.csv(variants.df, "Variants_df.csv", row.names = FALSE)
+# table(variants.df$Annotation_Impact_1)
 ```
+
+```{r echo=FALSE, message=FALSE}
+types <- variants.df %>% 
+  dplyr::group_by(FATHMM, SPLICEADJ,Annotation_Impact_1) %>% 
+  summarize(Number_of_Genes=n()) %>%
+  ungroup() 
+
+
+DT::datatable(types,class = 'cell-border stripe', caption = "Table 2. Summary of Expressed Genetic Variants with potential for Pathegenicity.")
+# ggplot(variants.df,aes(x=Classification, Y) )
+```
+
+A total of 34 variants across 33 genes were identified that met this criteria for further evaluation. 
 
 ***
 
-# HumanMine Annotation for Further dplyr::filtering and Results 
+# HumanMine Annotation for Further Results 
 
--highly expressed in RNAseq 
-- not highly expressed in normal tissues 
+HumanMine annotations for these 34 genes were queried from the HumanMine database API. 
+
+```{r echo=FALSE, results="hide"}
+library(InterMineR)
+source(here::here("HumanMine_query_functions.R"))
+source(here::here("query_get_and_filter_function.R"))
+```
+
+```{r echo=FALSE}
+genes <- variants.df %>% 
+  dplyr::slice(1:5) %>% 
+  pull(GENE) %>% 
+  unique()
+
+message("Retrieving Annotations for Genes.")  
+annots <- query_get_and_filter(gene.names=genes)
+```
+
+```{r echo=FALSE}
+# str(annots)
+# length(annots)
+# names(annots)
+```
+
+```{r echo=FALSE}
+gene.expn.regex <- paste(paste(genes,"Top.Expression", sep="."), collapse = "|")
+top.gene.expn <- annots[grep(gene.expn.regex, names(annots))] %>% 
+  bind_rows()
+  # mutate(GENE=rep(genes, each=5)) %>% 
+  # dplyr::select(GENE, everything())
+# head(top.gene.expn)
+
+DT::datatable(top.gene.expn, class = 'cell-border stripe', 
+              caption="Table 3. Expression of Gene in Various Tissues from Top Variant Hits")
+```
+
+```{r  fig.width=10, fig.height=15, echo=FALSE, fig.cap="Expression of Genes with identified variants/SNVs in Normal Tissues."}
+gene.expn.val.regex <- paste(paste(genes,"Expression", sep="."), collapse = "|")
+top.gene.expn.val <- annots[grep(gene.expn.val.regex, names(annots))] %>% 
+  bind_rows()
+
+# head(top.gene.expn.val)
+bar.plot <- ggplot(top.gene.expn.val, 
+       aes(x=Gene.rnaSeqResults.tissue, 
+           y=Gene.rnaSeqResults.expressionScore, 
+           fill=Gene.rnaSeqResults.tissue)) +
+  geom_col() +
+  coord_flip() +
+  facet_wrap(~Gene.symbol) +
+  theme_classic() +
+  labs(x="Tissue", y="Expression Score", title="Expression in Normal Tissues") +
+  theme(panel.border = element_rect(color="black", fill=NA), 
+        strip.text = element_text(size=16, face="bold"), 
+        axis.text.y = element_text(angle = 25, hjust=1, vjust=1,size=10),
+        axis.text.x = element_text(angle = 25, hjust=1, vjust=1), 
+        legend.position = "top",
+        legend.text = element_text(size=16))
+  
+bar.plot
+```
+
+
 
 References:
 *Smith RN, et al. InterMine: a flexible data warehouse system for the integration and analysis of heterogeneous biological data. Bioinformatics. 2012 Dec 1;28(23):3163-5.*
@@ -189,30 +292,26 @@ References:
 
 Included here are two tables for different gene types. Coding refers to genes that produce proteins, while non-coding refers to genes which do get utilized to produce proteins.   
 
-The top variants were ranked by the following attributes:
-  * FATHMM predicted pathogenicty
-  * genes with larger number of SNVs prioritized
-  * pathogenicity, or splice adjacent
-  * high or moderate impact on the structure of the gene 
-  * CADD Score/Polyphen Score 
-
 
 ## Coding Genes
 
-```{r echo=FALSE, fig.cap="Table 2. Protein Coding Variants, possibly pathogenic"}
+```{r echo=FALSE}
 DT::datatable(dplyr::filter(variants.df,
                      Transcript_BioType_1 == "Coding") %>%
                 dplyr::select(GENE:protein_change_1,protein_change_1) %>%
                 dplyr::slice(1:10),
-               class = 'cell-border stripe')
+               class = 'cell-border stripe', 
+              caption = "Table 4. Protein Coding Variants, possibly pathogenic.")
 ```
 
 ## Non-Coding Genes
 
-```{r echo=FALSE, fig.cap="Table 3. Non-Coding Variants, possibly pathogenic"}
+```{r echo=FALSE}
 DT::datatable(dplyr::filter(variants.df,
                      Transcript_BioType_1 == "Noncoding") %>%
-                dplyr::select(GENE:protein_change_1,protein_change_1),class = 'cell-border stripe')
+                dplyr::select(GENE:protein_change_1,protein_change_1),
+              class = 'cell-border stripe', 
+              caption = "Table 5. Non-Coding Variants, possibly pathogenic")
 ```
 
 ***
@@ -223,23 +322,37 @@ DT::datatable(dplyr::filter(variants.df,
 suppressPackageStartupMessages(library(Gviz))
 suppressPackageStartupMessages(library(GenomicRanges))
 options(ucscChromosomeNames=FALSE)
+source(here::here("Gviz_tracks.R"))
+```
+
+```{r echo=FALSE}
+knitr::kable(data.frame("Type"=c("coding:",
+                                 "5prime_UTR:",
+                                 "3prime_UTR:",
+                                 "introninc:", 
+                                  "splice:",
+                                 "synonymous_variant:",
+                                 "missense_variant:", 
+                                 "start/stop:"), 
+                        "Description"=c("Mutation is within a coding region",
+                                        "Mutation is within 5’ untranslated region",
+                                        "Mutation is with 3’ untranslated region",
+                                        "Mutation is with an intron region", 
+                                        "Mutation is within proximity to a splice-site.",
+                                        "Synonymous variant is a mutation in an exon that results in same amino acid (changed codon)", 
+                                        "Missense variant is a mutation in an exon that results in a different amino acid (changed codon)",
+                                        "Mutation is within a start/stop codon.")), 
+             caption = "Table 6. Types of Expressed Variants", align = "l") %>% 
+  kableExtra::kable_paper("hover", full_width = F, position = "float_left")
 ```
 
 
-Location     Details
-coding    falls within a coding region
-fiveUTR     falls within a 5’ untranslated region
-threeUTR    falls within a 3’ untranslated region
-intron    falls within an intron region
-intergenic    does not fall within a transcript associated with a gene
-spliceSite    overlaps any portion of the first 2 or last 2 nucleotides of an intron
-promoter    falls within a promoter region of a transcript
 
-```{r}
-kable(data.frame())
-```
+***
 
-```{r message=FALSE,fig.width=3, fig.height=3, echo=FALSE, fig.show=TRUE, fig.cap="Figure 1. Percentage of different types of mutations identified."}
+
+
+```{r message=FALSE,fig.width=5, fig.height=7, echo=FALSE, fig.show=TRUE, fig.cap="Figure 1. Percentage of different types of mutations identified."}
 donut.df <- variants.df %>% 
   group_by(Annotation_1) %>% 
   summarize(N=n()) %>% 
@@ -285,8 +398,9 @@ donut.types <- ggplot(data = donut.df,
         legend.text = element_text(size=8))
 
 donut.types
-# ggsave(plot=exon_pie,filename = "NUP98_Exon_Junctions_pie.pdf", height = 7, width=7, device="pdf" )
 ```
+
+*** 
 
 ```{r echo=FALSE, message=FALSE, results="hide"}
 # txdb <- GenomicFeatures::makeTxDbFromGFF(here::here("GenomicRefs/gencode.v22.chr_patch_hapl_scaff.annotation.gtf.gz"))
@@ -296,7 +410,7 @@ GRCh38.txs <- GenomicFeatures::transcripts(txdb)
 # txdb
 ```
 
-```{r}
+```{r echo=FALSE, message=FALSE,results="hide"}
 top5.coding <- dplyr::filter(variants.df, 
                      Transcript_BioType_1 == "Coding") %>%  
   dplyr::slice(1:5) %>% #Not accurate. Needs to be top5 unique genes. will deal with later. 
@@ -307,42 +421,8 @@ top5.coding <- dplyr::filter(variants.df, Transcript_BioType_1 == "Coding") %>%
     pull(S4_Vector_IDs)
 ```
 
-```{r echo=FALSE}
-gene_tracks <- function(variants_df, vcf_s4, transriptsGR) {
-  
-  vcf.ranges <- rowRanges(vcf_s4)
-  vcf.ranges <- vcf.ranges[top5.coding]
-  vcf.ranges <- vcf.ranges[order(vcf.ranges)]
-  chrs <- as.vector(seqnames(vcf.ranges)@values)
-  chrs <- chrs[grep("chr1$", chrs)]
-  print(chrs)
-  
-  for (chr in chrs){
-      ranges.sub <- vcf.ranges[seqnames(vcf.ranges)==chr]
-      transcripts.sub <- suppressWarnings(subsetByOverlaps(transriptsGR, ranges.sub))
-      
-      itrack.1 <- IdeogramTrack(genome = "hg38", chromosome = "chr1")
-      gtrack <- GenomeAxisTrack()
-      grtrack <- GeneRegionTrack(transcripts.sub, 
-                                 genome = "hg38",
-                                 chromosome = "chr1", 
-                                 name = "Gene Model",
-                                  showId=TRUE)
-      track <- AnnotationTrack(ranges.sub,
-                               genome = "hg38",
-                               name="SNVs",
-                               ucscChromosomeNames=FALSE)
-      
-      plotTracks(c(itrack.1,gtrack,track,grtrack))
-  }
-  
-}
-```
-
-Error in .defaultRange(trackList, from = from, to = to, extend.left = extend.left, : Unable to automatically determine plotting ranges from the supplied track(s). Please provide range coordinates through the 'from' and 'to' arguments of the plotTracks function.
-
-```{r fig.width=9, fig.show=TRUE, echo=FALSE, fig.subcap="A vizualization of the SNVs"}
-gene_tracks(variants_df = variants.df, vcf_s4 = vcf.s4, transriptsGR = GRCh38.txs)
+```{r fig.width=9, fig.show=TRUE, echo=FALSE, fig.subcap="A vizualization of the SNVs", message=FALSE, warning=FALSE}
+gene_tracks(vcf_s4 = vcf.s4[top5.coding], transriptsGR = GRCh38.txs)
 ```
 
 
@@ -362,9 +442,21 @@ Sommelier results: Haplyotype/PCA
 ```
 
 
+
+
 ***
 
-# What Does This Result Mean for you? 
+# What Does This Result Mean for you? And What's Next?
+
+Genetic tests sometimes reveal information that could be relevant to your family such as a health risk that might run in the family, or that family relationships are different from what you expected. 
+
+Can you please add this message in the next steps section, if the report show an association with a gene. Please contact your doctor and a genetic counselor. A genetic counselor can help you understand:
+<br>
+  1. how your family members may be affected if the test shows a serious health condition runs in your family.
+  2. the risk of you and your partner passing on a health condition to your children
+your options if you have a child with an inherited health condition and you do not want your next child to inherit it
+  3. genetic counsellor can also direct you to relevant patient support group
+
 
 ```{css echo=FALSE}
 .watch-out {
@@ -383,6 +475,20 @@ Sommelier results: Haplyotype/PCA
 
 # More information 
 
+```{r echo=FALSE}
+gene.pub.regex <- paste(paste(genes,"Recent.Publications", sep="."), collapse = "|")
+recent.pubs <- annots[grep(gene.pub.regex, names(annots))] %>% 
+  bind_rows() %>% 
+  mutate(GENE=rep(genes, each=5)) %>% 
+  dplyr::select(GENE, everything())
+
+# head(recent.pubs)
+# dim(recent.pubs)
+# lapply(recent.pubs, dim)
+
+DT::datatable(recent.pubs, class = 'cell-border stripe', 
+              caption="Table 5. Recent Publications for Top Variant Hits")
+```
 
 ```{r}
 # Add QR code
@@ -393,7 +499,7 @@ Sommelier results: Haplyotype/PCA
 
 # Quality Control 
 
-Embedd the IGV output from CTAT Mutation pipeline. 
+Embed the IGV output from CTAT Mutation pipeline. 
 
 ```{r}
 
@@ -452,14 +558,17 @@ patient_signature()
 
 <div class="boxBorder">
 
-Additional information about the pipelines used, check out the github repositorites listed below. 
+Additional information about the pipelines used, check out the github repositories listed below:
+
   * [CTAT Mutation Pipeline for Input VCF](https://github.com/collaborativebioinformatics/expressed-variant-impact)
   * [Association between Genes and Drug Targets](https://github.com/collaborativebioinformatics/viravate2)
   * [Mixed Sample Graphs QC](https://github.com/collaborativebioinformatics/mixed-sample-graphs)
   * [snpReportR Generation](https://github.com/collaborativebioinformatics/expressed-variant-reporting)
-
+<br>
 </div>
 
+
+<br><br><br><br>
 
 ```{r echo=FALSE}
 #Should not hardcode the different annotation algorithms used. 
@@ -469,10 +578,11 @@ keep.dat <- grep("SnpEff|format|Command",header.dat.names)
 keep.dat <- header_data@header@listData[keep.dat]
 keep.dat <- as.data.frame(lapply(keep.dat,function(x) as.data.frame(x)))
 
-DT::datatable(keep.dat)
+DT::datatable(keep.dat, class = 'cell-border stripe', caption = "Table 7. Software and Version Numbers.")
 ```
 
 ```{r echo=FALSE}
+message("Information about the Transcript Annotation Database.")
 txdb
 ```
 

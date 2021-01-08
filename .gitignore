@@ -1,6 +1,9 @@
 #R files
 .Rhistory
 .Rproj.user/
+*.sqlite
+
+
 
 #hidden caches
 ~$*
