@@ -76,9 +76,12 @@ Example clinical/patient report
 https://github.com/collaborativebioinformatics/expressed-variant-reporting/blob/main/Reports/genetic-report-3.pdf
 
 ### References:
-Smith RN, et al. InterMine: a flexible data warehouse system for the integration and analysis of heterogeneous biological data. Bioinformatics. 2012 Dec 1;28(23):3163-5.
-Richards S, Aziz N, Bale S, et al. Standards and guidelines for the interpretation of sequence variants: a joint consensus recommendation of the American College of Medical Genetics and Genomics and the Association for Molecular Pathology. Genet Med. 2015;17(5):405-424. doi:10.1038/gim.2015.30
-[ACMG 59 Genes](https://www.coriell.org/1/NIGMS/Collections/ACMG-59-Genes?gclid=CjwKCAiA_9r_BRBZEiwAHZ_v1zXfYPL5eKXE2acAJmrzdjMurIU7y1GleMAJeoIkAjNCSzXHw20sDRoCaNsQAvD_BwE)
+
+* Smith RN, et al. InterMine: a flexible data warehouse system for the integration and analysis of heterogeneous biological data. Bioinformatics. 2012 Dec 1;28(23):3163-5.
+
+* Richards S, Aziz N, Bale S, et al. Standards and guidelines for the interpretation of sequence variants: a joint consensus recommendation of the American College of Medical Genetics and Genomics and the Association for Molecular Pathology. Genet Med. 2015;17(5):405-424. doi:10.1038/gim.2015.30
+
+* [ACMG 59 Genes](https://www.coriell.org/1/NIGMS/Collections/ACMG-59-Genes?gclid=CjwKCAiA_9r_BRBZEiwAHZ_v1zXfYPL5eKXE2acAJmrzdjMurIU7y1GleMAJeoIkAjNCSzXHw20sDRoCaNsQAvD_BwE)
 
 
 
