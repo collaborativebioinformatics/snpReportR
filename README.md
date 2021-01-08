@@ -73,7 +73,9 @@ First report Patients, non-specialist clinicians
 The report was designed to use a patient friendly language 
 
 Example clinical/patient report
-https://github.com/collaborativebioinformatics/expressed-variant-reporting/blob/main/report-1.pdf
+https://github.com/collaborativebioinformatics/expressed-variant-reporting/blob/main/Reports/genetic-report-3.pdf
 
+**References:**
+Smith RN, et al. InterMine: a flexible data warehouse system for the integration and analysis of heterogeneous biological data. Bioinformatics. 2012 Dec 1;28(23):3163-5.
 
 
