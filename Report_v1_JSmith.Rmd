@@ -452,6 +452,7 @@ Genetic tests sometimes reveal information that could be relevant to your family
 
 Can you please add this message in the next steps section, if the report show an association with a gene. Please contact your doctor and a genetic counselor. A genetic counselor can help you understand:
 <br>
+
   1. how your family members may be affected if the test shows a serious health condition runs in your family.
   2. the risk of you and your partner passing on a health condition to your children
 your options if you have a child with an inherited health condition and you do not want your next child to inherit it
@@ -490,21 +491,27 @@ DT::datatable(recent.pubs, class = 'cell-border stripe',
               caption="Table 5. Recent Publications for Top Variant Hits")
 ```
 
+## Potential Drug Targets 
+
+```{r}
+#add drug target data information
+```
+
+Can search for additional drugs that may target the mutant genes online using [Drug Targetor](http://drugtargetor.com/) and at [Drug Gene Interaction Database](https://www.dgidb.org/)
+
+
+## Potential Clinical Trials 
+
+```{r}
+#search API at https://clinicaltrials.gov/api/ 
+```
+
+## Web resources
+
 ```{r}
 # Add QR code
 # where does it go?
 ```
-
-*** 
-
-# Quality Control 
-
-Embed the IGV output from CTAT Mutation pipeline. 
-
-```{r}
-
-```
-
 
 ***
 
@@ -542,6 +549,18 @@ patient_signature <- function(input){
 patient_signature()
 ```
 
+***
+
+
+# Quality Control 
+
+Embed the IGV output from CTAT Mutation pipeline. 
+
+```{r}
+#embed file here
+```
+
+
 
 ***
 
@@ -549,9 +568,9 @@ patient_signature()
 
 ```{css echo=FALSE}
 .boxBorder {
-     border: 2px solid #990066;
+     border: 2px solid black;
      padding: 10px;
-     outline: #990066 solid 5px;
+     outline: black solid 5px;
      outline-offset: 5px;
 }
 ```
