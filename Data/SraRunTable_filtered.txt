@@ -1,0 +1,125 @@
+Run,BioProject,Cell_Line,Sample_Name,drug,conc
+DRR131788,PRJDB6952,A549,RNA-seq_A549_72h_F10_(+)-JQ1 (Inhibitor_BET (BRD4))_1,(+)-JQ1 (Inhibitor_BET (BRD4)),1
+DRR131561,PRJDB6952,A549,RNA-seq_A549_24h_A01_DMSO (Control)_0.1,DMSO (Control),0.1
+DRR131564,PRJDB6952,A549,RNA-seq_A549_24h_A06_Temsirolimus (Inhibitor_mTOR)_1,Temsirolimus (Inhibitor_mTOR),1
+DRR131565,PRJDB6952,A549,RNA-seq_A549_24h_A07_Etoposide (Inhibitor_Topo II)_10,Etoposide (Inhibitor_Topo II),10
+DRR131570,PRJDB6952,A549,RNA-seq_A549_24h_B01_DMSO (Control)_0.1,DMSO (Control),0.1
+DRR131575,PRJDB6952,A549,RNA-seq_A549_24h_B06_Temsirolimus (Inhibitor_mTOR)_0.1,Temsirolimus (Inhibitor_mTOR),0.1
+DRR131576,PRJDB6952,A549,RNA-seq_A549_24h_B07_Etoposide (Inhibitor_Topo II)_1,Etoposide (Inhibitor_Topo II),1
+DRR131587,PRJDB6952,A549,RNA-seq_A549_24h_C06_Temsirolimus (Inhibitor_mTOR)_0.01,Temsirolimus (Inhibitor_mTOR),0.01
+DRR131588,PRJDB6952,A549,RNA-seq_A549_24h_C07_Etoposide (Inhibitor_Topo II)_0.1,Etoposide (Inhibitor_Topo II),0.1
+DRR131593,PRJDB6952,A549,RNA-seq_A549_24h_D01_DMSO (Control)_0.1,DMSO (Control),0.1
+DRR131598,PRJDB6952,A549,RNA-seq_A549_24h_D06_Temsirolimus (Inhibitor_mTOR)_0.001,Temsirolimus (Inhibitor_mTOR),0.001
+DRR131599,PRJDB6952,A549,RNA-seq_A549_24h_D07_Etoposide (Inhibitor_Topo II)_0.01,Etoposide (Inhibitor_Topo II),0.01
+DRR131611,PRJDB6952,A549,RNA-seq_A549_24h_E10_(+)-JQ1 (Inhibitor_BET (BRD4))_10,(+)-JQ1 (Inhibitor_BET (BRD4)),10
+DRR131622,PRJDB6952,A549,RNA-seq_A549_24h_F10_(+)-JQ1 (Inhibitor_BET (BRD4))_1,(+)-JQ1 (Inhibitor_BET (BRD4)),1
+DRR131633,PRJDB6952,A549,RNA-seq_A549_24h_G10_(+)-JQ1 (Inhibitor_BET (BRD4))_0.1,(+)-JQ1 (Inhibitor_BET (BRD4)),0.1
+DRR131644,PRJDB6952,A549,RNA-seq_A549_24h_H10_(+)-JQ1 (Inhibitor_BET (BRD4))_0.01,(+)-JQ1 (Inhibitor_BET (BRD4)),0.01
+DRR131647,PRJDB6952,A549,RNA-seq_A549_48h_A01_DMSO (Control)_0.1,DMSO (Control),0.1
+DRR131651,PRJDB6952,A549,RNA-seq_A549_48h_A06_Temsirolimus (Inhibitor_mTOR)_1,Temsirolimus (Inhibitor_mTOR),1
+DRR131652,PRJDB6952,A549,RNA-seq_A549_48h_A07_Etoposide (Inhibitor_Topo II)_10,Etoposide (Inhibitor_Topo II),10
+DRR131656,PRJDB6952,A549,RNA-seq_A549_48h_B01_DMSO (Control)_0.1,DMSO (Control),0.1
+DRR131661,PRJDB6952,A549,RNA-seq_A549_48h_B07_Etoposide (Inhibitor_Topo II)_1,Etoposide (Inhibitor_Topo II),1
+DRR131672,PRJDB6952,A549,RNA-seq_A549_48h_C06_Temsirolimus (Inhibitor_mTOR)_0.01,Temsirolimus (Inhibitor_mTOR),0.01
+DRR131678,PRJDB6952,A549,RNA-seq_A549_48h_D01_DMSO (Control)_0.1,DMSO (Control),0.1
+DRR131683,PRJDB6952,A549,RNA-seq_A549_48h_D06_Temsirolimus (Inhibitor_mTOR)_0.001,Temsirolimus (Inhibitor_mTOR),0.001
+DRR131684,PRJDB6952,A549,RNA-seq_A549_48h_D07_Etoposide (Inhibitor_Topo II)_0.01,Etoposide (Inhibitor_Topo II),0.01
+DRR131696,PRJDB6952,A549,RNA-seq_A549_48h_E10_(+)-JQ1 (Inhibitor_BET (BRD4))_10,(+)-JQ1 (Inhibitor_BET (BRD4)),10
+DRR131706,PRJDB6952,A549,RNA-seq_A549_48h_F10_(+)-JQ1 (Inhibitor_BET (BRD4))_1,(+)-JQ1 (Inhibitor_BET (BRD4)),1
+DRR131717,PRJDB6952,A549,RNA-seq_A549_48h_G10_(+)-JQ1 (Inhibitor_BET (BRD4))_0.1,(+)-JQ1 (Inhibitor_BET (BRD4)),0.1
+DRR131726,PRJDB6952,A549,RNA-seq_A549_48h_H10_(+)-JQ1 (Inhibitor_BET (BRD4))_0.01,(+)-JQ1 (Inhibitor_BET (BRD4)),0.01
+DRR131728,PRJDB6952,A549,RNA-seq_A549_72h_A01_DMSO (Control)_0.1,DMSO (Control),0.1
+DRR131731,PRJDB6952,A549,RNA-seq_A549_72h_A06_Temsirolimus (Inhibitor_mTOR)_1,Temsirolimus (Inhibitor_mTOR),1
+DRR131732,PRJDB6952,A549,RNA-seq_A549_72h_A07_Etoposide (Inhibitor_Topo II)_10,Etoposide (Inhibitor_Topo II),10
+DRR131736,PRJDB6952,A549,RNA-seq_A549_72h_B01_DMSO (Control)_0.1,DMSO (Control),0.1
+DRR131741,PRJDB6952,A549,RNA-seq_A549_72h_B06_Temsirolimus (Inhibitor_mTOR)_0.1,Temsirolimus (Inhibitor_mTOR),0.1
+DRR131742,PRJDB6952,A549,RNA-seq_A549_72h_B07_Etoposide (Inhibitor_Topo II)_1,Etoposide (Inhibitor_Topo II),1
+DRR131753,PRJDB6952,A549,RNA-seq_A549_72h_C06_Temsirolimus (Inhibitor_mTOR)_0.01,Temsirolimus (Inhibitor_mTOR),0.01
+DRR131754,PRJDB6952,A549,RNA-seq_A549_72h_C07_Etoposide (Inhibitor_Topo II)_0.1,Etoposide (Inhibitor_Topo II),0.1
+DRR131760,PRJDB6952,A549,RNA-seq_A549_72h_D01_DMSO (Control)_0.1,DMSO (Control),0.1
+DRR131765,PRJDB6952,A549,RNA-seq_A549_72h_D06_Temsirolimus (Inhibitor_mTOR)_0.001,Temsirolimus (Inhibitor_mTOR),0.001
+DRR131766,PRJDB6952,A549,RNA-seq_A549_72h_D07_Etoposide (Inhibitor_Topo II)_0.01,Etoposide (Inhibitor_Topo II),0.01
+DRR131777,PRJDB6952,A549,RNA-seq_A549_72h_E10_(+)-JQ1 (Inhibitor_BET (BRD4))_10,(+)-JQ1 (Inhibitor_BET (BRD4)),10
+DRR131798,PRJDB6952,A549,RNA-seq_A549_72h_G10_(+)-JQ1 (Inhibitor_BET (BRD4))_0.1,(+)-JQ1 (Inhibitor_BET (BRD4)),0.1
+DRR131810,PRJDB6952,A549,RNA-seq_A549_72h_H10_(+)-JQ1 (Inhibitor_BET (BRD4))_0.01,(+)-JQ1 (Inhibitor_BET (BRD4)),0.01
+DRR131813,PRJDB6952,II-18,RNA-seq_II-18_24h_A01_DMSO (Control)_0.1,DMSO (Control),0.1
+DRR131816,PRJDB6952,II-18,RNA-seq_II-18_24h_A06_Temsirolimus (Inhibitor_mTOR)_1,Temsirolimus (Inhibitor_mTOR),1
+DRR131817,PRJDB6952,II-18,RNA-seq_II-18_24h_A07_Etoposide (Inhibitor_Topo II)_10,Etoposide (Inhibitor_Topo II),10
+DRR131824,PRJDB6952,II-18,RNA-seq_II-18_24h_B06_Temsirolimus (Inhibitor_mTOR)_0.1,Temsirolimus (Inhibitor_mTOR),0.1
+DRR131825,PRJDB6952,II-18,RNA-seq_II-18_24h_B07_Etoposide (Inhibitor_Topo II)_1,Etoposide (Inhibitor_Topo II),1
+DRR131835,PRJDB6952,II-18,RNA-seq_II-18_24h_C06_Temsirolimus (Inhibitor_mTOR)_0.01,Temsirolimus (Inhibitor_mTOR),0.01
+DRR131836,PRJDB6952,II-18,RNA-seq_II-18_24h_C07_Etoposide (Inhibitor_Topo II)_0.1,Etoposide (Inhibitor_Topo II),0.1
+DRR131842,PRJDB6952,II-18,RNA-seq_II-18_24h_D01_DMSO (Control)_0.1,DMSO (Control),0.1
+DRR131845,PRJDB6952,II-18,RNA-seq_II-18_24h_D06_Temsirolimus (Inhibitor_mTOR)_0.001,Temsirolimus (Inhibitor_mTOR),0.001
+DRR131846,PRJDB6952,II-18,RNA-seq_II-18_24h_D07_Etoposide (Inhibitor_Topo II)_0.01,Etoposide (Inhibitor_Topo II),0.01
+DRR131867,PRJDB6952,II-18,RNA-seq_II-18_24h_F10_(+)-JQ1 (Inhibitor_BET (BRD4))_1,(+)-JQ1 (Inhibitor_BET (BRD4)),1
+DRR131878,PRJDB6952,II-18,RNA-seq_II-18_24h_G10_(+)-JQ1 (Inhibitor_BET (BRD4))_0.1,(+)-JQ1 (Inhibitor_BET (BRD4)),0.1
+DRR131890,PRJDB6952,II-18,RNA-seq_II-18_24h_H10_(+)-JQ1 (Inhibitor_BET (BRD4))_0.01,(+)-JQ1 (Inhibitor_BET (BRD4)),0.01
+DRR131893,PRJDB6952,II-18,RNA-seq_II-18_48h_A01_DMSO (Control)_0.1,DMSO (Control),0.1
+DRR131896,PRJDB6952,II-18,RNA-seq_II-18_48h_A06_Temsirolimus (Inhibitor_mTOR)_1,Temsirolimus (Inhibitor_mTOR),1
+DRR131897,PRJDB6952,II-18,RNA-seq_II-18_48h_A07_Etoposide (Inhibitor_Topo II)_10,Etoposide (Inhibitor_Topo II),10
+DRR131901,PRJDB6952,II-18,RNA-seq_II-18_48h_B01_DMSO (Control)_0.1,DMSO (Control),0.1
+DRR131905,PRJDB6952,II-18,RNA-seq_II-18_48h_B06_Temsirolimus (Inhibitor_mTOR)_0.1,Temsirolimus (Inhibitor_mTOR),0.1
+DRR131906,PRJDB6952,II-18,RNA-seq_II-18_48h_B07_Etoposide (Inhibitor_Topo II)_1,Etoposide (Inhibitor_Topo II),1
+DRR131915,PRJDB6952,II-18,RNA-seq_II-18_48h_C06_Temsirolimus (Inhibitor_mTOR)_0.01,Temsirolimus (Inhibitor_mTOR),0.01
+DRR131916,PRJDB6952,II-18,RNA-seq_II-18_48h_C07_Etoposide (Inhibitor_Topo II)_0.1,Etoposide (Inhibitor_Topo II),0.1
+DRR131921,PRJDB6952,II-18,RNA-seq_II-18_48h_D01_DMSO (Control)_0.1,DMSO (Control),0.1
+DRR131926,PRJDB6952,II-18,RNA-seq_II-18_48h_D06_Temsirolimus (Inhibitor_mTOR)_0.001,Temsirolimus (Inhibitor_mTOR),0.001
+DRR131927,PRJDB6952,II-18,RNA-seq_II-18_48h_D07_Etoposide (Inhibitor_Topo II)_0.01,Etoposide (Inhibitor_Topo II),0.01
+DRR131939,PRJDB6952,II-18,RNA-seq_II-18_48h_E10_(+)-JQ1 (Inhibitor_BET (BRD4))_10,(+)-JQ1 (Inhibitor_BET (BRD4)),10
+DRR131951,PRJDB6952,II-18,RNA-seq_II-18_48h_F10_(+)-JQ1 (Inhibitor_BET (BRD4))_1,(+)-JQ1 (Inhibitor_BET (BRD4)),1
+DRR131962,PRJDB6952,II-18,RNA-seq_II-18_48h_G10_(+)-JQ1 (Inhibitor_BET (BRD4))_0.1,(+)-JQ1 (Inhibitor_BET (BRD4)),0.1
+DRR131972,PRJDB6952,II-18,RNA-seq_II-18_48h_H10_(+)-JQ1 (Inhibitor_BET (BRD4))_0.01,(+)-JQ1 (Inhibitor_BET (BRD4)),0.01
+DRR131975,PRJDB6952,II-18,RNA-seq_II-18_72h_A01_DMSO (Control)_0.1,DMSO (Control),0.1
+DRR131977,PRJDB6952,II-18,RNA-seq_II-18_72h_A06_Temsirolimus (Inhibitor_mTOR)_1,Temsirolimus (Inhibitor_mTOR),1
+DRR131980,PRJDB6952,II-18,RNA-seq_II-18_72h_B01_DMSO (Control)_0.1,DMSO (Control),0.1
+DRR131983,PRJDB6952,II-18,RNA-seq_II-18_72h_B07_Etoposide (Inhibitor_Topo II)_1,Etoposide (Inhibitor_Topo II),1
+DRR131993,PRJDB6952,II-18,RNA-seq_II-18_72h_C06_Temsirolimus (Inhibitor_mTOR)_0.01,Temsirolimus (Inhibitor_mTOR),0.01
+DRR131994,PRJDB6952,II-18,RNA-seq_II-18_72h_C07_Etoposide (Inhibitor_Topo II)_0.1,Etoposide (Inhibitor_Topo II),0.1
+DRR132000,PRJDB6952,II-18,RNA-seq_II-18_72h_D01_DMSO (Control)_0.1,DMSO (Control),0.1
+DRR132005,PRJDB6952,II-18,RNA-seq_II-18_72h_D06_Temsirolimus (Inhibitor_mTOR)_0.001,Temsirolimus (Inhibitor_mTOR),0.001
+DRR132006,PRJDB6952,II-18,RNA-seq_II-18_72h_D07_Etoposide (Inhibitor_Topo II)_0.01,Etoposide (Inhibitor_Topo II),0.01
+DRR132035,PRJDB6952,II-18,RNA-seq_II-18_72h_G10_(+)-JQ1 (Inhibitor_BET (BRD4))_0.1,(+)-JQ1 (Inhibitor_BET (BRD4)),0.1
+DRR132295,PRJDB6952,H1299,RNA-seq_H1299_24h_A01_DMSO (Control)_0.1,DMSO (Control),0.1
+DRR132299,PRJDB6952,H1299,RNA-seq_H1299_24h_A06_Temsirolimus (Inhibitor_mTOR)_1,Temsirolimus (Inhibitor_mTOR),1
+DRR132300,PRJDB6952,H1299,RNA-seq_H1299_24h_A07_Etoposide (Inhibitor_Topo II)_10,Etoposide (Inhibitor_Topo II),10
+DRR132304,PRJDB6952,H1299,RNA-seq_H1299_24h_B01_DMSO (Control)_0.1,DMSO (Control),0.1
+DRR132309,PRJDB6952,H1299,RNA-seq_H1299_24h_B06_Temsirolimus (Inhibitor_mTOR)_0.1,Temsirolimus (Inhibitor_mTOR),0.1
+DRR132310,PRJDB6952,H1299,RNA-seq_H1299_24h_B07_Etoposide (Inhibitor_Topo II)_1,Etoposide (Inhibitor_Topo II),1
+DRR132320,PRJDB6952,H1299,RNA-seq_H1299_24h_C06_Temsirolimus (Inhibitor_mTOR)_0.01,Temsirolimus (Inhibitor_mTOR),0.01
+DRR132321,PRJDB6952,H1299,RNA-seq_H1299_24h_C07_Etoposide (Inhibitor_Topo II)_0.1,Etoposide (Inhibitor_Topo II),0.1
+DRR132327,PRJDB6952,H1299,RNA-seq_H1299_24h_D01_DMSO (Control)_0.1,DMSO (Control),0.1
+DRR132332,PRJDB6952,H1299,RNA-seq_H1299_24h_D06_Temsirolimus (Inhibitor_mTOR)_0.001,Temsirolimus (Inhibitor_mTOR),0.001
+DRR132333,PRJDB6952,H1299,RNA-seq_H1299_24h_D07_Etoposide (Inhibitor_Topo II)_0.01,Etoposide (Inhibitor_Topo II),0.01
+DRR132345,PRJDB6952,H1299,RNA-seq_H1299_24h_E10_(+)-JQ1 (Inhibitor_BET (BRD4))_10,(+)-JQ1 (Inhibitor_BET (BRD4)),10
+DRR132357,PRJDB6952,H1299,RNA-seq_H1299_24h_F10_(+)-JQ1 (Inhibitor_BET (BRD4))_1,(+)-JQ1 (Inhibitor_BET (BRD4)),1
+DRR132368,PRJDB6952,H1299,RNA-seq_H1299_24h_G10_(+)-JQ1 (Inhibitor_BET (BRD4))_0.1,(+)-JQ1 (Inhibitor_BET (BRD4)),0.1
+DRR132380,PRJDB6952,H1299,RNA-seq_H1299_24h_H10_(+)-JQ1 (Inhibitor_BET (BRD4))_0.01,(+)-JQ1 (Inhibitor_BET (BRD4)),0.01
+DRR132383,PRJDB6952,H1299,RNA-seq_H1299_48h_A01_DMSO (Control)_0.1,DMSO (Control),0.1
+DRR132386,PRJDB6952,H1299,RNA-seq_H1299_48h_A06_Temsirolimus (Inhibitor_mTOR)_1,Temsirolimus (Inhibitor_mTOR),1
+DRR132387,PRJDB6952,H1299,RNA-seq_H1299_48h_A07_Etoposide (Inhibitor_Topo II)_10,Etoposide (Inhibitor_Topo II),10
+DRR132391,PRJDB6952,H1299,RNA-seq_H1299_48h_B01_DMSO (Control)_0.1,DMSO (Control),0.1
+DRR132396,PRJDB6952,H1299,RNA-seq_H1299_48h_B06_Temsirolimus (Inhibitor_mTOR)_0.1,Temsirolimus (Inhibitor_mTOR),0.1
+DRR132397,PRJDB6952,H1299,RNA-seq_H1299_48h_B07_Etoposide (Inhibitor_Topo II)_1,Etoposide (Inhibitor_Topo II),1
+DRR132406,PRJDB6952,H1299,RNA-seq_H1299_48h_C06_Temsirolimus (Inhibitor_mTOR)_0.01,Temsirolimus (Inhibitor_mTOR),0.01
+DRR132407,PRJDB6952,H1299,RNA-seq_H1299_48h_C07_Etoposide (Inhibitor_Topo II)_0.1,Etoposide (Inhibitor_Topo II),0.1
+DRR132413,PRJDB6952,H1299,RNA-seq_H1299_48h_D01_DMSO (Control)_0.1,DMSO (Control),0.1
+DRR132418,PRJDB6952,H1299,RNA-seq_H1299_48h_D06_Temsirolimus (Inhibitor_mTOR)_0.001,Temsirolimus (Inhibitor_mTOR),0.001
+DRR132419,PRJDB6952,H1299,RNA-seq_H1299_48h_D07_Etoposide (Inhibitor_Topo II)_0.01,Etoposide (Inhibitor_Topo II),0.01
+DRR132431,PRJDB6952,H1299,RNA-seq_H1299_48h_E10_(+)-JQ1 (Inhibitor_BET (BRD4))_10,(+)-JQ1 (Inhibitor_BET (BRD4)),10
+DRR132443,PRJDB6952,H1299,RNA-seq_H1299_48h_F10_(+)-JQ1 (Inhibitor_BET (BRD4))_1,(+)-JQ1 (Inhibitor_BET (BRD4)),1
+DRR132454,PRJDB6952,H1299,RNA-seq_H1299_48h_G10_(+)-JQ1 (Inhibitor_BET (BRD4))_0.1,(+)-JQ1 (Inhibitor_BET (BRD4)),0.1
+DRR132466,PRJDB6952,H1299,RNA-seq_H1299_72h_A01_DMSO (Control)_0.1,DMSO (Control),0.1
+DRR132469,PRJDB6952,H1299,RNA-seq_H1299_72h_A07_Etoposide (Inhibitor_Topo II)_10,Etoposide (Inhibitor_Topo II),10
+DRR132473,PRJDB6952,H1299,RNA-seq_H1299_72h_B01_DMSO (Control)_0.1,DMSO (Control),0.1
+DRR132478,PRJDB6952,H1299,RNA-seq_H1299_72h_B06_Temsirolimus (Inhibitor_mTOR)_0.1,Temsirolimus (Inhibitor_mTOR),0.1
+DRR132479,PRJDB6952,H1299,RNA-seq_H1299_72h_B07_Etoposide (Inhibitor_Topo II)_1,Etoposide (Inhibitor_Topo II),1
+DRR132489,PRJDB6952,H1299,RNA-seq_H1299_72h_C06_Temsirolimus (Inhibitor_mTOR)_0.01,Temsirolimus (Inhibitor_mTOR),0.01
+DRR132490,PRJDB6952,H1299,RNA-seq_H1299_72h_C07_Etoposide (Inhibitor_Topo II)_0.1,Etoposide (Inhibitor_Topo II),0.1
+DRR132496,PRJDB6952,H1299,RNA-seq_H1299_72h_D01_DMSO (Control)_0.1,DMSO (Control),0.1
+DRR132501,PRJDB6952,H1299,RNA-seq_H1299_72h_D06_Temsirolimus (Inhibitor_mTOR)_0.001,Temsirolimus (Inhibitor_mTOR),0.001
+DRR132502,PRJDB6952,H1299,RNA-seq_H1299_72h_D07_Etoposide (Inhibitor_Topo II)_0.01,Etoposide (Inhibitor_Topo II),0.01
+DRR132513,PRJDB6952,H1299,RNA-seq_H1299_72h_E10_(+)-JQ1 (Inhibitor_BET (BRD4))_10,(+)-JQ1 (Inhibitor_BET (BRD4)),10
+DRR132525,PRJDB6952,H1299,RNA-seq_H1299_72h_F10_(+)-JQ1 (Inhibitor_BET (BRD4))_1,(+)-JQ1 (Inhibitor_BET (BRD4)),1
+DRR132536,PRJDB6952,H1299,RNA-seq_H1299_72h_G10_(+)-JQ1 (Inhibitor_BET (BRD4))_0.1,(+)-JQ1 (Inhibitor_BET (BRD4)),0.1
+DRR132548,PRJDB6952,H1299,RNA-seq_H1299_72h_H10_(+)-JQ1 (Inhibitor_BET (BRD4))_0.01,(+)-JQ1 (Inhibitor_BET (BRD4)),0.01

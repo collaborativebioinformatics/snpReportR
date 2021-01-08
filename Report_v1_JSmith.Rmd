@@ -1,0 +1,486 @@
+---
+title: "Expressed Variant Reporting"
+author: "Brandon Michael Blobner, Jenny Leopoldina Smith, Ahmad Al Khleifat"
+date: "1/6/2021"
+output:
+  html_document:
+    always_allow_html: yes
+    toc: true
+    toc_float: true
+    toc_depth: 3
+    number_sections: true
+    fig_caption: true
+    theme: darkly
+    highlight: tango
+    df_print: paged
+runtime: shiny
+---
+
+
+```{r setup, include=FALSE, echo=FALSE}
+require(knitr)
+knitr::opts_knit$set(root.dir = here::here())
+
+
+knitr::opts_chunk$set(tidy.opts=list(width.cutoff=50),
+                      tidy=TRUE,
+                      fig.align='center',
+                      fig.width = 5, fig.height = 7)
+
+getwd()
+```
+
+```{r echo=FALSE, message=FALSE}
+library(dplyr)
+library(magrittr)
+library(tidyr)
+library(stringr)
+
+library(here)
+library(shiny)
+
+library(ggplot2)
+library(gridExtra)
+library(RColorBrewer)
+
+suppressPackageStartupMessages(library(vcfR))
+suppressPackageStartupMessages(library(VariantAnnotation))
+```
+
+
+# About The Test: Variant Detection from RNA-seq
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+knitr::kable(data.frame("Information"=c("Name:", 
+                                        "DOB:",
+                                        "Sex:",
+                                        "Sample Type:"), 
+                        "Value"=c("Jane Doe","01/01/1900","F","RNA")), 
+             caption = "Patient details:", align = "l") %>% 
+  kableExtra::kable_paper("hover", full_width = F, position = "float_left")
+```
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+knitr::kable(data.frame("Information"=c("Name:", 
+                                        "Doctor identification number:",
+                                        "Hospital:"), 
+                        "Value"=c("Dr.X", "12345", "NCI")), 
+             caption = "Test ordered by:", align="l") %>% 
+  kableExtra::kable_paper("hover", full_width = F, position = "float_right")
+```
+
+![Caption for the picture.](snpReporter_logo.png)
+
+```{r echo=FALSE, message=FALSE, results="hide"}
+#https://gist.github.com/sephraim/3d352ba4893df07a2c35d8f227ab17ac
+
+vcf <-  suppressMessages(vcfR::read.vcfR(here("Data/DRR131561.variants.HC_init.wAnnot.vcf.gz")))
+
+vcf.df <- cbind(as.data.frame(getFIX(vcf)),
+                   INFO2df(vcf))
+
+# head(vcf.df)
+```
+
+```{r warning=FALSE, echo=FALSE, message=FALSE}
+vcf.s4 <- suppressMessages(VariantAnnotation::readVcf(here("Data/DRR131561.variants.HC_init.wAnnot.vcf.gz")))
+
+# vcf.test <- readVcf(here("Data/variants.HC_hard_cutoffs_applied.cancer.vcf"))
+# head(vcf.s4)
+# str(vcf)
+```
+
+```{r echo=F}
+header_data <- suppressMessages(VariantAnnotation::header(vcf.s4))
+SampleName <- header_data@samples
+```
+
+```{r echo=F}
+cat(paste0("Hi ", SampleName, ","), "This document will help you to understand the more important findings from a gene variant screening. The common definitions of the type of genetic variants (mutations) are described in the figure. While a variant may have been detected, the associations with the variant are not perfectly causal and their complex interactions between biology and the environment.")
+```
+
+`insert link to diagram here`
+
+***
+
+# About the Dataset
+
+```{r echo=FALSE, fig.cap="Table 1. Column names and Descriptions"}
+header_info <- info(header(vcf.s4)) %>% 
+  as.data.frame()
+
+# class(header_info)
+# str(header_info)
+# header_info
+
+DT::datatable(header_info)
+```
+
+```{r echo=FALSE, results='hide'}
+functional_annots_names <- header_info["ANN","Description"] %>% 
+  gsub("^.+\\'(.+)\\'","\\1",.) %>% 
+  str_split(., pattern = "\\|") %>% 
+  unlist() %>% 
+  gsub("\\s", "", .) 
+
+functional_annots_names <- functional_annots_names[-length(functional_annots_names)]
+# functional_annots_names
+# length(functional_annots_names) #15
+```
+
+```{r echo=FALSE, results='hide', warning=FALSE}
+# https://www.biostars.org/p/226965/
+function_annots.df <- data.frame(do.call(rbind, strsplit(as.vector(vcf.df$ANN), split = "\\|")))
+function_annots.df <- function_annots.df[,1:45]  #keep only the first 3 transcripts
+colnames(function_annots.df) <- paste(functional_annots_names,rep(1:3, each=15), sep="_")
+
+
+head(function_annots.df)
+# dim(function_annots.df)
+```
+
+```{r echo=FALSE, results='hide'}
+#should be able to download this. 
+variants.df <- vcf.df %>% 
+  mutate(S4_Vector_IDs=names(rowRanges(vcf.s4))) %>% 
+  bind_cols(., function_annots.df) %>% 
+  
+  mutate(rsID=ifelse(!is.na(RS), paste0("rs", RS), RS)) %>% 
+  mutate_at(vars(CHASM_FDR:VEST_FDR), ~as.numeric(.)) %>% 
+  group_by(GENE) %>% 
+  mutate(Number_SNVs_per_Gene=n()) %>% 
+  ungroup() %>% 
+  
+  dplyr::select(GENE,Number_SNVs_per_Gene, COSMIC_ID,
+         rsID,CHROM:ALT,FATHMM,SPLICEADJ,
+         TISSUE,TUMOR,
+         Annotation_1,Annotation_Impact_1,Feature_Type_1,
+         Transcript_BioType_1, 
+         coding_DNA_change_1=HGVS.c_1, 
+         protein_change_1=HGVS.p_1,
+         -ANN, everything(), ANN) %>% 
+  dplyr::filter(!is.na(FATHMM) | !is.na(SPLICEADJ) | grepl("High|Moderate",Annotation_Impact_1)) %>%
+  dplyr::filter(grepl("coding", ignore.case = T, Transcript_BioType_1)) %>%
+  dplyr::filter(VEST_FDR > 0.5 | is.na(VEST_FDR )) %>%
+  dplyr::filter(CHASM_FDR > 0.5 | is.na(CHASM_FDR )) %>%
+  arrange(desc(FATHMM), desc(Number_SNVs_per_Gene), Annotation_Impact_1)
+
+
+
+
+head(variants.df)
+dim(variants.df) #1411   89
+# write.csv(variants.df, "Variants_df.csv", row.names = FALSE)
+```
+
+***
+
+# HumanMine Annotation for Further dplyr::filtering and Results 
+
+-highly expressed in RNAseq 
+- not highly expressed in normal tissues 
+
+References:
+*Smith RN, et al. InterMine: a flexible data warehouse system for the integration and analysis of heterogeneous biological data. Bioinformatics. 2012 Dec 1;28(23):3163-5.*
+
+***
+
+# Results Table {.tabset}
+
+Included here are two tables for different gene types. Coding refers to genes that produce proteins, while non-coding refers to genes which do get utilized to produce proteins.   
+
+The top variants were ranked by the following attributes:
+  * FATHMM predicted pathogenicty
+  * genes with larger number of SNVs prioritized
+  * pathogenicity, or splice adjacent
+  * high or moderate impact on the structure of the gene 
+  * CADD Score/Polyphen Score 
+
+
+## Coding Genes
+
+```{r echo=FALSE, fig.cap="Table 2. Protein Coding Variants, possibly pathogenic"}
+DT::datatable(dplyr::filter(variants.df,
+                     Transcript_BioType_1 == "Coding") %>%
+                dplyr::select(GENE:protein_change_1,protein_change_1) %>%
+                dplyr::slice(1:10),
+               class = 'cell-border stripe')
+```
+
+## Non-Coding Genes
+
+```{r echo=FALSE, fig.cap="Table 3. Non-Coding Variants, possibly pathogenic"}
+DT::datatable(dplyr::filter(variants.df,
+                     Transcript_BioType_1 == "Noncoding") %>%
+                dplyr::select(GENE:protein_change_1,protein_change_1),class = 'cell-border stripe')
+```
+
+***
+
+# Chromosome and Gene Vizualization of Mutations
+
+```{r echo=FALSE, message=FALSE}
+suppressPackageStartupMessages(library(Gviz))
+suppressPackageStartupMessages(library(GenomicRanges))
+options(ucscChromosomeNames=FALSE)
+```
+
+
+Location     Details
+coding    falls within a coding region
+fiveUTR     falls within a 5’ untranslated region
+threeUTR    falls within a 3’ untranslated region
+intron    falls within an intron region
+intergenic    does not fall within a transcript associated with a gene
+spliceSite    overlaps any portion of the first 2 or last 2 nucleotides of an intron
+promoter    falls within a promoter region of a transcript
+
+```{r}
+kable(data.frame())
+```
+
+```{r message=FALSE,fig.width=3, fig.height=3, echo=FALSE, fig.show=TRUE, fig.cap="Figure 1. Percentage of different types of mutations identified."}
+donut.df <- variants.df %>% 
+  group_by(Annotation_1) %>% 
+  summarize(N=n()) %>% 
+  mutate_at(vars(Annotation_1), ~case_when(
+    grepl("5_prime_UTR", .) ~ "5_prime_UTR_variant", 
+    grepl("missense_variant", .) ~ "missense_variant", 
+    grepl("splice", .) ~ "splice_site", 
+    TRUE ~ .
+  )) %>% 
+  group_by(Annotation_1) %>% 
+  summarise(N=sum(N)) %>% 
+  ungroup() %>% 
+  mutate(Percent=round(N/sum(N) *100, digits = 2)) %>% 
+  arrange(N) %>% 
+  mutate(lab.pos = cumsum(Percent)-.5*Percent) %>% 
+  mutate(Annotation_1 = factor(Annotation_1, levels=rev(unique(Annotation_1))))
+
+
+temp <- filter(donut.df, Percent > 5)
+donut.types <- ggplot(data = donut.df, 
+       aes(x = 2, y = Percent, fill = Annotation_1))+
+  geom_col(width = 1.0, color="black", size=0.25) +
+  # scale_x_discrete(limits = c(" ", 2)) +
+  xlim(0.3, 2.5) +
+  annotate(geom="label",
+           x=2.0, y=temp$lab.pos,
+           label=paste0(temp$Percent,"%"),
+           size=3) +
+  ggrepel::geom_text_repel(data=filter(donut.df, Percent <= 5),
+                           aes(x = 2.5, y = lab.pos,label=paste0(Percent,"%")),
+                    nudge_x = 0.25,
+                    segment.size = .5,
+                    min.segment.length = 0.1,
+                    size=3,
+                    show.legend = FALSE,
+                   inherit.aes = F) +
+  labs(title="Variant Locations within Genes") +
+  coord_polar("y", start=1) +
+  scale_fill_brewer(palette="Paired") +
+  theme_void() +
+  theme(legend.position = "left", 
+        legend.title = element_blank(), 
+        legend.text = element_text(size=8))
+
+donut.types
+# ggsave(plot=exon_pie,filename = "NUP98_Exon_Junctions_pie.pdf", height = 7, width=7, device="pdf" )
+```
+
+```{r echo=FALSE, message=FALSE, results="hide"}
+# txdb <- GenomicFeatures::makeTxDbFromGFF(here::here("GenomicRefs/gencode.v22.chr_patch_hapl_scaff.annotation.gtf.gz"))
+# AnnotationDbi::saveDb(txdb, "gencode.v22.chr_patch_hapl_scaff.annotation.sqlite")
+txdb <- AnnotationDbi::loadDb(here::here("GenomicRefs/gencode.v22.chr_patch_hapl_scaff.annotation.sqlite"))
+GRCh38.txs <- GenomicFeatures::transcripts(txdb)
+# txdb
+```
+
+```{r}
+top5.coding <- dplyr::filter(variants.df, 
+                     Transcript_BioType_1 == "Coding") %>%  
+  dplyr::slice(1:5) %>% #Not accurate. Needs to be top5 unique genes. will deal with later. 
+    pull(GENE)
+
+top5.coding <- dplyr::filter(variants.df, Transcript_BioType_1 == "Coding") %>% 
+    dplyr::filter(GENE %in% top5.coding) %>% 
+    pull(S4_Vector_IDs)
+```
+
+```{r echo=FALSE}
+gene_tracks <- function(variants_df, vcf_s4, transriptsGR) {
+  
+  vcf.ranges <- rowRanges(vcf_s4)
+  vcf.ranges <- vcf.ranges[top5.coding]
+  vcf.ranges <- vcf.ranges[order(vcf.ranges)]
+  chrs <- as.vector(seqnames(vcf.ranges)@values)
+  chrs <- chrs[grep("chr1$", chrs)]
+  print(chrs)
+  
+  for (chr in chrs){
+      ranges.sub <- vcf.ranges[seqnames(vcf.ranges)==chr]
+      transcripts.sub <- suppressWarnings(subsetByOverlaps(transriptsGR, ranges.sub))
+      
+      itrack.1 <- IdeogramTrack(genome = "hg38", chromosome = "chr1")
+      gtrack <- GenomeAxisTrack()
+      grtrack <- GeneRegionTrack(transcripts.sub, 
+                                 genome = "hg38",
+                                 chromosome = "chr1", 
+                                 name = "Gene Model",
+                                  showId=TRUE)
+      track <- AnnotationTrack(ranges.sub,
+                               genome = "hg38",
+                               name="SNVs",
+                               ucscChromosomeNames=FALSE)
+      
+      plotTracks(c(itrack.1,gtrack,track,grtrack))
+  }
+  
+}
+```
+
+Error in .defaultRange(trackList, from = from, to = to, extend.left = extend.left, : Unable to automatically determine plotting ranges from the supplied track(s). Please provide range coordinates through the 'from' and 'to' arguments of the plotTracks function.
+
+```{r fig.width=9, fig.show=TRUE, echo=FALSE, fig.subcap="A vizualization of the SNVs"}
+gene_tracks(variants_df = variants.df, vcf_s4 = vcf.s4, transriptsGR = GRCh38.txs)
+```
+
+
+***
+
+
+# Expression of Genes with Mutations 
+
+boxplots/violin plots 
+
+DE genes by condition
+
+Sommelier results: Haplyotype/PCA
+
+```{r}
+
+```
+
+
+***
+
+# What Does This Result Mean for you? 
+
+```{css echo=FALSE}
+.watch-out {
+  background-color: white;
+  border: 3px solid red;
+  font-weight: bold;
+}
+```
+
+```{r class.source="watch-out"}
+# Need diagram here
+```
+
+
+***
+
+# More information 
+
+
+```{r}
+# Add QR code
+# where does it go?
+```
+
+*** 
+
+# Quality Control 
+
+Embedd the IGV output from CTAT Mutation pipeline. 
+
+```{r}
+
+```
+
+
+***
+
+# Consent for Analysis
+
+```{r echo=FALSE}
+message("Please Sign Form. Acknowledment of informed consent is provided upon signing.")
+```
+
+```{r echo=FALSE}
+patient_signature <- function(input){
+
+  shinyApp(
+
+    ui = fluidPage(
+
+        # Copy the line below to make a text input box
+        textInput("text", label = h3("Acknowledgement"), value = "Enter First and Last Name Here"),
+
+        hr(),
+        fluidRow(column(3, verbatimTextOutput("value")))
+    ),
+
+    server = function(input, output) {
+
+      # You can access the value of the widget with input$text, e.g.
+      output$value <- renderPrint({ input$text })
+    },
+    # options = list(height = 500)
+  )
+}
+```
+
+```{r}
+patient_signature()
+```
+
+
+***
+
+# Genome References and Software
+
+```{css echo=FALSE}
+.boxBorder {
+     border: 2px solid #990066;
+     padding: 10px;
+     outline: #990066 solid 5px;
+     outline-offset: 5px;
+}
+```
+
+<div class="boxBorder">
+
+Additional information about the pipelines used, check out the github repositorites listed below. 
+  * [CTAT Mutation Pipeline for Input VCF](https://github.com/collaborativebioinformatics/expressed-variant-impact)
+  * [Association between Genes and Drug Targets](https://github.com/collaborativebioinformatics/viravate2)
+  * [Mixed Sample Graphs QC](https://github.com/collaborativebioinformatics/mixed-sample-graphs)
+  * [snpReportR Generation](https://github.com/collaborativebioinformatics/expressed-variant-reporting)
+
+</div>
+
+
+```{r echo=FALSE}
+#Should not hardcode the different annotation algorithms used. 
+#but for now its just kind a difficult format to deal with. 
+header.dat.names <- names(header_data@header@listData)
+keep.dat <- grep("SnpEff|format|Command",header.dat.names)
+keep.dat <- header_data@header@listData[keep.dat]
+keep.dat <- as.data.frame(lapply(keep.dat,function(x) as.data.frame(x)))
+
+DT::datatable(keep.dat)
+```
+
+```{r echo=FALSE}
+txdb
+```
+
+
+
+# Session Information
+
+```{r}
+sessionInfo()
+```
+

@@ -6,12 +6,12 @@ html_document:
     toc: true
     toc_depth: 3
     number_sections: true
+    theme: Darkly
+runtime: shiny
 ---
 
 
-# Set-up 
-
-```{r setup, include=FALSE}
+```{r setup, include=FALSE, echo=FALSE}
 require(knitr)
 knitr::opts_knit$set(root.dir = here::here())
 
@@ -24,17 +24,29 @@ knitr::opts_chunk$set(tidy.opts=list(width.cutoff=50),
 getwd()
 ```
 
-```{r}
+```{r echo=FALSE, message=FALSE}
 library(dplyr)
 library(magrittr)
 library(tidyr)
 library(stringr)
+
 library(here)
+library(shiny)
+
+
+
+suppressPackageStartupMessages(library(vcfR))
 suppressPackageStartupMessages(library(VariantAnnotation))
 ```
 
-#About the test
 
+# About the test
+
+The genetic testing was performed at `institution X`
+
+```{r}
+kableExtra::kable(data.frame(""))
+```
 
 
 
@@ -42,15 +54,133 @@ suppressPackageStartupMessages(library(VariantAnnotation))
 
 grch38, and the annotation I used is gencode v22
 duplicate keys in header will be forced to unique rownamesduplicate keys in header will be forced to unique rownames
-```{r}
-vcf <- readVcf(here("Data/variants.HC_hard_cutoffs_applied.cancer.vcf"))
 
+https://bioconductor.org/packages/release/bioc/vignettes/VariantAnnotation/inst/doc/VariantAnnotation.pdf
 
-# head(vcf)
-str(vcf)
+```{r echo=FALSE, message=FALSE}
+#https://gist.github.com/sephraim/3d352ba4893df07a2c35d8f227ab17ac
+
+vcf <- vcfR::read.vcfR(here("Data/DRR131561.variants.HC_init.wAnnot.vcf.gz"))
+
+vcf.df <- cbind(as.data.frame(getFIX(vcf)),
+                   INFO2df(vcf))
+
+# head(vcf.df)
 ```
 
-#Results Table 
+```{r warning=FALSE, echo=FALSE, message=FALSE}
+vcf.s4 <- VariantAnnotation::readVcf(here("Data/DRR131561.variants.HC_init.wAnnot.vcf.gz"))
+# vcf.test <- readVcf(here("Data/variants.HC_hard_cutoffs_applied.cancer.vcf"))
+
+# head(vcf.s4)
+# str(vcf)
+```
+
+```{r echo=F}
+header_data <- VariantAnnotation::header(vcf.s4)
+SampleName <- header_data@samples
+```
+
+```{r echo=F}
+cat(paste0("Dear ", SampleName, ","))
+```
+
+This document will help you to understand the more important findings from a gene variant screening. The common definitions of the type of genetic variants (mutations) are described in the figure. While a variant may have been detected, the associations with the variant are not perfectly causal and their complex interactions between biology and the environment. 
+
+
+`insert link to diagram here`
+
+
+
+# About the Dataset
+
+https://varnomen.hgvs.org/bg-material/simple/
+https://pcingola.github.io/SnpEff/se_introduction/
+https://hbctraining.github.io/In-depth-NGS-Data-Analysis-Course/sessionVI/lessons/03_annotation-snpeff.html
+https://www.ncbi.nlm.nih.gov/books/NBK279177/
+
+```{r}
+header_info <- info(header(vcf.s4)) %>% 
+  as.data.frame()
+
+# class(header_info)
+# str(header_info)
+# header_info
+
+DT::datatable(header_info)
+```
+
+
+# Re-format the Data 
+
+```{r echo=FALSE, results='hide'}
+functional_annots_names <- header_info["ANN","Description"] %>% 
+  gsub("^.+\\'(.+)\\'","\\1",.) %>% 
+  str_split(., pattern = "\\|") %>% 
+  unlist() %>% 
+  gsub("\\s", "", .) 
+
+functional_annots_names <- functional_annots_names[-length(functional_annots_names)]
+# functional_annots_names
+# length(functional_annots_names) #15
+```
+
+```{r echo=FALSE, results='hide'}
+# https://www.biostars.org/p/226965/
+function_annots.df <- data.frame(do.call(rbind, strsplit(as.vector(vcf.df$ANN), split = "\\|")))
+function_annots.df <- function_annots.df[,1:45]  #keep only the first 3 transcripts
+colnames(function_annots.df) <- paste(functional_annots_names,rep(1:3, each=15), sep="_")
+
+
+head(function_annots.df)
+# dim(function_annots.df)
+```
+
+```{r echo=FALSE, results='hide'}
+variants.df <- vcf.df %>% 
+  mutate(S4_Vector_IDs=names(rowRanges(vcf.s4))) %>% 
+  bind_cols(., function_annots.df) %>% 
+  
+  mutate(rsID=ifelse(!is.na(RS), paste0("rs", RS), RS)) %>% 
+  mutate_at(vars(CHASM_FDR:VEST_FDR), ~as.numeric(.)) %>% 
+  group_by(GENE) %>% 
+  mutate(Number_SNVs_per_Gene=n()) %>% 
+  ungroup() %>% 
+  
+  dplyr::select(GENE,Number_SNVs_per_Gene, COSMIC_ID,
+         rsID,CHROM:ALT,FATHMM,SPLICEADJ,
+         TISSUE,TUMOR,
+         Annotation_1,Annotation_Impact_1,Feature_Type_1,
+         Transcript_BioType_1, 
+         coding_DNA_change_1=HGVS.c_1, 
+         protein_change_1=HGVS.p_1,
+         -ANN, everything(), ANN) %>% 
+  dplyr::filter(!is.na(FATHMM) | !is.na(SPLICEADJ) | grepl("High|Moderate",Annotation_Impact_1)) %>% 
+  dplyr::filter(grepl("coding", ignore.case = T, Transcript_BioType_1)) %>% 
+  dplyr::filter(VEST_FDR > 0.5 | is.na(VEST_FDR )) %>% 
+  dplyr::filter(CHASM_FDR > 0.5 | is.na(CHASM_FDR )) %>% 
+  arrange(desc(FATHMM), desc(Number_SNVs_per_Gene), Annotation_Impact_1) 
+
+
+
+
+head(variants.df)
+dim(variants.df) #1411   89
+# write.csv(variants.df, "Variants_df.csv", row.names = FALSE)
+```
+
+
+
+# HumanMine Annotation for Further dplyr::filtering and Results 
+
+-highly expressed in RNAseq 
+- not highly expressed in normal tissues 
+
+References:
+*Smith RN, et al. InterMine: a flexible data warehouse system for the integration and analysis of heterogeneous biological data. Bioinformatics. 2012 Dec 1;28(23):3163-5.*
+
+
+# Results Table 
 
 Gene ID
 Phenotype
@@ -59,24 +189,110 @@ Frequency in cases
 Gene variants
 Classification
 
+- different Tables for different gene biotypes 
+
+* larger indels prioritized (need to parse out size)
+* genes with larger number of SNVs prioritized
+* pathogenicity, or splice adjacent
+* high or moderate impact 
+
+
+```{r echo=FALSE, results="hide"}
+suppressPackageStartupMessages(library(DT))
+```
+
+Need to add a table header. How?
+
+```{r}
+DT::datatable(dplyr::filter(variants.df,
+                     Transcript_BioType_1 == "Coding") %>%
+                dplyr::select(GENE:protein_change_1,protein_change_1) %>%
+                dplyr::slice(1:10),
+               class = 'cell-border stripe')
+```
+
+```{r}
+DT::datatable(dplyr::filter(variants.df,
+                     Transcript_BioType_1 == "Noncoding") %>%
+                dplyr::select(GENE:protein_change_1,protein_change_1),class = 'cell-border stripe')
+```
+
+
+# Chromosome and Gene Vizualization of Mutations
+
+```{r echo=FALSE}
+library(Gviz)
+library(GenomicRanges)
+options(ucscChromosomeNames=FALSE)
+```
+
+```{r echo=FALSE, message=FALSE, results="hide"}
+# txdb <- GenomicFeatures::makeTxDbFromGFF(here::here("GenomicRefs/gencode.v22.chr_patch_hapl_scaff.annotation.gtf.gz"))
+# AnnotationDbi::saveDb(txdb, "gencode.v22.chr_patch_hapl_scaff.annotation.sqlite")
+
+txdb <- AnnotationDbi::loadDb(here::here("GenomicRefs/gencode.v22.chr_patch_hapl_scaff.annotation.sqlite"))
+
+# txdb
+```
+
+```{r echo=FALSE}
+top5.coding <- dplyr::filter(variants.df, 
+                     Transcript_BioType_1 == "Coding") %>%  
+  dplyr::slice(1:5) %>% #Not accurate. Needs to be top5 unique genes. will deal with later. 
+  pull(GENE)
+
+top5.coding <- dplyr::filter(variants.df, Transcript_BioType_1 == "Coding") %>% 
+  dplyr::filter(GENE %in% top5.coding) %>% 
+  pull(S4_Vector_IDs)
+
+
+vcf.ranges <- rowRanges(vcf.s4)
+vcf.ranges <- vcf.ranges[top5.coding]
+vcf.ranges <- vcf.ranges[order(vcf.ranges)]
+
+# seqnames(vcf.ranges)
+```
+
+```{r echo=FALSE, results="hide"}
+# itrack <- IdeogramTrack(genome = "hg38", chromosome = "chr4")
+# levels(itrack@bandTable$chrom) <- sub("^chr", "", 
+#                                       levels(itrack@bandTable$chrom),
+#                                       ignore.case=T)
+# dtrack <- DataTrack(range=GRanges("4", IRanges(45.5e6, width=1), e=100))
+# plotTracks(list(itrack,dtrack), from=45e6, to=46e6, chromosome="chr4")
+
+
+vcf.ranges[seqnames(vcf.ranges)=="chr1"]
+```
+
+```{r fig.show=TRUE, echo=FALSE, fig.subcap="A vizualization of the SNVs"}
+itrack.1 <- IdeogramTrack(genome = "hg38", chromosome = "chr1")
+gtrack <- GenomeAxisTrack()
+grtrack <- GeneRegionTrack(genome = "hg38",
+                           chromosome = "chr1", 
+                           name = "Gene Model")
+track <- AnnotationTrack(vcf.ranges[seqnames(vcf.ranges)=="chr1"],
+                         genome = "hg38",
+                         name="SNVs",
+                         ucscChromosomeNames=FALSE)
+
+plotTracks(c(itrack.1,gtrack,track,grtrack))
+```
+
+
+
+# Expression of Genes with Mutations 
+
+boxplots/violin plots 
+
+DE genes by condition
+
+Sommelier results: Haplyotype/PCA
 
 ```{r}
 
 ```
 
-
-#Chromosome and Gene Vizualization of Mutations
-
-```{r}
-
-```
-
-
-#Expression of Genes with Mutations 
-
-```{r}
-
-```
 
 
 # What this results means for you 
@@ -90,20 +306,58 @@ Classification
 Add QR code
 where does it go?
 
-# Important Considerations
 
-Need to protect PII/PHI!
-How to add security?? 
 
-de-identified information critical 
+# Consent for Analysis
+
+should include a consent form for patients 
+
+```{r}
+message("Please Sign Form. Acknowledment of informed consent is provided up signing.")
+```
+
+```{r}
+# patient_signature <- function(input){
+#   
+#   shinyApp( 
+#     
+#     ui = fluidPage(
+#     
+#         # Copy the line below to make a text input box
+#         textInput("text", label = h3("Acknowledgement"), value = "Enter First and Last Name Here"),
+#         
+#         hr(),
+#         fluidRow(column(3, verbatimTextOutput("value")))
+#     ), 
+#   
+#     server = function(input, output) {
+# 
+#       # You can access the value of the widget with input$text, e.g.
+#       output$value <- renderPrint({ input$text })
+#     },
+#     # options = list(height = 500)
+#   )
+# }
+```
+
 
 # Genome References and Software
 
-Can we automate this somehow?
+```{r echo=FALSE}
+#Should not hardcode the different annotation algorithms used. 
+#but for now its just kind a difficult format to deal with. 
+header.dat.names <- names(header_data@header@listData)
+keep.dat <- grep("SnpEff|format|Command",header.dat.names)
+keep.dat <- header_data@header@listData[keep.dat]
+keep.dat <- as.data.frame(lapply(keep.dat,function(x) as.data.frame(x)))
 
-```{r}
-
+DT::datatable(keep.dat)
 ```
+
+```{r echo=FALSE}
+txdb
+```
+
 
 
 #SessionInfo
