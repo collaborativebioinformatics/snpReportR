@@ -34,8 +34,7 @@ https://docs.google.com/spreadsheets/d/1pcB_bI_83B__sJ_Qw3tYDUhAYTz7Bh9SBvxjMzd8
 ## Outputs
 ![](https://github.com/collaborativebioinformatics/expressed-variant-reporting/blob/main/Report_example.png)
 
-Example clinical/patient report
-https://github.com/collaborativebioinformatics/expressed-variant-reporting/blob/main/report-1.pdf
+
 
 # Operation
 SNP-ReportR requires a VCF file that includes all the variants that should be genotyped (Flow chart).
@@ -51,5 +50,30 @@ Working flow chart link
 https://docs.google.com/presentation/d/1GwtkY6gtXj9l-k23cuZHhgFGPFtRZ0RkTLCqfZa2p-o/edit?usp=sharing
 
 SNPReprter creates two reports. The first report is aimed at patients, non-specialist clinicians. The second report is aimed for genetic researchers.
+
+# Results
+
+SNP-ReportR is a web page application. After uploading the VCF file or entering the gene name (HGNC, Ensembl gene (ENSG) in the search box on the homepage, you will be directed to the gene-specific page containing:
+1.	Gene-level summary in addition to information about associated disease.  
+2.	Links to the gene's page on OMIM, GTEx, gnomAD.
+3.	A dynamic table with the annotated variants overlapping the gene.
+4.	A graph with showing summary of all the variants within the gene.
+5.	Chromosome location. 
+6.	Table showing summary of gene expression analysis.
+7.	Tissue specific gene expression summary table.
+8.	Table with haplotype information, such as start, end and length. 
+9.	Haplotype visualisation. 
+10.	Link to 5 recent publications about the associated genes. 
+11.	SNPReprter creates two reports. The first report is aimed at patients, non-specialist clinicians. The second report is aimed for genetic researchers
+
+
+
+
+First report Patients, non-specialist clinicians
+The report was designed to use a patient friendly language 
+
+Example clinical/patient report
+https://github.com/collaborativebioinformatics/expressed-variant-reporting/blob/main/report-1.pdf
+
 
 
