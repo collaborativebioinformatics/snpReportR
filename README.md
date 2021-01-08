@@ -44,7 +44,7 @@ After uploading the VCF file or entering the gene name (HGNC, Ensembl gene (ENSG
 
 
 Flow Chart
-![](https://github.com/collaborativebioinformatics/expressed-variant-reporting/blob/main/flowchart.v2.png)
+![](https://github.com/collaborativebioinformatics/expressed-variant-reporting/blob/main/flowchart.v3.png)
 
 Working flow chart link
 https://docs.google.com/presentation/d/1GwtkY6gtXj9l-k23cuZHhgFGPFtRZ0RkTLCqfZa2p-o/edit?usp=sharing
