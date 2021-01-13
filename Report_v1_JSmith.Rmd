@@ -351,7 +351,6 @@ knitr::kable(data.frame("Type"=c("coding:",
 ***
 
 
-
 ```{r message=FALSE,fig.width=5, fig.height=7, echo=FALSE, fig.show=TRUE, fig.cap="Figure 1. Percentage of different types of mutations identified."}
 donut.df <- variants.df %>% 
   group_by(Annotation_1) %>% 
