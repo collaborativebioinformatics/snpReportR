@@ -248,8 +248,9 @@ source(here::here("R_Code/query_get_and_filter_function.R"))
 ```
 
 ```{r echo=FALSE}
+n <- nrow(variants.df)
 genes <- variants.df %>%
-  dplyr::slice(1:5) %>%
+  dplyr::slice(1:min(n,5)) %>%
   pull(GENE) %>%
   unique()
 
@@ -513,15 +514,27 @@ Can you please add this message in the next steps section, if the report show an
 
 #  More information
 
+## Recent Publications
+
+Quitting from lines 517-529 (Report_v2_JSmith.Rmd) 
+Error: Problem with `mutate()` input `GENE`.
+✖ Input `GENE` can't be recycled to size 20.
+ℹ Input `GENE` is `rep(genes, each = 5)`.
+ℹ Input `GENE` must be size 20 or 1, not 25.
+
 ```{r echo=FALSE}
 gene.pub.regex <- paste(paste(genes,"Recent.Publications", sep="."), collapse = "|")
+
 recent.pubs <- annots[grep(gene.pub.regex, names(annots))] %>%
-  bind_rows() %>%
-  mutate(GENE=rep(genes, each=5)) %>%
-  dplyr::select(GENE, everything())
+  bind_rows() 
+
+#Must fix this: 
+# each <- nrow(recent.pubs)/length(genes)
+# mutate(GENE=rep(genes, each=each)) %>%
+#   dplyr::select(GENE, everything())
 
 #  head(recent.pubs)
-#  dim(recent.pubs)
+ # dim(recent.pubs)
 #  lapply(recent.pubs, dim)
 
 DT::datatable(recent.pubs, class = 'cell-border stripe',
