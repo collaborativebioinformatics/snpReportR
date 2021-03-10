@@ -1,26 +1,10 @@
 ---
-title: "Expressed Variant Reporting"
+title: "Expressed Variant Reporting Results"
 author: "Brandon Michael Blobner, Jenny Leopoldina Smith, and Ahmad Al Khleifat"
 date: "`r format(Sys.Date(), tz = 'America/Los_Angeles')`"
 output:
-  html_document:
-    theme: yeti
-    highlight: breezedark
-    always_allow_html: yes
-    toc: true
-    toc_float: true
-    toc_depth: 3
-    number_sections: true
-    fig_caption: true
-    df_print: paged
-params:
-  data:
-    label: "Enter the Dataset:"
-    value: "Data/DRR131561_dx.variants.HC_init.wAnnot.vcf.gz"
-    input: file
-      
+  blastula::blastula_email
 ---
-
 
 
 ```{r setup, include=FALSE, echo=FALSE}
@@ -43,38 +27,27 @@ library(tidyr)
 library(stringr)
 
 library(here)
-library(shiny)
-
 library(ggplot2)
 library(gridExtra)
 library(RColorBrewer)
+```
 
-suppressPackageStartupMessages(library(vcfR))
-suppressPackageStartupMessages(library(VariantAnnotation))
+For CSS Styles:
+https://emilyriederer.netlify.app/post/rmarkdown-css-tips/
+
+
+<br><br><br>
+
+
+```{r}
+htmltools::img(src = "cid:foobar",
+               alt = 'logo',
+               style = 'float: center;padding-right:10px;height:a125px;width:250px')
 ```
 
 
-```{css echo=FALSE}
-.boxBorder {
-     border: 2px solid black;
-     padding: 10px;
-     outline: black solid 5px;
-     outline-offset: 5px;
-}
-```
 
 
-<style type="text/css">
-body{ /* Normal  */
-      font-size: 14px;
-  }
-p {line-height: 1.5em;}
-</style>
+<br><br><br>
 
-
-
-
-
-![snpReportR](../snpReporter_logo.png)
-
-
+Add a footer too

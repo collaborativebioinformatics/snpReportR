@@ -80,6 +80,7 @@ p {line-height: 1.5em;}
 
 
 ```{r echo=FALSE, message=FALSE, warning=FALSE}
+#These need to become API queries to an EHR database or other clinical database which has the patient information and the test information
 pt.info <- data.frame("Information"=c("Name:", 
                                         "DOB:",
                                         "Sex:",
