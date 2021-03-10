@@ -1,0 +1,23 @@
+Package: snpReportR
+Title: Provides automated HTML and PDF reports of genetic variants detected by RNA-seq
+Version: 0.0.0.9
+Authors@R: 
+    c(person(given = "Jenny",
+           family = "Smith",
+           role = c("aut", "cre"),
+           email = "jennyl.smith12@gmail.com",
+           comment = c(ORCID = "0000-0003-0402-2779")), 
+      person(given = "Brandon",
+           family = "Blobner",
+           role = c("aut", "cre"),
+           email = ""),
+      person(given = "Ahmad",
+           family = "Al Khleifat",
+           role = c("aut", "cre"),
+           email = ""))
+Description: Used input from the Trinity Cancer Transcriptome Analysis Toolkit (CTAT) mutation pipeline to create an interactive HTML report, and static PDF report of the most relevant genetic variants detected. Provides a clinician/reseacher report a patient report. 
+License: MIT + file LICENSE
+Encoding: UTF-8
+LazyData: true
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.1.1
