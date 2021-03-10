@@ -1,7 +1,7 @@
 # Differential Expression to query input
 
 # Read in differntial expression results
-diff.ex<-read.table("edgeR_test_results.tsv", header = T)
+diff.ex<-read.table(here::here("data-raw/edgeR_test_results.tsv"), header = T)
 
 # Filter significant results
 diff.ex<-diff.ex[which(diff.ex$PValue<0.05),]

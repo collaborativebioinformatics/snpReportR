@@ -9,11 +9,11 @@ Authors@R:
            comment = c(ORCID = "0000-0003-0402-2779")), 
       person(given = "Brandon",
            family = "Blobner",
-           role = c("aut", "cre"),
+           role = c("aut"),
            email = ""),
       person(given = "Ahmad",
            family = "Al Khleifat",
-           role = c("aut", "cre"),
+           role = c("aut"),
            email = ""))
 Description: Used input from the Trinity Cancer Transcriptome Analysis Toolkit (CTAT) mutation pipeline to create an interactive HTML report, and static PDF report of the most relevant genetic variants detected. Provides a clinician/reseacher report a patient report. 
 License: MIT + file LICENSE
@@ -34,4 +34,5 @@ Imports:
     Rsamtools,
     GenomicRanges,
     S4Vectors,
-    tidyr
+    tidyr,
+    here
