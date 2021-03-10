@@ -30,7 +30,7 @@ for (input_file in files){
   filename <- paste0(gsub("_applied.cancer.vcf|.wAnnot.vcf.gz","", basename(input_file)), "_snpReport.html")
   Params <- list(data=here(input_file))
 
-  rmarkdown::render(input = here("R_Code/Report_v2_JSmith.Rmd"),
+  rmarkdown::render(input = here:::here("R_Code/Report_v2_JSmith.Rmd"),
                     output_file=filename, 
                     output_dir = here("Reports"),
                     params=Params)

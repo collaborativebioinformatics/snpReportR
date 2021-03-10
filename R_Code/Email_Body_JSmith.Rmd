@@ -50,7 +50,7 @@ htmltools::img(src = "cid:foobar",
 
 <br><br><br>
 
-
+Add a footer too
 
 
 
