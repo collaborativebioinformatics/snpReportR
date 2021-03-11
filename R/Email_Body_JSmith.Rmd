@@ -3,7 +3,12 @@ title: "Expressed Variant Reporting Results"
 author: "Brandon Michael Blobner, Jenny Leopoldina Smith, and Ahmad Al Khleifat"
 date: "`r format(Sys.Date(), tz = 'America/Los_Angeles')`"
 output:
-  blastula::blastula_email
+  blastula::blastula_email:
+    always_allow_html: yes
+    number_sections: true
+    fig_caption: true
+    connect_footer: TRUE
+    
 ---
 
 
@@ -32,12 +37,27 @@ library(gridExtra)
 library(RColorBrewer)
 ```
 
+
+Dear { Patient/Clinician },
+
+We have produced a report of your current genetic report produced by `snpReportR` from {institution}. The following synopsis is provided below and an in-depth description of findings and their potential impact are included in the full HTML report. 
+
+If you encounter questions or concerns, please contact { institution } or { doctorInfo }. 
+
+
+<br><br><br>
+
+# Summary of Findings 
+
 For CSS Styles:
 https://emilyriederer.netlify.app/post/rmarkdown-css-tips/
 
 
 <br><br><br>
 
+# About snpReportR 
+
+<br><br><br>
 
 ```{r}
 htmltools::img(src = "cid:foobar", 
@@ -45,13 +65,16 @@ htmltools::img(src = "cid:foobar",
                style = 'float: center;padding-right:10px;height:a125px;width:250px')
 ```
 
-
-
-
 <br><br><br>
 
 Add a footer too
 
+<br><br><br>
+
+
+```{cat, engine.opts=list(file = "footer.html")}
+<p>This is a footer</p>
+```
 
 
 

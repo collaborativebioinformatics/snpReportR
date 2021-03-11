@@ -21,8 +21,6 @@ params:
       
 ---
 
-
-
 ```{r setup, include=FALSE, echo=FALSE}
 require(knitr)
 knitr::opts_knit$set(root.dir = here::here())
