@@ -1,6 +1,14 @@
 #Brandon Blobner 
 # Example: gene.names<-c("SCNN1A", "SCNN1B", "SCNN1G", "SCNN1D")
 
+#' Query HumanMine using gene symbols
+#'
+#' @param gene.names character(1) string, specifying gene symbols to query
+#'
+#' @return Disease, tissue, snps, and publications associated with genes of interest
+#' @export
+#'
+#' @examples query_get_and_filter(c("SCNN1A", "SCNN1B", "SCNN1G", "SCNN1D"))
 query_get_and_filter <- function(gene.names){
   print(gene.names)
   

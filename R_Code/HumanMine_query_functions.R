@@ -1,15 +1,16 @@
+#Brandon Blobner 
 # Library InterMineR, the HumanMine API
 library(InterMineR)
 
 
-#' query.Disease
+#' Query HumanMine for associated diseases
 #'
-#' @param gene.symbol 
+#' @param gene.symbol character(1) string, specifying gene symbol
 #'
-#' @return
+#' @return Dataframe of associated diseases
 #' @export
 #'
-#' @examples
+#' @examples query.Disease("SCNN1A")
 query.Disease<-function(gene.symbol) {
 # Set databse to HumanMine
 im <- initInterMine(mine=listMines()["HumanMine"])
@@ -29,6 +30,14 @@ runQuery(im, queryDisease)
 
 ## Query expression
 
+#' Query HumanMine for tissue expression data
+#'
+#' @param gene.symbol character(1) string, specifying gene symbol
+#'
+#' @return Dataframe of tissue expression data
+#' @export
+#'
+#' @examples query.expression("SCNN1A")
 query.Expression<-function(gene.symbol) {
 im <- initInterMine(mine=listMines()["HumanMine"])
 
@@ -47,6 +56,14 @@ runQuery(im, queryExpression)
 
 
 ## Set template to query Gene snps
+#' Query HumanMine for snps in genes of interest
+#'
+#' @param gene.symbol character(1) string, specifying gene symbol
+#'
+#' @return Dataframe of snp data for genes of interest
+#' @export
+#'
+#' @examples query.Snps("SCNN1A")
 query.Snps<-function(gene.symbol) {
   
 im <- initInterMine(mine=listMines()["HumanMine"])
@@ -64,6 +81,14 @@ runQuery(im, querySnps)
 }
 
 
+#' Query HumanMine for publications relevant to genes of interest
+#'
+#' @param gene.symbol character(1) string, specifying gene symbol
+#'
+#' @return Dataframe of publications and relevant data
+#' @export
+#'
+#' @examples query.Publications("SCNN1A")
 query.Publication<-function(gene.symbol) {
 im <- initInterMine(mine=listMines()["HumanMine"])
 
