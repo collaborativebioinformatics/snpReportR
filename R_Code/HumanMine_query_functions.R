@@ -1,8 +1,15 @@
-#Brandon Blobner 
 # Library InterMineR, the HumanMine API
 library(InterMineR)
 
 
+#' query.Disease
+#'
+#' @param gene.symbol 
+#'
+#' @return
+#' @export
+#'
+#' @examples
 query.Disease<-function(gene.symbol) {
 # Set databse to HumanMine
 im <- initInterMine(mine=listMines()["HumanMine"])
