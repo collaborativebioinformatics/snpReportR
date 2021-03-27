@@ -1,0 +1,153 @@
+---
+title: "Expressed Variant Reporting"
+author: "Brandon Michael Blobner, Jenny Leopoldina Smith, and Ahmad Al Khleifat"
+date: "`r format(Sys.Date(), tz = 'America/Los_Angeles')`"
+output:
+  pdf_document:
+    toc: true
+    toc_depth: 3
+    number_sections: true
+    df_print: kable
+    highlight: breezedark
+    
+params:
+  data:
+    label: "Enter the Dataset:"
+    value: "Data/DRR131561_dx.variants.HC_init.wAnnot.vcf.gz"
+    input: file
+      
+---
+
+```{r setup, include=FALSE, echo=FALSE}
+require(knitr)
+knitr::opts_knit$set(root.dir = here::here())
+
+
+knitr::opts_chunk$set(tidy.opts=list(width.cutoff=50),
+                      tidy=TRUE,
+                      fig.align='center',
+                      fig.width = 5, fig.height = 7)
+
+
+rmarkdown::find_pandoc(cache = FALSE)
+```
+
+```{r echo=FALSE, message=FALSE}
+library(dplyr)
+library(magrittr)
+library(tidyr)
+library(stringr)
+library(here)
+library(ggplot2)
+library(gridExtra)
+library(RColorBrewer)
+
+suppressPackageStartupMessages(library(vcfR))
+suppressPackageStartupMessages(library(VariantAnnotation))
+```
+
+
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+#These need to become API queries to an EHR database or other clinical database which has the patient information and the test information
+pt.info <- data.frame("Information"=c("Name:", 
+                                        "DOB:",
+                                        "Sex:",
+                                        "Sample Type:"), 
+                        "Value"=c("Jane Doe","01/01/1900","F","RNA"))
+dr.info <- data.frame("Information"=c("Name:", 
+                                        "Doctor identification number:",
+                                        "Hospital:"), 
+                        "Value"=c("Dr.X", "12345", "NCI"))
+                      
+                      
+knitr::kable(pt.info, caption = "Patient details:",align="l") %>% 
+  kableExtra::kable_paper(full_width = F, position = "left")
+
+knitr::kable(dr.info, caption = "Test ordered by:", align="l") %>% 
+  kableExtra::kable_paper(full_width = F, position = "float_left")
+```
+
+
+```{r echo=FALSE, message=FALSE, results="hide"}
+vcf <-  suppressMessages(vcfR::read.vcfR(params$data))
+
+vcf.df <- cbind(as.data.frame(getFIX(vcf)),
+                   INFO2df(vcf))
+
+ head(vcf.df)
+```
+
+```{r warning=FALSE, echo=FALSE, message=FALSE}
+vcf.s4 <- suppressMessages(VariantAnnotation::readVcf(here(params$data)))
+
+#  head(vcf.s4)
+#  str(vcf)
+```
+
+```{r echo=F}
+header_data <- suppressMessages(VariantAnnotation::header(vcf.s4))
+SampleName <- header_data@samples
+```
+
+This document will help you to understand the more important findings from a gene variant screening. The common definitions of the type of genetic variants (mutations) are described in the figure and in the table in section `Chromosome and Gene Vizualization of Mutations`.
+
+While a variant may have been detected, the associations with the variant are not perfectly causal and their complex interactions between biology and the environment.
+
+
+***
+
+#  About the Dataset
+
+```{r echo=FALSE, fig.cap="Table 1. Column names and Descriptions"}
+header_info <- info(header_data) %>%
+  as.data.frame()
+
+#  class(header_info)
+#  str(header_info)
+#  header_info
+
+DT::datatable(header_info, class = 'cell-border stripe',
+              caption="Table 1. Column names and descriptions for the CTAT Mutation Pipeline Results.")
+```
+
+```{r echo=FALSE, results='hide'}
+functional_annots_names <- header_info["ANN","Description"] %>%
+  gsub("^.+\\'(.+)\\'","\\1",.) %>%
+  str_split(., pattern = "\\|") %>%
+  unlist() %>%
+  gsub("\\s", "", .)
+
+functional_annots_names <- functional_annots_names[-length(functional_annots_names)]
+#  functional_annots_names
+#  length(functional_annots_names) #15
+```
+
+*In addition there are functional annotations for the variants per  transcript from snpEFF. These include:*
+
+* "Annotation_Impact"
+* "Feature_Type"
+* "Transcript_BioType"
+* "Rank"
+* "HGVS.c"
+* "HGVS.p"
+* "cDNA.pos/cDNA.length"
+* "CDS.pos/CDS.length"
+* "AA.pos/AA.length"
+* "Distance"
+
+
+*The top variants were ranked by the following attributes:*
+
+* FATHMM predicted pathogenicty or splice adjacent
+* genes with larger number of SNVs prioritized
+* high or moderate impact on the structure of the gene
+* CADD Score/Polyphen Score (not done yet)
+
+
+##  Session Information
+
+```{r}
+# sessionInfo()
+```
+

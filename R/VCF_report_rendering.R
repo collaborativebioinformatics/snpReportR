@@ -11,7 +11,7 @@ here::here()
 #Configure gmailr package.
 #https://cran.r-project.org/web/packages/gmailr/vignettes/gmailr.html
 gmailr::gm_auth_configure() #this needs to be run at the top of the script to send emails
-# gm_auth()
+
 
 #---------------------------------Define Parameters----------------------------------------------
 currentDate    <- Sys.Date()
@@ -24,7 +24,7 @@ smtp.username  <- 'jennyl.smith.workonly@gmail.com'
 
 #Must provide path to pandoc since Rscript does not natively know where to find it,
 #unlike running rmakrdown::render() interactively
-Sys.setenv(RSTUDIO_PANDOC="/Applications/RStudio.app/Contents/MacOS/pandoc")
+Sys.setenv(RSTUDIO_PANDOC=rmarkdown::find_pandoc(cache = FALSE)$dir)
 
 #---------------------------------Define Parameters----------------------------------------------
 

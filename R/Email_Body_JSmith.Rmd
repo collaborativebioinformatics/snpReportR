@@ -52,6 +52,8 @@ If you encounter questions or concerns, please contact { institution } or { doct
 For CSS Styles:
 https://emilyriederer.netlify.app/post/rmarkdown-css-tips/
 
+For LATEX PDF templates
+https://www.overleaf.com/latex/templates/tu-dublin-computing-poster-template/mpnrbxzvjgsr 
 
 <br><br><br>
 
