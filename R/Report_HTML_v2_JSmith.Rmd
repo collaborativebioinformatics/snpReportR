@@ -55,30 +55,56 @@ suppressPackageStartupMessages(library(VariantAnnotation))
 
 
 ```{css echo=FALSE}
+body { 
+  font-size: 14px;
+  background-color: lightgray; 
+}
+p { 
+  line-height: 1.5em;
+}
+
 .boxBorder {
      border: 2px solid black;
      padding: 10px;
      outline: black solid 5px;
      outline-offset: 5px;
 }
+
+.styleContentContainer {
+  background-color: white;
+  padding: 0.25rem;
+  padding-left: 25px;
+  margin-top: 28px;
+  border-radius: 5px;
+}
+
+.styleTwoColumnContainer {
+  display: flex;
+}
+
+.style25PercentContent {
+  flex: 1 0 auto;
+}
+
+.style75PercentContent {
+  padding: 1rem;
+}
+
 ```
 
 
-<style type="text/css">
-body{ /* Normal  */
-      font-size: 14px;
-  }
-p {line-height: 1.5em;}
-</style>
 
 
+<div class="styleContentContainer">
 # About The Test: Variant Detection from RNA-seq
 
 
 ![snpReportR](../snpReporter_logo.png)
 
 
+<div class="styleTwoColumnContainer" >
 
+<div class="style25PercentContent" >
 ```{r echo=FALSE, message=FALSE, warning=FALSE}
 #These need to become API queries to an EHR database or other clinical database which has the patient information and the test information
 pt.info <- data.frame("Information"=c("Name:", 
@@ -117,7 +143,9 @@ vcf.s4 <- suppressMessages(VariantAnnotation::readVcf(here(params$data)))
 #  head(vcf.s4)
 #  str(vcf)
 ```
+</div>
 
+<div class="style75PercentContent" >
 ```{r echo=F}
 header_data <- suppressMessages(VariantAnnotation::header(vcf.s4))
 SampleName <- header_data@samples
@@ -129,6 +157,8 @@ While a variant may have been detected, the associations with the variant are no
 
 
 ***
+</div>
+</div>
 
 #  About the Dataset
 
@@ -679,3 +709,4 @@ txdb
 # sessionInfo()
 ```
 
+</div>
