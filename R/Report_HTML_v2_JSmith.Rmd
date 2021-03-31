@@ -16,10 +16,12 @@ output:
 params:
   data:
     label: "Enter the Dataset:"
-    value: "Data/DRR131561_dx.variants.HC_init.wAnnot.vcf.gz"
+    value: "data-raw/DRR131565_dx.variants.HC_hard_cutoffs_applied.cancer.vcf"
     input: file
-      
 ---
+
+TODO: MAKE IT PRETTY :) 
+
 
 ```{r setup, include=FALSE, echo=FALSE}
 require(knitr)
@@ -53,21 +55,47 @@ suppressPackageStartupMessages(library(VariantAnnotation))
 
 
 ```{css echo=FALSE}
+body { 
+  font-size: 14px;
+  background-color: lightgray; 
+}
+p { 
+  line-height: 1.5em;
+}
+
 .boxBorder {
      border: 2px solid black;
      padding: 10px;
      outline: black solid 5px;
      outline-offset: 5px;
 }
+
+.styleContentContainer {
+  background-color: white;
+  padding: 0.25rem;
+  padding-left: 25px;
+  margin-top: 28px;
+  border-radius: 5px;
+}
+
+.styleTwoColumnContainer {
+  display: flex;
+}
+
+.style25PercentContent {
+  flex: 1 0 auto;
+}
+
+.style75PercentContent {
+  padding: 1rem;
+}
+
 ```
 
 
-<style type="text/css">
-body{ /* Normal  */
-      font-size: 14px;
-  }
-p {line-height: 1.5em;}
-</style>
+
+
+<div class="styleContentContainer">
 
 
 # About The Test: Variant Detection from RNA-seq
@@ -76,6 +104,9 @@ p {line-height: 1.5em;}
 ![snpReportR](../snpReporter_logo.png)
 
 
+<div class="styleTwoColumnContainer" >
+
+<div class="style25PercentContent" >
 
 ```{r echo=FALSE, message=FALSE, warning=FALSE}
 #These need to become API queries to an EHR database or other clinical database which has the patient information and the test information
@@ -98,15 +129,20 @@ knitr::kable(dr.info, caption = "Test ordered by:", align="l") %>%
 ```
 
 
-```{r echo=FALSE, message=FALSE, results="hide"}
+```{r echo=FALSE, message=FALSE, results="hide", warning=FALSE}
 # https://gist.github.com/sephraim/3d352ba4893df07a2c35d8f227ab17ac
 
 vcf <-  suppressMessages(vcfR::read.vcfR(params$data))
 
-vcf.df <- cbind(as.data.frame(getFIX(vcf)),
-                   INFO2df(vcf))
+# vcf.df <- vcfR::vcfR2tidy(vcf, .name_repair="unique")
 
- head(vcf.df)
+vcf.df <- cbind(as.data.frame(getFIX(vcf)),
+                   INFO2df(vcf)) %>% 
+   as_tibble(.,  .name_repair = "unique")
+  
+
+ # head(vcf.df)
+ # dim(vcf.df)
 ```
 
 ```{r warning=FALSE, echo=FALSE, message=FALSE}
@@ -115,6 +151,10 @@ vcf.s4 <- suppressMessages(VariantAnnotation::readVcf(here(params$data)))
 #  head(vcf.s4)
 #  str(vcf)
 ```
+
+</div>
+
+<div class="style75PercentContent" >
 
 ```{r echo=F}
 header_data <- suppressMessages(VariantAnnotation::header(vcf.s4))
@@ -127,6 +167,8 @@ While a variant may have been detected, the associations with the variant are no
 
 
 ***
+</div>
+</div>
 
 #  About the Dataset
 
@@ -154,6 +196,9 @@ functional_annots_names <- functional_annots_names[-length(functional_annots_nam
 #  length(functional_annots_names) #15
 ```
 
+<br><br><br>
+<div class="boxBorder">
+
 *In addition there are functional annotations for the variants per  transcript from snpEFF. These include:*
 
 * "Annotation_Impact"
@@ -167,14 +212,35 @@ functional_annots_names <- functional_annots_names[-length(functional_annots_nam
 * "AA.pos/AA.length"
 * "Distance"
 
+</div>
+<br><br><br>
+
+
+
+<br><br><br>
+<div class="boxBorder">
 
 *The top variants were ranked by the following attributes:*
 
 * FATHMM predicted pathogenicty or splice adjacent
+* CHASMplus predicts driver mutations 
 * genes with larger number of SNVs prioritized
 * high or moderate impact on the structure of the gene
 * CADD Score/Polyphen Score (not done yet)
 
+</div>
+<br><br><br>
+
+*Interpretation of attributes* 
+
+<div class="boxBorder">
+
+* "[FATHMM] weighted algorithm is capable of adjusting our conservation-based predictions to account for the tolerance of related sequences to mutations" (http://fathmm.biocompute.org.uk/inherited.html)
+* "CHASMplus scores range from 0 to 1, with higher scores meaning more likely to be a cancer driver mutation." (https://chasmplus.readthedocs.io/en/latest/)
+* "VEST‐indel scores were assigned to categories of pathogenic (≥0.5) or benign (<0.5)." (https://doi.org/10.1002/humu.22911)
+
+</div>
+<br><br><br>
 
 ```{r echo=FALSE, results='hide', warning=FALSE}
 #  https://www.biostars.org/p/226965/
@@ -183,11 +249,11 @@ function_annots.df <- function_annots.df[,1:45]  #keep only the first 3 transcri
 colnames(function_annots.df) <- paste(functional_annots_names,rep(1:3, each=15), sep="_")
 
 
-# head(function_annots.df)
-#  dim(function_annots.df)
+head(function_annots.df)
+dim(function_annots.df)
 ```
 
-```{r echo=FALSE, results='hide'}
+```{r echo=FALSE, results='hide', message=FALSE, warning=FALSE}
 variants.df <- vcf.df %>%
   mutate(S4_Vector_IDs=names(rowRanges(vcf.s4))) %>%
   bind_cols(., function_annots.df) %>%
@@ -199,7 +265,10 @@ variants.df <- vcf.df %>%
   ungroup() %>%
 
   dplyr::select(GENE,Number_SNVs_per_Gene, COSMIC_ID,
-         rsID,CHROM:ALT,FATHMM,SPLICEADJ,
+         rsID,CHROM:ALT,
+         FATHMM,SPLICEADJ,
+         matches("chasmplus_(pval|score)"),
+         matches("vest_(pval|score)"),
          TISSUE,TUMOR,
          Annotation_1,Annotation_Impact_1,Feature_Type_1,
          Transcript_BioType_1,
@@ -207,16 +276,13 @@ variants.df <- vcf.df %>%
          protein_change_1=HGVS.p_1,
          -ANN, everything(), ANN) %>%
   dplyr::filter(grepl("PATHOGENIC", FATHMM) | !is.na(SPLICEADJ)) %>%
-  dplyr::filter(grepl("HIGH|MODERATE",Annotation_Impact_1) | !is.na(SPLICEADJ)) %>%
+  dplyr::filter(grepl("HIGH|MODERATE",Annotation_Impact_1) | !is.na(SPLICEADJ)) %>% 
+  arrange(desc(chasmplus_score), desc(vest_score),
+          desc(Number_SNVs_per_Gene), Annotation_Impact_1)
 
 
-  dplyr::filter(vest_pval > 0.5 | is.na(vest_pval)) %>%
-  dplyr::filter(chasmplus_pval > 0.5 | is.na(chasmplus_pval )) %>%
-  arrange(desc(FATHMM), desc(Number_SNVs_per_Gene), Annotation_Impact_1)
-
-
-# head(variants.df)
-# dim(variants.df)
+head(variants.df)
+dim(variants.df)
 # length(unique(variants.df$GENE))
 # write.csv(variants.df, "Variants_df.csv", row.names = FALSE)
 ```
@@ -232,18 +298,14 @@ DT::datatable(types,class = 'cell-border stripe',
               caption = "Table 2. Summary of Expressed Genetic Variants with potential for Pathegenicity.")
 ```
 
-A total of 34 variants across 33 genes were identified that met this criteria for further evaluation.
-
 ***
 
 #  HumanMine Annotation for Further Results
 
-HumanMine annotations for these 34 genes were queried from the HumanMine database API.
-
 ```{r echo=FALSE, results="hide"}
 library(InterMineR)
-source(here::here("R_Code/HumanMine_query_functions.R"))
-source(here::here("R_Code/query_get_and_filter_function.R"))
+source(here::here("R/HumanMine_query_functions.R"))
+source(here::here("R/query_get_and_filter_function.R"))
 ```
 
 ```{r echo=FALSE}
@@ -298,8 +360,6 @@ bar.plot
 
 
 
-
-
 ***
 
 #  Results Table {.tabset}
@@ -336,8 +396,10 @@ DT::datatable(dplyr::filter(variants.df,
 suppressPackageStartupMessages(library(Gviz))
 suppressPackageStartupMessages(library(GenomicRanges))
 options(ucscChromosomeNames=FALSE)
-source(here::here("R_Code/Gviz_tracks.R"))
+source("R/donut_plots.R")
+source(here::here("R/Gviz_tracks.R"))
 ```
+
 
 ```{r echo=FALSE}
 knitr::kable(data.frame("Type"=c("coding:",
@@ -364,84 +426,33 @@ knitr::kable(data.frame("Type"=c("coding:",
 
 ***
 
-
 ```{r message=FALSE,fig.width=5, fig.height=7, echo=FALSE, fig.show=TRUE, fig.cap="Figure 1. Percentage of different types of mutations identified."}
-donut.df <- variants.df %>%
-  group_by(Annotation_1) %>%
-  summarize(N=n()) %>%
-  mutate_at(vars(Annotation_1), ~case_when(
-    grepl("5_prime_UTR", .) ~ "5_prime_UTR_variant",
-    grepl("missense_variant", .) ~ "missense_variant",
-    grepl("splice", .) ~ "splice_site",
-    TRUE ~ .
-  )) %>%
-  group_by(Annotation_1) %>%
-  summarise(N=sum(N)) %>%
-  ungroup() %>%
-  mutate(Percent=round(N/sum(N) *100, digits = 2)) %>%
-  arrange(N) %>%
-  mutate(lab.pos = cumsum(Percent)-.5*Percent) %>%
-  mutate(Annotation_1 = factor(Annotation_1, levels=rev(unique(Annotation_1))))
-
-
-GT.5pct <- filter(donut.df, Percent > 5)
-LE.5pct <- filter(donut.df, Percent <= 5)
-
-
-donut.types <- ggplot(data = donut.df,
-       aes(x = 2, y = Percent, fill = Annotation_1))+
-  geom_col(width = 1.0, color="black", size=0.25) +
-  # scale_x_discrete(limits = c(" ", 2)) +
-  xlim(0.3, 2.5) +
-  annotate(geom="label",
-           x=2.0, y=GT.5pct$lab.pos,
-           label=paste0(GT.5pct$Percent,"%"),
-           size=3) +
-  labs(title="Variant Locations within Genes") +
-  coord_polar("y", start=1) +
-  scale_fill_brewer(palette="Paired") +
-  theme_void() +
-  theme(legend.position = "left",
-        legend.title = element_blank(),
-        legend.text = element_text(size=8))
-
-if(nrow(LE.5pct) > 0){
-  donut.types <- donut.types +
-      ggrepel::geom_text_repel(data=LE.5pct,
-                           aes(x = 2.5, y = lab.pos,label=paste0(Percent,"%")),
-                    nudge_x = 0.25,
-                    segment.size = .5,
-                    min.segment.length = 0.1,
-                    size=3,
-                    show.legend = FALSE,
-                   inherit.aes = F) 
-}
-
-
-donut.types
+donut_plot(variants.df)
 ```
 
 ***
 
 ```{r echo=FALSE, message=FALSE, results="hide"}
-txdb <- AnnotationDbi::loadDb(here::here("GenomicRefs/gencode.v22.chr_patch_hapl_scaff.annotation.sqlite"))
-GRCh38.txs <- GenomicFeatures::transcripts(txdb)
- # txdb
+txdb <- AnnotationDbi::loadDb("gencode.v22.annotation.sqlite")
+# gff <- readRDS("gencode.v22.annotation.gff3.RDS")
+# class(gff) 
+# gff
 ```
 
 ```{r echo=FALSE, message=FALSE,results="hide"}
 top5.coding <- dplyr::filter(variants.df,
                      Transcript_BioType_1 == "Coding") %>%
   dplyr::slice(1:5) %>% #Not accurate. Needs to be top5 unique genes. will deal with later.
-    pull(GENE)
+  pull(GENE)
 
 top5.coding <- dplyr::filter(variants.df, Transcript_BioType_1 == "Coding") %>%
     dplyr::filter(GENE %in% top5.coding) %>%
     pull(S4_Vector_IDs)
+
 ```
 
 ```{r fig.width=9, fig.show=TRUE, echo=FALSE, fig.subcap="A vizualization of the SNVs", message=FALSE, warning=FALSE}
-gene_tracks(vcf_s4 = vcf.s4[top5.coding], transriptsGR = GRCh38.txs)
+gene_tracks(vcf_s4 = vcf.s4[top5.coding], txdb=txdb) #gff=gff
 ```
 
 
@@ -472,7 +483,7 @@ gene_tracks(vcf_s4 = vcf.s4[top5.coding], transriptsGR = GRCh38.txs)
 # Sommelier results: Haplyotype/PCA
 
 ```{r}
-
+#add results here
 ```
 
 <br><br><br>
@@ -572,11 +583,12 @@ Can search for additional drugs that may target the mutant genes online using [D
 
 #  Consent for Analysis
 
-```{r echo=FALSE}
-message("Please Sign Form. Acknowledgment of informed consent is provided upon signing.")
-```
+This should simply be a copy of the consent form the patient has already signed.
+Also, interactive shiny widgets make this less portable. 
 
 ```{r echo=FALSE}
+# message("Please Sign Form. Acknowledgment of informed consent is provided upon signing.")
+
 # patient_signature <- function(input){
 
 #   shinyApp(
@@ -646,6 +658,9 @@ message("Please Sign Form. Acknowledgment of informed consent is provided upon s
   * [Association between Genes and Drug Targets](https://github.com/collaborativebioinformatics/viravate2)
   * [Mixed Sample Graphs QC](https://github.com/collaborativebioinformatics/mixed-sample-graphs)
   * [snpReportR Generation](https://github.com/collaborativebioinformatics/expressed-variant-reporting)
+  * [CHASMplus](https://chasmplus.readthedocs.io/en/latest/index.html)
+  * [FATHMM](http://fathmm.biocompute.org.uk/)
+  * [VEST](https://karchinlab.org/apps/appVest.html)
 <br>
 
 </div>
@@ -674,6 +689,7 @@ txdb
 ##  Session Information
 
 ```{r}
-# sessionInfo()
+sessionInfo()
 ```
 
+</div>
