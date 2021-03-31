@@ -2,7 +2,7 @@
 .Rhistory
 .Rproj.user/
 *.sqlite
-
+*.RDS
 
 #hidden caches
 ~$*
