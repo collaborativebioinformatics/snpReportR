@@ -4,7 +4,6 @@
 *.sqlite
 
 
-
 #hidden caches
 ~$*
 
@@ -40,6 +39,3 @@ pip-delete-this-directory.txt
 #OS specific
 .DS_Store
 .Rproj.user
-
-#sample report files
-sample_html_report.html
