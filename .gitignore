@@ -39,3 +39,5 @@ pip-delete-this-directory.txt
 #OS specific
 .DS_Store
 .Rproj.user
+
+sample_html_report.html
