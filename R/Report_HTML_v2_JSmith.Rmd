@@ -111,9 +111,11 @@ p {
     padding: 3rem;
 }
 
-/* .styleTableInfo .styleTableInfoPanel {
-  background-color: gray;
-} */
+.styleTableInfo .styleTableInfoPanel {
+  border: 0.25rem solid gray;
+  border-radius: 1rem;
+  height: 25rem;
+}
 
 
 ```
@@ -262,7 +264,7 @@ DT::datatable(header_info, class = 'cell-border stripe',
 * "CHASMplus scores range from 0 to 1, with higher scores meaning more likely to be a cancer driver mutation." (https://chasmplus.readthedocs.io/en/latest/)
 * "VEST‐indel scores were assigned to categories of pathogenic (≥0.5) or benign (<0.5)." (https://doi.org/10.1002/humu.22911)
 
-
+<br><br><br>
 
 ```{r echo=FALSE, results='hide', message=FALSE, warning=FALSE}
 variants.df <- filter_ctat_vcf(vcf.df=vcf.df, vcf.s4=vcf.s4)
