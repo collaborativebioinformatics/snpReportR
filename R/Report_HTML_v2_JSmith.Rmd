@@ -24,9 +24,6 @@ params:
     input: file 
 ---
 
-# TODO: MAKE IT PRETTY :) :)
-
-
 ```{r setup, include=FALSE, echo=FALSE}
 require(knitr)
 knitr::opts_knit$set(root.dir = here::here())
@@ -62,6 +59,8 @@ library(snpReportR)
 ```
 
 ```{css echo=FALSE}
+/* TODO: MAKE IT PRETTY :) :) */
+
 body { 
   font-size: 14px;
   background-color: lightgray; 
