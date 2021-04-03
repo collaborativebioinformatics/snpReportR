@@ -102,6 +102,17 @@ p {
   padding: 1rem;
 }
 
+.styleTableInfo {
+    display: flex;
+    justify-content: center;
+    align-items: baseline;
+    padding: 3rem;
+}
+
+/* .styleTableInfo .styleTableInfoPanel {
+  background-color: gray;
+} */
+
 
 ```
 
@@ -207,9 +218,10 @@ DT::datatable(header_info, class = 'cell-border stripe',
               caption="Table 1. Column names and descriptions for the CTAT Mutation Pipeline Results.")
 ```
 
+<div class="styleTableInfo">
 
+<div class="styleTableInfoPanel">
 <br><br><br>
-<div class="boxBorder">
 
 *In addition there are functional annotations for the variants per  transcript from snpEFF. These include:*
 
@@ -223,14 +235,10 @@ DT::datatable(header_info, class = 'cell-border stripe',
 * "CDS.pos/CDS.length"
 * "AA.pos/AA.length"
 * "Distance"
-
 </div>
+
+<div class="styleTableInfoPanel">
 <br><br><br>
-
-
-
-<br><br><br>
-<div class="boxBorder">
 
 *The top variants were ranked by the following attributes:*
 
@@ -239,20 +247,21 @@ DT::datatable(header_info, class = 'cell-border stripe',
 * genes with larger number of SNVs prioritized
 * high or moderate impact on the structure of the gene
 * CADD Score/Polyphen Score (not done yet)
-
 </div>
+
+<div class="styleTableInfoPanel">
 <br><br><br>
 
 *Interpretation of attributes* 
-
-<div class="boxBorder">
 
 * "[FATHMM] weighted algorithm is capable of adjusting our conservation-based predictions to account for the tolerance of related sequences to mutations" (http://fathmm.biocompute.org.uk/inherited.html)
 * "CHASMplus scores range from 0 to 1, with higher scores meaning more likely to be a cancer driver mutation." (https://chasmplus.readthedocs.io/en/latest/)
 * "VEST‐indel scores were assigned to categories of pathogenic (≥0.5) or benign (<0.5)." (https://doi.org/10.1002/humu.22911)
 
 </div>
-<br><br><br>
+
+
+</div>
 
 ```{r echo=FALSE, results='hide', message=FALSE, warning=FALSE}
 variants.df <- filter_ctat_vcf(vcf.df=vcf.df, vcf.s4=vcf.s4)
