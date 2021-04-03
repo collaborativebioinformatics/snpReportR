@@ -76,6 +76,19 @@ p {
      outline-offset: 5px;
 }
 
+/* .styleTitleHeader {    
+  background-color: pink;
+  padding: 1.25rem;
+  margin-top: 1rem;
+  background-image: linear-gradient(white, #008cba);
+  border-radius: 1rem;
+}
+
+.styleTitleHeader h1 {
+  margin: 0;
+} */
+
+
 .styleContentContainer {
   background-color: white;
   padding: 0.25rem;
