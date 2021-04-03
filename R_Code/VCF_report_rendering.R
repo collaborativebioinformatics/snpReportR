@@ -24,8 +24,6 @@ recipients     <- c('jennyl.smith.workonly@gmail.com')
 #Rmarkdown Config
 Sys.setenv(RSTUDIO_PANDOC="/Applications/RStudio.app/Contents/MacOS/pandoc")
 
-Sys.setenv(RSTUDIO_PANDOC="/Applications/RStudio.app/Contents/MacOS/pandoc")
-
 #---------------------------------Define Parameters----------------------------------------------
 
 for (input_file in files){
