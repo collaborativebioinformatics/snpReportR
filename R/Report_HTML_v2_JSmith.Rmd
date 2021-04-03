@@ -82,6 +82,7 @@ p {
   padding-left: 25px;
   margin-top: 28px;
   border-radius: 5px;
+  width: 95rem;
 }
 
 .styleTwoColumnContainer {
@@ -111,10 +112,13 @@ p {
     padding: 3rem;
 }
 
+/* This is a child of the .styleTableinfo with the space. If there is no space eg styleTableinfo.thisOtherStyle means it needs both classes */
 .styleTableInfo .styleTableInfoPanel {
   border: 0.25rem solid gray;
   border-radius: 1rem;
-  height: 25rem;
+  height: 33rem;
+  padding: 1rem;
+  margin: 1rem;
 }
 
 
@@ -225,7 +229,7 @@ DT::datatable(header_info, class = 'cell-border stripe',
 <div class="styleTableInfo">
 
 <div class="styleTableInfoPanel">
-<br><br><br>
+
 
 *In addition there are functional annotations for the variants per  transcript from snpEFF. These include:*
 
@@ -242,7 +246,7 @@ DT::datatable(header_info, class = 'cell-border stripe',
 </div>
 
 <div class="styleTableInfoPanel">
-<br><br><br>
+
 
 *The top variants were ranked by the following attributes:*
 
@@ -253,8 +257,6 @@ DT::datatable(header_info, class = 'cell-border stripe',
 * CADD Score/Polyphen Score (not done yet)
 </div>
 
-<br><br><br>
-
 </div>
 
 
@@ -263,6 +265,7 @@ DT::datatable(header_info, class = 'cell-border stripe',
 * "[FATHMM] weighted algorithm is capable of adjusting our conservation-based predictions to account for the tolerance of related sequences to mutations" (http://fathmm.biocompute.org.uk/inherited.html)
 * "CHASMplus scores range from 0 to 1, with higher scores meaning more likely to be a cancer driver mutation." (https://chasmplus.readthedocs.io/en/latest/)
 * "VEST‐indel scores were assigned to categories of pathogenic (≥0.5) or benign (<0.5)." (https://doi.org/10.1002/humu.22911)
+
 
 <br><br><br>
 
