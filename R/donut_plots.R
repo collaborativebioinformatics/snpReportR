@@ -2,10 +2,28 @@
 # March 30, 2021
 #Purpose: Create donut plots for SNVs types of interest.
 
-donut_plot <- function(variants.df){
+#' Create a donut plot
+#'
+#' @param variants.df is the filtered and re-formatted dataframe from filtered VCF from filter_vcf() function.
+#'
+#' @return
+#' @export
+#'
+#' @examples
+#' \dontrun{
+#' vcf <- vcfR::read.vcfR("/path/to/vcf")
+#' vcf.df <- cbind(as.data.frame(vcfR::getFIX(vcf)), vcfR::INFO2df(vcf))
+#' vcf.s4 <- VariantAnnotation::readVcf("/path/to/vcf")
+#' variants.df <- filter_vcf(vcf.df,vcf.s4)
+#'
+#' donut_plot(filtered.vcf=variants.df)
+#' }
+#'
+#' @import dplyr
+donut_plot <- function(filtered.vcf){
 
   #Calculate number of variant types
-  donut.df <- variants.df %>%
+  donut.df <- filtered.vcf %>%
     group_by(Annotation_1) %>%
     summarize(N=n()) %>%
     mutate_at(vars(Annotation_1), ~case_when(
@@ -26,20 +44,20 @@ donut_plot <- function(variants.df){
   LE.5pct <- filter(donut.df, Percent <= 5)
 
   #create the donut plot with ggplot2
-  donut.types <- ggplot(data = donut.df,
+  donut.types <- ggplot2::ggplot(data = donut.df,
                         aes(x = 2, y = Percent, fill = Annotation_1))+
-    geom_col(width = 1.0, color="black", size=0.25) +
+    ggplot2::geom_col(width = 1.0, color="black", size=0.25) +
     # scale_x_discrete(limits = c(" ", 2)) +
-    xlim(0.3, 2.5) +
-    annotate(geom="label",
+    ggplot2::xlim(0.3, 2.5) +
+    ggplot2::annotate(geom="label",
              x=2.0, y=GT.5pct$lab.pos,
              label=paste0(GT.5pct$Percent,"%"),
              size=3) +
-    labs(title="Variant Locations within Genes") +
-    coord_polar("y", start=1) +
-    scale_fill_brewer(palette="Paired") +
-    theme_void() +
-    theme(legend.position = "left",
+    ggplot2::labs(title="Variant Locations within Genes") +
+    ggplot2::coord_polar("y", start=1) +
+    ggplot2::scale_fill_brewer(palette="Paired") +
+    ggplot2::theme_void() +
+    ggplot2::theme(legend.position = "left",
           legend.title = element_blank(),
           legend.text = element_text(size=8))
 
@@ -47,7 +65,8 @@ donut_plot <- function(variants.df){
   if(nrow(LE.5pct) > 0){
     donut.types <- donut.types +
       ggrepel::geom_text_repel(data=LE.5pct,
-                               aes(x = 2.5, y = lab.pos,label=paste0(Percent,"%")),
+                               aes(x = 2.5, y = lab.pos,
+                                   label=paste0(Percent,"%")),
                                nudge_x = 0.25,
                                segment.size = .5,
                                min.segment.length = 0.1,

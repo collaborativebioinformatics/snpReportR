@@ -35,4 +35,11 @@ Imports:
     GenomicRanges,
     S4Vectors,
     tidyr,
-    here
+    here,
+    ggplot2,
+    ggrepel,
+    SummarizedExperiment,
+    GenomeInfoDb,
+    AnnotationDbi,
+    Gviz,
+    VariantAnnotation
