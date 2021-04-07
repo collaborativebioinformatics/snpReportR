@@ -24,9 +24,6 @@ params:
     input: file 
 ---
 
-TODO: MAKE IT PRETTY :) 
-
-
 ```{r setup, include=FALSE, echo=FALSE}
 require(knitr)
 knitr::opts_knit$set(root.dir = here::here())
@@ -35,7 +32,9 @@ knitr::opts_knit$set(root.dir = here::here())
 knitr::opts_chunk$set(tidy.opts=list(width.cutoff=50),
                       tidy=TRUE,
                       fig.align='center',
-                      fig.width = 5, fig.height = 7)
+                      fig.width = 5, fig.height = 7,
+                      message=FALSE,
+                      warning=FALSE)
 
 rmarkdown::find_pandoc(cache = FALSE)
 ```
@@ -55,10 +54,13 @@ library(RColorBrewer)
 
 suppressPackageStartupMessages(library(vcfR))
 suppressPackageStartupMessages(library(VariantAnnotation))
+
+library(snpReportR)
 ```
 
-
 ```{css echo=FALSE}
+/* TODO: MAKE IT PRETTY :) :) */
+
 body { 
   font-size: 14px;
   background-color: lightgray; 
@@ -74,12 +76,26 @@ p {
      outline-offset: 5px;
 }
 
+/* .styleTitleHeader {    
+  background-color: pink;
+  padding: 1.25rem;
+  margin-top: 1rem;
+  background-image: linear-gradient(white, #008cba);
+  border-radius: 1rem;
+}
+
+.styleTitleHeader h1 {
+  margin: 0;
+} */
+
+
 .styleContentContainer {
   background-color: white;
   padding: 0.25rem;
   padding-left: 25px;
   margin-top: 28px;
   border-radius: 5px;
+  width: 95rem;
 }
 
 .styleTwoColumnContainer {
@@ -93,6 +109,31 @@ p {
 .style75PercentContent {
   padding: 1rem;
 }
+
+.styleTable {
+  border: 0.25rem solid gray;
+  border-radius: 1rem;
+  display: flex;
+  justify-content: center;
+  padding: 1rem;
+}
+
+.styleTableInfo {
+    display: flex;
+    justify-content: center;
+    align-items: baseline;
+    padding: 3rem;
+}
+
+/* This is a child of the .styleTableinfo with the space. If there is no space eg styleTableinfo.thisOtherStyle means it needs both classes */
+.styleTableInfo .styleTableInfoPanel {
+  border: 0.25rem solid gray;
+  border-radius: 1rem;
+  height: 33rem;
+  padding: 1rem;
+  margin: 1rem;
+}
+
 
 ```
 
@@ -112,6 +153,7 @@ p {
 
 <div class="style25PercentContent" >
 
+<div class="styleTable">
 ```{r echo=FALSE, message=FALSE, warning=FALSE}
 #These need to become API queries to an EHR database or other clinical database which has the patient information and the test information
 pt.info <- data.frame("Information"=c("Name:", 
@@ -119,19 +161,26 @@ pt.info <- data.frame("Information"=c("Name:",
                                         "Sex:",
                                         "Sample Type:"), 
                         "Value"=c("Jane Doe","01/01/1900","F","RNA"))
+                                          
+knitr::kable(pt.info, caption = "Patient details:",align="l") %>% 
+  kableExtra::kable_paper(full_width = F, position = "left")
+
+```
+</div>
+
+<div class="styleTable">
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+#These need to become API queries to an EHR database or other clinical database which has the patient information and the test information
+
 dr.info <- data.frame("Information"=c("Name:", 
                                         "Doctor identification number:",
                                         "Hospital:"), 
                         "Value"=c("Dr.X", "12345", "NCI"))
-                      
-                      
-knitr::kable(pt.info, caption = "Patient details:",align="l") %>% 
-  kableExtra::kable_paper(full_width = F, position = "left")
 
 knitr::kable(dr.info, caption = "Test ordered by:", align="l") %>% 
   kableExtra::kable_paper(full_width = F, position = "float_left")
 ```
-
+</div>
 
 ```{r echo=FALSE, message=FALSE, results="hide", warning=FALSE}
 # https://gist.github.com/sephraim/3d352ba4893df07a2c35d8f227ab17ac
@@ -190,9 +239,10 @@ DT::datatable(header_info, class = 'cell-border stripe',
               caption="Table 1. Column names and descriptions for the CTAT Mutation Pipeline Results.")
 ```
 
+<div class="styleTableInfo">
 
-<br><br><br>
-<div class="boxBorder">
+<div class="styleTableInfoPanel">
+
 
 *In addition there are functional annotations for the variants per  transcript from snpEFF. These include:*
 
@@ -206,14 +256,10 @@ DT::datatable(header_info, class = 'cell-border stripe',
 * "CDS.pos/CDS.length"
 * "AA.pos/AA.length"
 * "Distance"
-
 </div>
-<br><br><br>
 
+<div class="styleTableInfoPanel">
 
-
-<br><br><br>
-<div class="boxBorder">
 
 *The top variants were ranked by the following attributes:*
 
@@ -222,19 +268,18 @@ DT::datatable(header_info, class = 'cell-border stripe',
 * genes with larger number of SNVs prioritized
 * high or moderate impact on the structure of the gene
 * CADD Score/Polyphen Score (not done yet)
+</div>
 
 </div>
-<br><br><br>
+
 
 *Interpretation of attributes* 
-
-<div class="boxBorder">
 
 * "[FATHMM] weighted algorithm is capable of adjusting our conservation-based predictions to account for the tolerance of related sequences to mutations" (http://fathmm.biocompute.org.uk/inherited.html)
 * "CHASMplus scores range from 0 to 1, with higher scores meaning more likely to be a cancer driver mutation." (https://chasmplus.readthedocs.io/en/latest/)
 * "VEST‐indel scores were assigned to categories of pathogenic (≥0.5) or benign (<0.5)." (https://doi.org/10.1002/humu.22911)
 
-</div>
+
 <br><br><br>
 
 ```{r echo=FALSE, results='hide', message=FALSE, warning=FALSE}
