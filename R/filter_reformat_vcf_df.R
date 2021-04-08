@@ -41,12 +41,10 @@ filter_ctat_vcf <- function(vcf.df, vcf.s4){
   functional_annots.df <- functional_annots.df[,1:45]  #keep only the first 3 transcripts
   colnames(functional_annots.df) <- paste(functional_annots_names,rep(1:3, each=15), sep="_")
 
-  # head(function_annots.df)
-  # dim(function_annots.df)
-
+  #Run the filtering function
   vcf.df.filter <- vcf.df %>%
     mutate(S4_Vector_IDs=names(SummarizedExperiment::rowRanges(vcf.s4))) %>%
-    bind_cols(., function_annots.df) %>%
+    bind_cols(., functional_annots.df) %>%
 
     mutate(rsID=ifelse(!is.na(RS), paste0("rs", RS), RS)) %>%
     mutate_at(vars(chasmplus_pval,vest_pval), ~as.numeric(.)) %>%

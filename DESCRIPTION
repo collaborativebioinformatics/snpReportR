@@ -42,4 +42,6 @@ Imports:
     GenomeInfoDb,
     AnnotationDbi,
     Gviz,
-    VariantAnnotation
+    VariantAnnotation,
+    rtracklayer,
+    htmltools

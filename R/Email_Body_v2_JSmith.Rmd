@@ -5,10 +5,13 @@ date: "`r format(Sys.Date(), tz = 'America/Los_Angeles')`"
 output:
   blastula::blastula_email:
     always_allow_html: yes
+    section_divs: true
     number_sections: true
     fig_caption: true
-    connect_footer: TRUE
-    
+    includes:
+      before_body: email_header.html
+      after_body: email_footer.html
+    connect_footer: false
 ---
 
 
@@ -21,8 +24,6 @@ knitr::opts_chunk$set(tidy.opts=list(width.cutoff=50),
                       tidy=TRUE,
                       fig.align='center',
                       fig.width = 5, fig.height = 7)
-
-getwd()
 ```
 
 ```{r echo=FALSE, message=FALSE}
@@ -49,11 +50,12 @@ If you encounter questions or concerns, please contact { institution } or { doct
 
 # Summary of Findings 
 
-For CSS Styles:
-https://emilyriederer.netlify.app/post/rmarkdown-css-tips/
+Here are the most relevant findings in your sequencing results
 
-For LATEX PDF templates
-https://www.overleaf.com/latex/templates/tu-dublin-computing-poster-template/mpnrbxzvjgsr 
+1. GeneA
+2. GeneB
+3. GeneC
+
 
 <br><br><br>
 
@@ -61,22 +63,27 @@ https://www.overleaf.com/latex/templates/tu-dublin-computing-poster-template/mpn
 
 <br><br><br>
 
-```{r}
-htmltools::img(src = "cid:foobar", 
-               alt = 'logo', 
+
+```{r eval=FALSE, echo=FALSE}
+#cid:foobar #worked on pandoc v2.7.3 not on v2.11.4
+#here("logos/snpReporter_logo.png") #works in pandoc render, NOT in email body
+htmltools::img(src = here("logos/snpReporter_logo.png"),
+               alt = 'logo',
                style = 'float: center;padding-right:10px;height:a125px;width:250px')
+
+```
+
+```{r echo=FALSE, eval=FALSE}
+#This give me the base64 encoded image, but it will not render into an image in the sent email...
+logo <- htmltools::img(src = knitr::image_uri(here("logos/snpReporter_logo.png")),
+               alt = 'logo',
+               style = 'float: center;padding-right:10px;height:a125px;width:250px')
+
+# # str(logo)
 ```
 
 <br><br><br>
 
-Add a footer too
-
-<br><br><br>
-
-
-```{cat, engine.opts=list(file = "footer.html")}
-<p>This is a footer</p>
-```
 
 
 

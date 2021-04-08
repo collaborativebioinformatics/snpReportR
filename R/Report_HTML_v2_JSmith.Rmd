@@ -13,15 +13,34 @@ output:
     number_sections: true
     fig_caption: true
     df_print: paged
+    includes:
+      before_body: report_header.html
+      after_body: report_footer.html
+  pdf_document:
+    latex_engine: pdflatex
+    toc: true
+    toc_depth: 3
+    number_sections: true
+    highlight: breezedark
 params:
   data:
     label: "Enter the VCF Dataset:"
     value: "data-raw/DRR131565_dx.variants.HC_hard_cutoffs_applied.cancer.vcf"
     input: file
+  counts: 
+    label: "Enter RNAseq counts matrix"
+    value: "data-raw/edgeR_normcounts.tsv"
+    input: file
   degs:
     label: "Enter the differentially expressed genes dataset"
     value: "data-raw/edgeR_test_results.tsv"
     input: file 
+  txdb:
+    label: "A bioconductor Transcript Database (TxDB)"
+    value: "gencode.v22.annotation.gff3.sqlite"
+  gtf: 
+    label: "A bioconductor GRanges object of reference GFF"
+    value: "gencode.v22.annotation.gff3.RDS"
 ---
 
 ```{r setup, include=FALSE, echo=FALSE}
@@ -54,8 +73,6 @@ library(RColorBrewer)
 
 suppressPackageStartupMessages(library(vcfR))
 suppressPackageStartupMessages(library(VariantAnnotation))
-
-library(snpReportR)
 ```
 
 ```{css echo=FALSE}
@@ -145,9 +162,11 @@ p {
 
 # About The Test: Variant Detection from RNA-seq
 
+<!-- [snpReportR](logos/snpReporter_logo.png) -->
 
-![snpReportR](../snpReporter_logo.png)
-
+```{r echo=FALSE, fig.cap="snpReportR: A Method for RNAseq Variant Detection Reporting", out.width = "25%", fig.align='center'}
+knitr::include_graphics(here::here("logos/snpReporter_logo.png"))
+```
 
 <div class="styleTwoColumnContainer" >
 
@@ -201,7 +220,7 @@ vcf.df <- cbind(as.data.frame(getFIX(vcf)),
 ```
 
 ```{r warning=FALSE, echo=FALSE, message=FALSE}
-vcf.s4 <- suppressMessages(VariantAnnotation::readVcf(here(params$data)))
+vcf.s4 <- suppressMessages(VariantAnnotation::readVcf(params$data))
 
 #  head(vcf.s4)
 #  str(vcf)
@@ -260,7 +279,6 @@ DT::datatable(header_info, class = 'cell-border stripe',
 
 <div class="styleTableInfoPanel">
 
-
 *The top variants were ranked by the following attributes:*
 
 * FATHMM predicted pathogenicty or splice adjacent
@@ -273,16 +291,22 @@ DT::datatable(header_info, class = 'cell-border stripe',
 </div>
 
 
+<div class="styleTable">
+
 *Interpretation of attributes* 
 
 * "[FATHMM] weighted algorithm is capable of adjusting our conservation-based predictions to account for the tolerance of related sequences to mutations" (http://fathmm.biocompute.org.uk/inherited.html)
 * "CHASMplus scores range from 0 to 1, with higher scores meaning more likely to be a cancer driver mutation." (https://chasmplus.readthedocs.io/en/latest/)
 * "VEST‐indel scores were assigned to categories of pathogenic (≥0.5) or benign (<0.5)." (https://doi.org/10.1002/humu.22911)
 
+</div>
 
 <br><br><br>
 
+
+
 ```{r echo=FALSE, results='hide', message=FALSE, warning=FALSE}
+source(here::here("R/filter_reformat_vcf_df.R"))
 variants.df <- filter_ctat_vcf(vcf.df=vcf.df, vcf.s4=vcf.s4)
 
 
@@ -401,8 +425,10 @@ DT::datatable(dplyr::filter(variants.df,
 suppressPackageStartupMessages(library(Gviz))
 suppressPackageStartupMessages(library(GenomicRanges))
 options(ucscChromosomeNames=FALSE)
-source("R/donut_plots.R")
-source(here::here("R/Gviz_tracks.R"))
+
+#Sourced before building the R package 
+# source("R/donut_plots.R")
+# source(here::here("R/Gviz_tracks.R"))
 ```
 
 
@@ -432,17 +458,11 @@ knitr::kable(data.frame("Type"=c("coding:",
 ***
 
 ```{r message=FALSE,fig.width=5, fig.height=7, echo=FALSE, fig.show=TRUE, fig.cap="Figure 1. Percentage of different types of mutations identified."}
+source(here("R/donut_plots.R"))
 donut_plot(variants.df)
 ```
 
 ***
-
-```{r echo=FALSE, message=FALSE, results="hide"}
-txdb <- AnnotationDbi::loadDb("gencode.v22.annotation.sqlite")
-# gff <- readRDS("gencode.v22.annotation.gff3.RDS")
-# class(gff) 
-# gff
-```
 
 ```{r echo=FALSE, message=FALSE,results="hide"}
 top5.coding <- dplyr::filter(variants.df,
@@ -457,7 +477,8 @@ top5.coding <- dplyr::filter(variants.df, Transcript_BioType_1 == "Coding") %>%
 ```
 
 ```{r fig.width=9, fig.show=TRUE, echo=FALSE, fig.subcap="A vizualization of the SNVs", message=FALSE, warning=FALSE}
-gene_tracks(vcf_s4 = vcf.s4[top5.coding], txdb=txdb) #gff=gff
+source(here("R/Gviz_tracks.R"))
+gene_tracks(vcf_s4 = vcf.s4[top5.coding], txdb=params$txdb) #gff=gff
 ```
 
 
@@ -472,18 +493,20 @@ gene_tracks(vcf_s4 = vcf.s4[top5.coding], txdb=txdb) #gff=gff
 
 # boxplots/violin plots
 
-```{r}
-# sample <- params$Sample
-# cts_file <- dir("Data/", pattern=sample)
-# counts <- read.csv(cts_file)
+```{r echo=FALSE}
+#read in the counts file
+cts_file <-  read.csv(params$counts)
+```
+
+```{r echo=FALSE}
+head(cts_file)
 ```
 
 # DE genes by condition
 
-```{r}
-#DE_file <- dir("Data/", pattern=sample)
+```{r echo=FALSE}
 # Read in differntial expression results
-diff.ex <- read.table(here::here(params$degs), header = T)
+diff.ex <- read.table(params$degs, header = T)
 
 # Filter significant results
 diff.ex<-diff.ex[which(diff.ex$PValue<0.05),]
@@ -498,6 +521,10 @@ top.diff.ex<-rbind(top.diff.ex.up, top.diff.ex.down)
 
 # Extract gene ID
 gene.names<-top.diff.ex[,1]
+```
+
+```{r echo=FALSE}
+head(top.diff.ex)
 ```
 
 # Sommelier results: Haplyotype/PCA
@@ -702,7 +729,7 @@ DT::datatable(keep.dat, class = 'cell-border stripe', caption = "Table 7. Softwa
 
 ```{r echo=FALSE}
 message("Information about the Transcript Annotation Database.")
-txdb
+params$txdb
 ```
 
 
