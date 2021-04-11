@@ -1,12 +1,12 @@
 ---
 title: "<div class='styleTitleHeader'> Expressed Variant Reporting </div>"
-author: "Brandon Michael Blobner, Jenny Leopoldina Smith, and Ahmad Al Khleifat"
-date: "`r format(Sys.Date(), tz = 'America/Los_Angeles')`"
+author: "<div class='styleAuthors'> Brandon Michael Blobner, Jenny Leopoldina Smith, and Ahmad Al Khleifat </div>"
+date: "<div class='styleDate'> `r format(Sys.Date(), tz = 'America/Los_Angeles')` </div>"
+always_allow_html: true
 output:
   html_document:
     theme: yeti
     highlight: breezedark
-    always_allow_html: true
     toc: true
     toc_float: true
     toc_depth: 3
@@ -17,7 +17,6 @@ output:
       before_body: report_header.html
       after_body: report_footer.html
   pdf_document:
-    always_allow_html: true
     latex_engine: pdflatex
     toc: true
     toc_depth: 3
@@ -79,21 +78,39 @@ suppressPackageStartupMessages(library(VariantAnnotation))
 ```{css echo=FALSE}
 /* TODO: MAKE IT PRETTY :) :) */
 
-.styleTitleHeader {    
-  background-color: pink;
-  padding: 1.25rem;
+/*property is a simple color, measurement, etc. while a function is like the linear-gradient() */
+/*note: make alpahabetical for each parameter changed*/
+.styleTitleHeader {   
+  color: white; 
+  padding: 2.25rem;
   margin-top: 1rem;
-  background-image: linear-gradient(white, #008cba);
+  background-image: linear-gradient(#406b7a, #008cba);
   border-radius: 1rem;
+  font-weight: 500;
+  text-align: center;
+  width: 95rem;
 }
 
 .styleTitleHeader h1 {
   margin: 0;
 }   
 
+.styleAuthors {    
+  color: white;
+  text-align: center;
+  margin-top: -1rem;
+}
+
+.styleDate {    
+  color: white;
+  text-align: center;
+  margin-top: -1rem;
+}
+
+
 body { 
   font-size: 14px;
-  background-color: lightgray; 
+  background-color: gray; 
 }
 p { 
   line-height: 1.5em;
@@ -156,10 +173,15 @@ p {
 ```
 
 
+<!-- Notes on the image logo for header (dont want to hardcode)
+try setting a parameter such as this: 
+https://stackoverflow.com/questions/31861569/setting-document-title-in-rmarkdown-from-parameters
+https://community.rstudio.com/t/r-markdown-html-output-title/47294
+Then include the image src tag as the paramter:
+https://stackoverflow.com/questions/42543206/r-markdown-compile-error -->
 
 
 <div class="styleContentContainer">
-
 
 # About The Test: Variant Detection from RNA-seq
 
