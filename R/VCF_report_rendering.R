@@ -50,6 +50,7 @@ for (input_file in vcf_files){
 
   #Render the Rmarkdown HTML report
   rmarkdown::render(input = here("R/Report_HTML_v2_JSmith.Rmd"),
+                    output_format="all",
                     output_file=filename,
                     output_dir = here("Reports"),
                     params=Params)

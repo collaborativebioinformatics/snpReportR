@@ -1,12 +1,12 @@
 ---
-title: "Expressed Variant Reporting"
+title: "<div class='styleTitleHeader'> Expressed Variant Reporting </div>"
 author: "Brandon Michael Blobner, Jenny Leopoldina Smith, and Ahmad Al Khleifat"
 date: "`r format(Sys.Date(), tz = 'America/Los_Angeles')`"
 output:
   html_document:
     theme: yeti
     highlight: breezedark
-    always_allow_html: yes
+    always_allow_html: true
     toc: true
     toc_float: true
     toc_depth: 3
@@ -17,6 +17,7 @@ output:
       before_body: report_header.html
       after_body: report_footer.html
   pdf_document:
+    always_allow_html: true
     latex_engine: pdflatex
     toc: true
     toc_depth: 3
@@ -78,6 +79,18 @@ suppressPackageStartupMessages(library(VariantAnnotation))
 ```{css echo=FALSE}
 /* TODO: MAKE IT PRETTY :) :) */
 
+.styleTitleHeader {    
+  background-color: pink;
+  padding: 1.25rem;
+  margin-top: 1rem;
+  background-image: linear-gradient(white, #008cba);
+  border-radius: 1rem;
+}
+
+.styleTitleHeader h1 {
+  margin: 0;
+}   
+
 body { 
   font-size: 14px;
   background-color: lightgray; 
@@ -92,18 +105,6 @@ p {
      outline: black solid 5px;
      outline-offset: 5px;
 }
-
-/* .styleTitleHeader {    
-  background-color: pink;
-  padding: 1.25rem;
-  margin-top: 1rem;
-  background-image: linear-gradient(white, #008cba);
-  border-radius: 1rem;
-}
-
-.styleTitleHeader h1 {
-  margin: 0;
-} */
 
 
 .styleContentContainer {
