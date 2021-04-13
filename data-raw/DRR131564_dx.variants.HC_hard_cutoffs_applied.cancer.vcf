@@ -1,0 +1,293 @@
+##fileformat=VCFv4.2
+##FILTER=<ID=FS,Description="FS > 30.0">
+##FILTER=<ID=LowQual,Description="Low quality">
+##FILTER=<ID=PASS,Description="All filters passed">
+##FILTER=<ID=QD,Description="QD < 2.0">
+##FILTER=<ID=SPLICEADJ,Description="SPLICEADJ < 3">
+##FILTER=<ID=SnpCluster,Description="SNPs found in clusters">
+##FORMAT=<ID=AD,Number=R,Type=Integer,Description="Allelic depths for the ref and alt alleles in the order listed">
+##FORMAT=<ID=DP,Number=1,Type=Integer,Description="Approximate read depth (reads with MQ=255 or with bad mates are filtered)">
+##FORMAT=<ID=GQ,Number=1,Type=Integer,Description="Genotype Quality">
+##FORMAT=<ID=GT,Number=1,Type=String,Description="Genotype">
+##FORMAT=<ID=PL,Number=G,Type=Integer,Description="Normalized, Phred-scaled likelihoods for genotypes as defined in the VCF specification">
+##GATKCommandLine=<ID=HaplotypeCaller,CommandLine="HaplotypeCaller --standard-min-confidence-threshold-for-calling 20.0 --recover-dangling-heads true --dont-use-soft-clipped-bases true --output /home/dnanexus/OUTDIR/work_dir/chr1.interval.vcf --intervals /home/dnanexus/OUTDIR/work_dir/chr1.intervals --input /home/dnanexus/OUTDIR/work_dir/recalibrated.bam --reference ctat_genome_lib/ref_genome.fa --annotate-with-num-discovered-alleles false --heterozygosity 0.001 --indel-heterozygosity 1.25E-4 --heterozygosity-stdev 0.01 --max-alternate-alleles 6 --max-genotype-count 1024 --sample-ploidy 2 --num-reference-samples-if-no-call 0 --contamination-fraction-to-filter 0.0 --output-mode EMIT_VARIANTS_ONLY --all-site-pls false --gvcf-gq-bands 1 --gvcf-gq-bands 2 --gvcf-gq-bands 3 --gvcf-gq-bands 4 --gvcf-gq-bands 5 --gvcf-gq-bands 6 --gvcf-gq-bands 7 --gvcf-gq-bands 8 --gvcf-gq-bands 9 --gvcf-gq-bands 10 --gvcf-gq-bands 11 --gvcf-gq-bands 12 --gvcf-gq-bands 13 --gvcf-gq-bands 14 --gvcf-gq-bands 15 --gvcf-gq-bands 16 --gvcf-gq-bands 17 --gvcf-gq-bands 18 --gvcf-gq-bands 19 --gvcf-gq-bands 20 --gvcf-gq-bands 21 --gvcf-gq-bands 22 --gvcf-gq-bands 23 --gvcf-gq-bands 24 --gvcf-gq-bands 25 --gvcf-gq-bands 26 --gvcf-gq-bands 27 --gvcf-gq-bands 28 --gvcf-gq-bands 29 --gvcf-gq-bands 30 --gvcf-gq-bands 31 --gvcf-gq-bands 32 --gvcf-gq-bands 33 --gvcf-gq-bands 34 --gvcf-gq-bands 35 --gvcf-gq-bands 36 --gvcf-gq-bands 37 --gvcf-gq-bands 38 --gvcf-gq-bands 39 --gvcf-gq-bands 40 --gvcf-gq-bands 41 --gvcf-gq-bands 42 --gvcf-gq-bands 43 --gvcf-gq-bands 44 --gvcf-gq-bands 45 --gvcf-gq-bands 46 --gvcf-gq-bands 47 --gvcf-gq-bands 48 --gvcf-gq-bands 49 --gvcf-gq-bands 50 --gvcf-gq-bands 51 --gvcf-gq-bands 52 --gvcf-gq-bands 53 --gvcf-gq-bands 54 --gvcf-gq-bands 55 --gvcf-gq-bands 56 --gvcf-gq-bands 57 --gvcf-gq-bands 58 --gvcf-gq-bands 59 --gvcf-gq-bands 60 --gvcf-gq-bands 70 --gvcf-gq-bands 80 --gvcf-gq-bands 90 --gvcf-gq-bands 99 --floor-blocks false --indel-size-to-eliminate-in-ref-model 10 --disable-optimizations false --just-determine-active-regions false --dont-genotype false --do-not-run-physical-phasing false --do-not-correct-overlapping-quality false --use-filtered-reads-for-annotations false --adaptive-pruning false --do-not-recover-dangling-branches false --kmer-size 10 --kmer-size 25 --dont-increase-kmer-sizes-for-cycles false --allow-non-unique-kmers-in-ref false --num-pruning-samples 1 --min-dangling-branch-length 4 --recover-all-dangling-branches false --max-num-haplotypes-in-population 128 --min-pruning 2 --adaptive-pruning-initial-error-rate 0.001 --pruning-lod-threshold 2.302585092994046 --max-unpruned-variants 100 --linked-de-bruijn-graph false --disable-artificial-haplotype-recovery false --debug-assembly false --debug-graph-transformations false --capture-assembly-failure-bam false --error-correction-log-odds -Infinity --error-correct-reads false --kmer-length-for-read-error-correction 25 --min-observations-for-kmer-to-be-solid 20 --base-quality-score-threshold 18 --pair-hmm-gap-continuation-penalty 10 --pair-hmm-implementation FASTEST_AVAILABLE --pcr-indel-model CONSERVATIVE --phred-scaled-global-read-mismapping-rate 45 --native-pair-hmm-threads 4 --native-pair-hmm-use-double-precision false --bam-writer-type CALLED_HAPLOTYPES --min-base-quality-score 10 --smith-waterman JAVA --emit-ref-confidence NONE --max-mnp-distance 0 --force-call-filtered-alleles false --allele-informative-reads-overlap-margin 2 --min-assembly-region-size 50 --max-assembly-region-size 300 --active-probability-threshold 0.002 --max-prob-propagation-distance 50 --force-active false --assembly-region-padding 100 --padding-around-indels 75 --padding-around-snps 20 --padding-around-strs 75 --max-reads-per-alignment-start 50 --interval-set-rule UNION --interval-padding 0 --interval-exclusion-padding 0 --interval-merging-rule ALL --read-validation-stringency SILENT --seconds-between-progress-updates 10.0 --disable-sequence-dictionary-validation false --create-output-bam-index true --create-output-bam-md5 false --create-output-variant-index true --create-output-variant-md5 false --lenient false --add-output-sam-program-record true --add-output-vcf-command-line true --cloud-prefetch-buffer 40 --cloud-index-prefetch-buffer -1 --disable-bam-index-caching false --sites-only-vcf-output false --help false --version false --showHidden false --verbosity INFO --QUIET false --use-jdk-deflater false --use-jdk-inflater false --gcs-max-retries 20 --gcs-project-for-requester-pays --disable-tool-default-read-filters false --minimum-mapping-quality 20 --disable-tool-default-annotations false --enable-all-annotations false --allow-old-rms-mapping-quality-annotation-data false",Version="4.1.7.0",Date="January 8, 2021 at 5:13:53 PM GMT">
+##GATKCommandLine=<ID=SelectVariants,CommandLine="SelectVariants --output /home/dnanexus/OUTDIR/work_dir/HaplotypeCaller.hard_cutoff_filters_applied.selected_variants.vcf --exclude-filtered true --select-type-to-include SNP --variant /home/dnanexus/OUTDIR/work_dir/HaplotypeCaller.hard_cutoff_filters_applied.vcf --reference ctat_genome_lib/ref_genome.fa --invertSelect false --exclude-non-variants false --preserve-alleles false --remove-unused-alternates false --restrict-alleles-to ALL --keep-original-ac false --keep-original-dp false --mendelian-violation false --invert-mendelian-violation false --mendelian-violation-qual-threshold 0.0 --select-random-fraction 0.0 --remove-fraction-genotypes 0.0 --fully-decode false --max-indel-size 2147483647 --min-indel-size 0 --max-filtered-genotypes 2147483647 --min-filtered-genotypes 0 --max-fraction-filtered-genotypes 1.0 --min-fraction-filtered-genotypes 0.0 --max-nocall-number 2147483647 --max-nocall-fraction 1.0 --set-filtered-gt-to-nocall false --allow-nonoverlapping-command-line-samples false --suppress-reference-path false --genomicsdb-use-vcf-codec false --interval-set-rule UNION --interval-padding 0 --interval-exclusion-padding 0 --interval-merging-rule ALL --read-validation-stringency SILENT --seconds-between-progress-updates 10.0 --disable-sequence-dictionary-validation false --create-output-bam-index true --create-output-bam-md5 false --create-output-variant-index true --create-output-variant-md5 false --lenient false --add-output-sam-program-record true --add-output-vcf-command-line true --cloud-prefetch-buffer 40 --cloud-index-prefetch-buffer -1 --disable-bam-index-caching false --sites-only-vcf-output false --help false --version false --showHidden false --verbosity INFO --QUIET false --use-jdk-deflater false --use-jdk-inflater false --gcs-max-retries 20 --gcs-project-for-requester-pays --disable-tool-default-read-filters false",Version="4.1.7.0",Date="January 8, 2021 at 5:24:02 PM GMT">
+##INFO=<ID=AC,Number=A,Type=Integer,Description="Allele count in genotypes for each ALT allele in the same order as listed">
+##INFO=<ID=AC,Number=A,Type=Integer,Description="Allele count in genotypes for each ALT allele in the same order as listed">
+##INFO=<ID=AF,Number=A,Type=Float,Description="Allele Frequency for each ALT allele in the same order as listed">
+##INFO=<ID=AF,Number=A,Type=Float,Description="Allele Frequency for each ALT allele in the same order as listed">
+##INFO=<ID=AN,Number=1,Type=Integer,Description="Total number of alleles in called genotypes">
+##INFO=<ID=ANN,Number=.,Type=String,Description="Functional annotations: 'Allele | Annotation | Annotation_Impact | Gene_Name | Gene_ID | Feature_Type | Feature_ID | Transcript_BioType | Rank | HGVS.c | HGVS.p | cDNA.pos / cDNA.length | CDS.pos / CDS.length | AA.pos / AA.length | Distance | ERRORS / WARNINGS / INFO'">
+##INFO=<ID=BaseQRankSum,Number=1,Type=Float,Description="Z-score from Wilcoxon rank sum test of Alt Vs. Ref base qualities">
+##INFO=<ID=COSMIC_ID,Number=.,Type=String,Description="COSMIC mutation id (unique).">
+##INFO=<ID=DP,Number=1,Type=Integer,Description="Approximate read depth; some reads may have been filtered">
+##INFO=<ID=Entropy,Number=1,Type=Float,Description="Entropy for sequence in window of length 7 centered at the variant position">
+##INFO=<ID=ExcessHet,Number=1,Type=Float,Description="Phred-scaled p-value for exact test of excess heterozygosity">
+##INFO=<ID=FATHMM,Number=.,Type=String,Description="FATHMM (Functional Analysis through Hidden Markov Models). 'Pathogenic':Cancer or damaging 'Neutral':Passanger or Tolerated.">
+##INFO=<ID=FS,Number=1,Type=Float,Description="Phred-scaled p-value using Fisher's exact test to detect strand bias">
+##INFO=<ID=GENE,Number=.,Type=String,Description="The name of the gene/s in the genomic region of the SNP as annotated by SNPeff">
+##INFO=<ID=Homopolymer,Number=1,Type=Integer,Description="Variant is located in or near a homopolymer sequence">
+##INFO=<ID=InbreedingCoeff,Number=1,Type=Float,Description="Inbreeding coefficient as estimated from the genotype likelihoods per-sample when compared against the Hardy-Weinberg expectation">
+##INFO=<ID=MLEAC,Number=A,Type=Integer,Description="Maximum likelihood expectation (MLE) for the allele counts (not necessarily the same as the AC) for each ALT allele in the same order as listed">
+##INFO=<ID=MLEAF,Number=A,Type=Float,Description="Maximum likelihood expectation (MLE) for the allele frequency (not necessarily the same as the AF) for each ALT allele in the same order as listed">
+##INFO=<ID=MQ,Number=1,Type=Float,Description="RMS Mapping Quality">
+##INFO=<ID=MQRankSum,Number=1,Type=Float,Description="Z-score From Wilcoxon rank sum test of Alt vs. Ref read mapping qualities">
+##INFO=<ID=OM,Number=0,Type=Flag,Description="Has OMIM/OMIA">
+##INFO=<ID=PM,Number=0,Type=Flag,Description="Variant is Precious(Clinical Pubmed Cited)">
+##INFO=<ID=QD,Number=1,Type=Float,Description="Variant Confidence/Quality by Depth">
+##INFO=<ID=RNAEDIT,Number=.,Type=String,Description="A known or predicted RNA-editing site">
+##INFO=<ID=RPT,Number=1,Type=String,Description="Repeat family from UCSC Genome Browser Repeatmasker Annotations">
+##INFO=<ID=RS,Number=1,Type=Integer,Description="dbSNP ID (i.e. rs number)">
+##INFO=<ID=ReadPosRankSum,Number=1,Type=Float,Description="Z-score from Wilcoxon rank sum test of Alt vs. Ref read position bias">
+##INFO=<ID=SAO,Number=1,Type=Integer,Description="Variant Allele Origin: 0 - unspecified 1 - Germline 2 - Somatic 3 - Both">
+##INFO=<ID=SOMATIC,Number=0,Type=Flag,Description="Somatic event">
+##INFO=<ID=SOR,Number=1,Type=Float,Description="Symmetric Odds Ratio of 2x2 contingency table to detect strand bias">
+##INFO=<ID=SPLICEADJ,Number=1,Type=Integer,Description="Variant is within distance of 10 to a reference exon splice boundary">
+##INFO=<ID=TISSUE,Number=.,Type=String,Description="The primary tissue/cancer and subtype from which the sample originated.">
+##INFO=<ID=TUMOR,Number=.,Type=String,Description="The histological classification of the sample.">
+##INFO=<ID=base_achange,Number=A,Type=String,Description="">
+##INFO=<ID=base_all_mappings,Number=A,Type=String,Description="">
+##INFO=<ID=base_cchange,Number=A,Type=String,Description="">
+##INFO=<ID=base_coding,Number=A,Type=String,Description="">
+##INFO=<ID=base_hugo,Number=A,Type=String,Description="">
+##INFO=<ID=base_note,Number=A,Type=String,Description="">
+##INFO=<ID=base_numsample,Number=A,Type=Integer,Description="Number of samples which contain the variant.">
+##INFO=<ID=base_samples,Number=A,Type=String,Description="Samples which contain the variant.">
+##INFO=<ID=base_so,Number=A,Type=String,Description="">
+##INFO=<ID=base_tags,Number=A,Type=String,Description="Variant tags from the input file.">
+##INFO=<ID=base_transcript,Number=A,Type=String,Description="">
+##INFO=<ID=chasmplus_pval,Number=A,Type=Float,Description="">
+##INFO=<ID=chasmplus_results,Number=A,Type=String,Description="">
+##INFO=<ID=chasmplus_score,Number=A,Type=Float,Description="">
+##INFO=<ID=chasmplus_transcript,Number=A,Type=String,Description="">
+##INFO=<ID=clinvar_disease_names,Number=A,Type=String,Description="">
+##INFO=<ID=clinvar_disease_refs,Number=A,Type=String,Description="Disease reference numbers">
+##INFO=<ID=clinvar_id,Number=A,Type=String,Description="">
+##INFO=<ID=clinvar_rev_stat,Number=A,Type=String,Description="The level of review supporting the assertion of clinical significance">
+##INFO=<ID=clinvar_sig,Number=A,Type=String,Description="">
+##INFO=<ID=gnomad_AF,Number=A,Type=Float,Description="Allele Frequency for each ALT allele in the same order as listed">
+##INFO=<ID=gnomad_RS,Number=.,Type=String,Description="dbSNP ID (i.e. rs number)">
+##INFO=<ID=mupit_hugo,Number=A,Type=String,Description="Gene ID">
+##INFO=<ID=mupit_link,Number=A,Type=String,Description="">
+##INFO=<ID=vest_all_results,Number=A,Type=String,Description="">
+##INFO=<ID=vest_hugo,Number=A,Type=String,Description="Gene ID">
+##INFO=<ID=vest_pval,Number=A,Type=Float,Description="">
+##INFO=<ID=vest_score,Number=A,Type=Float,Description="">
+##INFO=<ID=vest_transcript,Number=A,Type=String,Description="">
+##OpenCRAVATFileDate=20210108
+##SnpEffCmd="SnpEff -nostats -noLof -no-downstream -no-upstream hg38 "
+##SnpEffVersion="4.1k (build 2015-09-07), by Pablo Cingolani"
+##bcftools_annotateCommand=annotate --output-type z --annotations ctat_genome_lib/ctat_mutation_lib/RNAediting.library.vcf.gz --columns INFO/RNAEDIT /home/dnanexus/OUTDIR/work_dir/HaplotypeCaller.raw_variants.LNormSpt.grommed.sorted.snpEff1.sF2.dbsnp.gnomad.vcf.gz; Date=Fri Jan 8 17:22:12 2021
+##bcftools_annotateVersion=1.9+htslib-1.9
+##bcftools_normCommand=norm -f ctat_genome_lib/ref_genome.fa -m -any -o /home/dnanexus/OUTDIR/work_dir/HaplotypeCaller.raw_variants.LNormSpt.vcf /home/dnanexus/OUTDIR/work_dir/HaplotypeCaller.raw_variants.vcf; Date=Fri Jan 8 17:18:55 2021
+##bcftools_normVersion=1.9+htslib-1.9
+##contig=<ID=chr1,length=248956422,assembly=ref_genome.fa>
+##contig=<ID=chr2,length=242193529,assembly=ref_genome.fa>
+##contig=<ID=chr3,length=198295559,assembly=ref_genome.fa>
+##contig=<ID=chr4,length=190214555,assembly=ref_genome.fa>
+##contig=<ID=chr5,length=181538259,assembly=ref_genome.fa>
+##contig=<ID=chr6,length=170805979,assembly=ref_genome.fa>
+##contig=<ID=chr7,length=159345973,assembly=ref_genome.fa>
+##contig=<ID=chr8,length=145138636,assembly=ref_genome.fa>
+##contig=<ID=chr9,length=138394717,assembly=ref_genome.fa>
+##contig=<ID=chr10,length=133797422,assembly=ref_genome.fa>
+##contig=<ID=chr11,length=135086622,assembly=ref_genome.fa>
+##contig=<ID=chr12,length=133275309,assembly=ref_genome.fa>
+##contig=<ID=chr13,length=114364328,assembly=ref_genome.fa>
+##contig=<ID=chr14,length=107043718,assembly=ref_genome.fa>
+##contig=<ID=chr15,length=101991189,assembly=ref_genome.fa>
+##contig=<ID=chr16,length=90338345,assembly=ref_genome.fa>
+##contig=<ID=chr17,length=83257441,assembly=ref_genome.fa>
+##contig=<ID=chr18,length=80373285,assembly=ref_genome.fa>
+##contig=<ID=chr19,length=58617616,assembly=ref_genome.fa>
+##contig=<ID=chr20,length=64444167,assembly=ref_genome.fa>
+##contig=<ID=chr21,length=46709983,assembly=ref_genome.fa>
+##contig=<ID=chr22,length=50818468,assembly=ref_genome.fa>
+##contig=<ID=chrX,length=156040895,assembly=ref_genome.fa>
+##contig=<ID=chrY,length=57227415,assembly=ref_genome.fa>
+##contig=<ID=chrM,length=16569,assembly=ref_genome.fa>
+##contig=<ID=GL000008.2,length=209709,assembly=ref_genome.fa>
+##contig=<ID=GL000009.2,length=201709,assembly=ref_genome.fa>
+##contig=<ID=GL000194.1,length=191469,assembly=ref_genome.fa>
+##contig=<ID=GL000195.1,length=182896,assembly=ref_genome.fa>
+##contig=<ID=GL000205.2,length=185591,assembly=ref_genome.fa>
+##contig=<ID=GL000208.1,length=92689,assembly=ref_genome.fa>
+##contig=<ID=GL000213.1,length=164239,assembly=ref_genome.fa>
+##contig=<ID=GL000214.1,length=137718,assembly=ref_genome.fa>
+##contig=<ID=GL000216.2,length=176608,assembly=ref_genome.fa>
+##contig=<ID=GL000218.1,length=161147,assembly=ref_genome.fa>
+##contig=<ID=GL000219.1,length=179198,assembly=ref_genome.fa>
+##contig=<ID=GL000220.1,length=161802,assembly=ref_genome.fa>
+##contig=<ID=GL000221.1,length=155397,assembly=ref_genome.fa>
+##contig=<ID=GL000224.1,length=179693,assembly=ref_genome.fa>
+##contig=<ID=GL000225.1,length=211173,assembly=ref_genome.fa>
+##contig=<ID=GL000226.1,length=15008,assembly=ref_genome.fa>
+##contig=<ID=KI270302.1,length=2274,assembly=ref_genome.fa>
+##contig=<ID=KI270303.1,length=1942,assembly=ref_genome.fa>
+##contig=<ID=KI270304.1,length=2165,assembly=ref_genome.fa>
+##contig=<ID=KI270305.1,length=1472,assembly=ref_genome.fa>
+##contig=<ID=KI270310.1,length=1201,assembly=ref_genome.fa>
+##contig=<ID=KI270311.1,length=12399,assembly=ref_genome.fa>
+##contig=<ID=KI270312.1,length=998,assembly=ref_genome.fa>
+##contig=<ID=KI270315.1,length=2276,assembly=ref_genome.fa>
+##contig=<ID=KI270316.1,length=1444,assembly=ref_genome.fa>
+##contig=<ID=KI270317.1,length=37690,assembly=ref_genome.fa>
+##contig=<ID=KI270320.1,length=4416,assembly=ref_genome.fa>
+##contig=<ID=KI270322.1,length=21476,assembly=ref_genome.fa>
+##contig=<ID=KI270329.1,length=1040,assembly=ref_genome.fa>
+##contig=<ID=KI270330.1,length=1652,assembly=ref_genome.fa>
+##contig=<ID=KI270333.1,length=2699,assembly=ref_genome.fa>
+##contig=<ID=KI270334.1,length=1368,assembly=ref_genome.fa>
+##contig=<ID=KI270335.1,length=1048,assembly=ref_genome.fa>
+##contig=<ID=KI270336.1,length=1026,assembly=ref_genome.fa>
+##contig=<ID=KI270337.1,length=1121,assembly=ref_genome.fa>
+##contig=<ID=KI270338.1,length=1428,assembly=ref_genome.fa>
+##contig=<ID=KI270340.1,length=1428,assembly=ref_genome.fa>
+##contig=<ID=KI270362.1,length=3530,assembly=ref_genome.fa>
+##contig=<ID=KI270363.1,length=1803,assembly=ref_genome.fa>
+##contig=<ID=KI270364.1,length=2855,assembly=ref_genome.fa>
+##contig=<ID=KI270366.1,length=8320,assembly=ref_genome.fa>
+##contig=<ID=KI270371.1,length=2805,assembly=ref_genome.fa>
+##contig=<ID=KI270372.1,length=1650,assembly=ref_genome.fa>
+##contig=<ID=KI270373.1,length=1451,assembly=ref_genome.fa>
+##contig=<ID=KI270374.1,length=2656,assembly=ref_genome.fa>
+##contig=<ID=KI270375.1,length=2378,assembly=ref_genome.fa>
+##contig=<ID=KI270376.1,length=1136,assembly=ref_genome.fa>
+##contig=<ID=KI270378.1,length=1048,assembly=ref_genome.fa>
+##contig=<ID=KI270379.1,length=1045,assembly=ref_genome.fa>
+##contig=<ID=KI270381.1,length=1930,assembly=ref_genome.fa>
+##contig=<ID=KI270382.1,length=4215,assembly=ref_genome.fa>
+##contig=<ID=KI270383.1,length=1750,assembly=ref_genome.fa>
+##contig=<ID=KI270384.1,length=1658,assembly=ref_genome.fa>
+##contig=<ID=KI270385.1,length=990,assembly=ref_genome.fa>
+##contig=<ID=KI270386.1,length=1788,assembly=ref_genome.fa>
+##contig=<ID=KI270387.1,length=1537,assembly=ref_genome.fa>
+##contig=<ID=KI270388.1,length=1216,assembly=ref_genome.fa>
+##contig=<ID=KI270389.1,length=1298,assembly=ref_genome.fa>
+##contig=<ID=KI270390.1,length=2387,assembly=ref_genome.fa>
+##contig=<ID=KI270391.1,length=1484,assembly=ref_genome.fa>
+##contig=<ID=KI270392.1,length=971,assembly=ref_genome.fa>
+##contig=<ID=KI270393.1,length=1308,assembly=ref_genome.fa>
+##contig=<ID=KI270394.1,length=970,assembly=ref_genome.fa>
+##contig=<ID=KI270395.1,length=1143,assembly=ref_genome.fa>
+##contig=<ID=KI270396.1,length=1880,assembly=ref_genome.fa>
+##contig=<ID=KI270411.1,length=2646,assembly=ref_genome.fa>
+##contig=<ID=KI270412.1,length=1179,assembly=ref_genome.fa>
+##contig=<ID=KI270414.1,length=2489,assembly=ref_genome.fa>
+##contig=<ID=KI270417.1,length=2043,assembly=ref_genome.fa>
+##contig=<ID=KI270418.1,length=2145,assembly=ref_genome.fa>
+##contig=<ID=KI270419.1,length=1029,assembly=ref_genome.fa>
+##contig=<ID=KI270420.1,length=2321,assembly=ref_genome.fa>
+##contig=<ID=KI270422.1,length=1445,assembly=ref_genome.fa>
+##contig=<ID=KI270423.1,length=981,assembly=ref_genome.fa>
+##contig=<ID=KI270424.1,length=2140,assembly=ref_genome.fa>
+##contig=<ID=KI270425.1,length=1884,assembly=ref_genome.fa>
+##contig=<ID=KI270429.1,length=1361,assembly=ref_genome.fa>
+##contig=<ID=KI270435.1,length=92983,assembly=ref_genome.fa>
+##contig=<ID=KI270438.1,length=112505,assembly=ref_genome.fa>
+##contig=<ID=KI270442.1,length=392061,assembly=ref_genome.fa>
+##contig=<ID=KI270448.1,length=7992,assembly=ref_genome.fa>
+##contig=<ID=KI270465.1,length=1774,assembly=ref_genome.fa>
+##contig=<ID=KI270466.1,length=1233,assembly=ref_genome.fa>
+##contig=<ID=KI270467.1,length=3920,assembly=ref_genome.fa>
+##contig=<ID=KI270468.1,length=4055,assembly=ref_genome.fa>
+##contig=<ID=KI270507.1,length=5353,assembly=ref_genome.fa>
+##contig=<ID=KI270508.1,length=1951,assembly=ref_genome.fa>
+##contig=<ID=KI270509.1,length=2318,assembly=ref_genome.fa>
+##contig=<ID=KI270510.1,length=2415,assembly=ref_genome.fa>
+##contig=<ID=KI270511.1,length=8127,assembly=ref_genome.fa>
+##contig=<ID=KI270512.1,length=22689,assembly=ref_genome.fa>
+##contig=<ID=KI270515.1,length=6361,assembly=ref_genome.fa>
+##contig=<ID=KI270516.1,length=1300,assembly=ref_genome.fa>
+##contig=<ID=KI270517.1,length=3253,assembly=ref_genome.fa>
+##contig=<ID=KI270518.1,length=2186,assembly=ref_genome.fa>
+##contig=<ID=KI270519.1,length=138126,assembly=ref_genome.fa>
+##contig=<ID=KI270521.1,length=7642,assembly=ref_genome.fa>
+##contig=<ID=KI270522.1,length=5674,assembly=ref_genome.fa>
+##contig=<ID=KI270528.1,length=2983,assembly=ref_genome.fa>
+##contig=<ID=KI270529.1,length=1899,assembly=ref_genome.fa>
+##contig=<ID=KI270530.1,length=2168,assembly=ref_genome.fa>
+##contig=<ID=KI270538.1,length=91309,assembly=ref_genome.fa>
+##contig=<ID=KI270539.1,length=993,assembly=ref_genome.fa>
+##contig=<ID=KI270544.1,length=1202,assembly=ref_genome.fa>
+##contig=<ID=KI270548.1,length=1599,assembly=ref_genome.fa>
+##contig=<ID=KI270579.1,length=31033,assembly=ref_genome.fa>
+##contig=<ID=KI270580.1,length=1553,assembly=ref_genome.fa>
+##contig=<ID=KI270581.1,length=7046,assembly=ref_genome.fa>
+##contig=<ID=KI270582.1,length=6504,assembly=ref_genome.fa>
+##contig=<ID=KI270583.1,length=1400,assembly=ref_genome.fa>
+##contig=<ID=KI270584.1,length=4513,assembly=ref_genome.fa>
+##contig=<ID=KI270587.1,length=2969,assembly=ref_genome.fa>
+##contig=<ID=KI270588.1,length=6158,assembly=ref_genome.fa>
+##contig=<ID=KI270589.1,length=44474,assembly=ref_genome.fa>
+##contig=<ID=KI270590.1,length=4685,assembly=ref_genome.fa>
+##contig=<ID=KI270591.1,length=5796,assembly=ref_genome.fa>
+##contig=<ID=KI270593.1,length=3041,assembly=ref_genome.fa>
+##contig=<ID=KI270706.1,length=175055,assembly=ref_genome.fa>
+##contig=<ID=KI270707.1,length=32032,assembly=ref_genome.fa>
+##contig=<ID=KI270708.1,length=127682,assembly=ref_genome.fa>
+##contig=<ID=KI270709.1,length=66860,assembly=ref_genome.fa>
+##contig=<ID=KI270710.1,length=40176,assembly=ref_genome.fa>
+##contig=<ID=KI270711.1,length=42210,assembly=ref_genome.fa>
+##contig=<ID=KI270712.1,length=176043,assembly=ref_genome.fa>
+##contig=<ID=KI270713.1,length=40745,assembly=ref_genome.fa>
+##contig=<ID=KI270714.1,length=41717,assembly=ref_genome.fa>
+##contig=<ID=KI270715.1,length=161471,assembly=ref_genome.fa>
+##contig=<ID=KI270716.1,length=153799,assembly=ref_genome.fa>
+##contig=<ID=KI270717.1,length=40062,assembly=ref_genome.fa>
+##contig=<ID=KI270718.1,length=38054,assembly=ref_genome.fa>
+##contig=<ID=KI270719.1,length=176845,assembly=ref_genome.fa>
+##contig=<ID=KI270720.1,length=39050,assembly=ref_genome.fa>
+##contig=<ID=KI270721.1,length=100316,assembly=ref_genome.fa>
+##contig=<ID=KI270722.1,length=194050,assembly=ref_genome.fa>
+##contig=<ID=KI270723.1,length=38115,assembly=ref_genome.fa>
+##contig=<ID=KI270724.1,length=39555,assembly=ref_genome.fa>
+##contig=<ID=KI270725.1,length=172810,assembly=ref_genome.fa>
+##contig=<ID=KI270726.1,length=43739,assembly=ref_genome.fa>
+##contig=<ID=KI270727.1,length=448248,assembly=ref_genome.fa>
+##contig=<ID=KI270728.1,length=1872759,assembly=ref_genome.fa>
+##contig=<ID=KI270729.1,length=280839,assembly=ref_genome.fa>
+##contig=<ID=KI270730.1,length=112551,assembly=ref_genome.fa>
+##contig=<ID=KI270731.1,length=150754,assembly=ref_genome.fa>
+##contig=<ID=KI270732.1,length=41543,assembly=ref_genome.fa>
+##contig=<ID=KI270733.1,length=179772,assembly=ref_genome.fa>
+##contig=<ID=KI270734.1,length=165050,assembly=ref_genome.fa>
+##contig=<ID=KI270735.1,length=42811,assembly=ref_genome.fa>
+##contig=<ID=KI270736.1,length=181920,assembly=ref_genome.fa>
+##contig=<ID=KI270737.1,length=103838,assembly=ref_genome.fa>
+##contig=<ID=KI270738.1,length=99375,assembly=ref_genome.fa>
+##contig=<ID=KI270739.1,length=73985,assembly=ref_genome.fa>
+##contig=<ID=KI270740.1,length=37240,assembly=ref_genome.fa>
+##contig=<ID=KI270741.1,length=157432,assembly=ref_genome.fa>
+##contig=<ID=KI270742.1,length=186739,assembly=ref_genome.fa>
+##contig=<ID=KI270743.1,length=210658,assembly=ref_genome.fa>
+##contig=<ID=KI270744.1,length=168472,assembly=ref_genome.fa>
+##contig=<ID=KI270745.1,length=41891,assembly=ref_genome.fa>
+##contig=<ID=KI270746.1,length=66486,assembly=ref_genome.fa>
+##contig=<ID=KI270747.1,length=198735,assembly=ref_genome.fa>
+##contig=<ID=KI270748.1,length=93321,assembly=ref_genome.fa>
+##contig=<ID=KI270749.1,length=158759,assembly=ref_genome.fa>
+##contig=<ID=KI270750.1,length=148850,assembly=ref_genome.fa>
+##contig=<ID=KI270751.1,length=150742,assembly=ref_genome.fa>
+##contig=<ID=KI270752.1,length=27745,assembly=ref_genome.fa>
+##contig=<ID=KI270753.1,length=62944,assembly=ref_genome.fa>
+##contig=<ID=KI270754.1,length=40191,assembly=ref_genome.fa>
+##contig=<ID=KI270755.1,length=36723,assembly=ref_genome.fa>
+##contig=<ID=KI270756.1,length=79590,assembly=ref_genome.fa>
+##contig=<ID=KI270757.1,length=71251,assembly=ref_genome.fa>
+##reference=file:///home/dnanexus/ctat_genome_lib/ref_genome.fa
+##source=HaplotypeCaller
+##source=SelectVariants
+#CHROM	POS	ID	REF	ALT	QUAL	FILTER	INFO	FORMAT	DRR131564_sra
+chr1	11248075	.	T	C	49.32	PASS	AC=2;AF=1;AN=2;ANN=C|missense_variant|MODERATE|MTOR|MTOR|transcript|NM_004958.3|Coding|7/58|c.860A>G|p.Glu287Gly|981/8725|860/7650|287/2549||;DP=2;Entropy=1.449;ExcessHet=3.0103;FS=0;GENE=MTOR;MLEAC=1;MLEAF=0.5;MQ=60;QD=24.66;SOR=0.693;base_achange="p.Glu287Gly";base_all_mappings=ENST00000361445.9:MTOR:P42345:missense_variant:p.Glu287Gly:c.860A>G;base_cchange="c.860A>G";base_coding="Yes";base_hugo="MTOR";base_numsample=1;base_samples="DRR131564_sra";base_so="missense_variant";base_transcript="ENST00000361445.9";chasmplus_pval=0.00168;chasmplus_results="*NM_004958.3:(0.400:0.00168)";chasmplus_score=0.4;chasmplus_transcript="NM_004958.3";mupit_hugo="MTOR";mupit_link="http://www.cravat.us/MuPIT_Interactive?gm=chr1:11248075"	GT:AD:DP:GQ:PL	1/1:0,2:2:6:61,6,0
+chr6	29942850	.	A	T	72.64	PASS	AC=1;AF=0.5;AN=2;ANN=T|missense_variant|MODERATE|HLA-A|HLA-A|transcript|NM_001242758.1|Coding|2/8|c.167A>T|p.Gln56Leu|251/1611|167/1098|56/365||,T|missense_variant|MODERATE|HLA-A|HLA-A|transcript|NM_002116.7|Coding|2/8|c.167A>T|p.Gln56Leu|251/1611|167/1098|56/365||;BaseQRankSum=0.108;COSMIC_ID=COSV65138509;DP=10;Entropy=1.95;ExcessHet=3.0103;FATHMM=NEUTRAL;FS=3.136;GENE=HLA-A;MLEAC=1;MLEAF=0.5;MQ=60;MQRankSum=0;QD=10.38;ReadPosRankSum=2.189;SOMATIC;SOR=0.916;TISSUE=skin;TUMOR=carcinoma_--_basal_cell_carcinoma;base_achange="p.Gln56Leu";base_all_mappings=ENST00000376802.2:HLA-A::missense_variant:p.Gln56Leu:c.167A>T&ENST00000376806.9:HLA-A::missense_variant:p.Gln56Leu:c.167A>T&ENST00000376809.10:HLA-A:P16188:missense_variant:p.Gln56Leu:c.167A>T&ENST00000396634.5:HLA-A:P16188:missense_variant:p.Gln56Leu:c.167A>T;base_cchange="c.167A>T";base_coding="Yes";base_hugo="HLA-A";base_numsample=1;base_samples="DRR131564_sra";base_so="missense_variant";base_transcript="ENST00000376806.9";chasmplus_pval=0.0375;chasmplus_results="ENST00000376802.2:(0.217:0.0391),*ENST00000376806.9:(0.220:0.0375),ENST00000396634.5:(0.217:0.0391),NM_002116.7:(0.217:0.0391)";chasmplus_score=0.22;chasmplus_transcript="ENST00000376806.9";mupit_hugo="HLA-A";mupit_link="http://www.cravat.us/MuPIT_Interactive?gm=chr6:29942850";vest_all_results="ENST00000376802.2(0.132:0.68202),ENST00000376806.9(0.183:0.56239),*ENST00000396634.5(0.188:0.55349)";vest_hugo="HLA-A";vest_pval=0.55349;vest_score=0.188;vest_transcript="ENST00000396634.5"	GT:AD:DP:GQ:PL	0/1:4,3:7:80:80,0,113
+chr6	56555422	.	T	G	78.32	PASS	AC=2;AF=1;AN=2;ANN=G|missense_variant|MODERATE|DST|DST|transcript|NM_001144769.2|Coding|54/97|c.8702A>C|p.Glu2901Ala|8743/18087|8702/17028|2901/5675||,G|missense_variant|MODERATE|DST|DST|transcript|NM_015548.4|Coding|41/84|c.7190A>C|p.Glu2397Ala|7298/16642|7190/15516|2397/5171||,G|missense_variant|MODERATE|DST|DST|transcript|NM_183380.3|Coding|51/94|c.8168A>C|p.Glu2723Ala|8688/18032|8168/16494|2723/5497||,G|missense_variant|MODERATE|DST|DST|transcript|NM_001144770.1|Coding|52/95|c.8288A>C|p.Glu2763Ala|8414/17758|8288/16614|2763/5537||;DP=2;Entropy=0.863;ExcessHet=3.0103;FS=0;GENE=DST;MLEAC=1;MLEAF=0.5;MQ=60;QD=26.61;SOR=2.303;base_achange="p.Glu4809Ala";base_all_mappings=ENST00000244364.10:DST:Q03001:missense_variant:p.Glu2397Ala:c.7190A>C&ENST00000312431.10:DST::missense_variant:p.Glu2763Ala:c.8288A>C&ENST00000361203.7:DST::missense_variant:p.Glu4809Ala:c.14426A>C&ENST00000370788.6:DST:Q03001:missense_variant:p.Glu2723Ala:c.8168A>C&ENST00000421834.6:DST::missense_variant:p.Glu2723Ala:c.8168A>C;base_cchange="c.14426A>C";base_coding="Yes";base_hugo="DST";base_numsample=1;base_samples="DRR131564_sra";base_so="missense_variant";base_transcript="ENST00000361203.7";chasmplus_pval=0.0237;chasmplus_results="ENST00000361203.7:(0.243:0.0265),ENST00000370788.6:(0.258:0.0209),NM_001144769.2:(0.283:0.0139),NM_001144770.1:(0.251:0.0234),NM_015548.4:(0.288:0.0128),*NM_183380.3:(0.250:0.0237)";chasmplus_score=0.25;chasmplus_transcript="NM_183380.3";vest_all_results="*ENST00000244364.10(0.703:0.07165),ENST00000312431.10(0.622:0.11355),ENST00000361203.7(0.436:0.22012),ENST00000370788.6(0.659:0.09473),ENST00000421834.6(0.629:0.1092)";vest_hugo="DST";vest_pval=0.07165;vest_score=0.703;vest_transcript="ENST00000244364.10"	GT:AD:DP:GQ:PL	1/1:0,2:2:6:90,6,0
+chr6	143504210	.	G	T	80.64	PASS	AC=1;AF=0.5;AN=2;ANN=T|missense_variant|MODERATE|FUCA2|FUCA2|transcript|NM_032020.4|Coding|3/7|c.455C>A|p.Ala152Asp|704/2548|455/1404|152/467||;BaseQRankSum=1.15;COSMIC_ID=COSV50020568;DP=5;Entropy=1.95;ExcessHet=3.0103;FATHMM=PATHOGENIC;FS=0;GENE=FUCA2;MLEAC=1;MLEAF=0.5;MQ=60;MQRankSum=0;QD=20.16;ReadPosRankSum=0.319;SOMATIC;SOR=0.446;TISSUE=lung;TUMOR=carcinoma_--_NS;base_achange="p.Ala152Asp";base_all_mappings=ENST00000002165.11:FUCA2:Q9BTY2:missense_variant:p.Ala152Asp:c.455C>A&ENST00000367585.1:FUCA2::intron_variant,processed_transcript::&ENST00000591892.2:AL031320.2::intron_variant,lnc_RNA::;base_cchange="c.455C>A";base_coding="Yes";base_hugo="FUCA2";base_numsample=1;base_samples="DRR131564_sra";base_so="missense_variant";base_transcript="ENST00000002165.11";chasmplus_pval=0.446;chasmplus_results="*NM_032020.4:(0.041:0.446)";chasmplus_score=0.041;chasmplus_transcript="NM_032020.4"	GT:AD:DP:GQ:PL	0/1:1,3:4:20:88,0,20
+chr14	73192817	.	T	C	37.64	PASS	AC=1;AF=0.5;AN=2;ANN=C|missense_variant|MODERATE|PSEN1|PSEN1|transcript|NM_000021.3|Coding|7/12|c.722T>C|p.Leu241Pro|1006/6090|722/1404|241/467||,C|missense_variant|MODERATE|PSEN1|PSEN1|transcript|NM_007318.2|Coding|7/12|c.710T>C|p.Leu237Pro|994/6078|710/1392|237/463||;BaseQRankSum=-0.842;DP=5;Entropy=1.149;ExcessHet=3.0103;FS=0;GENE=PSEN1;MLEAC=1;MLEAF=0.5;MQ=60;MQRankSum=0;QD=7.53;ReadPosRankSum=-1.645;SOR=1.609;base_achange="p.Leu241Pro";base_all_mappings=ENST00000324501.10:PSEN1:P49768:missense_variant:p.Leu241Pro:c.722T>C&ENST00000357710.8:PSEN1:P49768:missense_variant:p.Leu237Pro:c.710T>C&ENST00000394164.5:PSEN1:P49768:missense_variant:p.Leu237Pro:c.710T>C&ENST00000406768.1:PSEN1::missense_variant:p.Leu149Pro:c.446T>C&ENST00000553855.5:PSEN1:P49768:missense_variant,NMD_transcript_variant:p.Leu241Pro:c.722T>C&ENST00000555386.5:PSEN1:P49768:missense_variant,NMD_transcript_variant:p.Leu237Pro:c.710T>C&ENST00000557511.5:PSEN1:P49768:missense_variant:p.Leu241Pro:c.722T>C;base_cchange="c.722T>C";base_coding="Yes";base_hugo="PSEN1";base_numsample=1;base_samples="DRR131564_sra";base_so="missense_variant";base_transcript="ENST00000324501.10";chasmplus_pval=0.00937;chasmplus_results="*ENST00000394164.5:(0.306:0.00937),ENST00000406768.1:(0.304:0.00972),ENST00000557511.5:(0.310:0.00874),NM_000021.3:(0.302:0.0101),NM_007318.2:(0.305:0.00955)";chasmplus_score=0.306;chasmplus_transcript="ENST00000394164.5";mupit_hugo="PSEN1";mupit_link="http://www.cravat.us/MuPIT_Interactive?gm=chr14:73192817";vest_all_results="ENST00000357710.8(0.975:0.00253),ENST00000394164.5(0.975:0.00253),*ENST00000406768.1(0.977:0.00223),ENST00000557511.5(0.968:0.00283)";vest_hugo="PSEN1";vest_pval=0.00223;vest_score=0.977;vest_transcript="ENST00000406768.1"	GT:AD:DP:GQ:PL	0/1:3,2:5:45:45,0,87
+chr15	43047254	.	G	C	56.32	PASS	AC=2;AF=1;AN=2;ANN=C|missense_variant|MODERATE|UBR1|UBR1|transcript|NM_174916.2|Coding|14/47|c.1575C>G|p.His525Gln|1641/7745|1575/5250|525/1749||;DP=2;Entropy=1.557;ExcessHet=3.0103;FS=0;GENE=UBR1;MLEAC=1;MLEAF=0.5;MQ=60;QD=28.16;SOR=2.303;base_achange="p.His525Gln";base_all_mappings=ENST00000290650.9:UBR1:Q8IWV7:missense_variant:p.His525Gln:c.1575C>G&ENST00000546274.6:UBR1::missense_variant:p.His525Gln:c.1575C>G&ENST00000563239.1:UBR1::NMD_transcript_variant,3_prime_UTR_variant::c.*238C>G;base_cchange="c.1575C>G";base_coding="Yes";base_hugo="UBR1";base_numsample=1;base_samples="DRR131564_sra";base_so="missense_variant";base_transcript="ENST00000290650.9";chasmplus_pval=0.00452;chasmplus_results="*ENST00000546274.6:(0.347:0.00452),NM_174916.2:(0.348:0.00444)";chasmplus_score=0.347;chasmplus_transcript="ENST00000546274.6";vest_all_results="*ENST00000546274.6(0.85:0.01832)";vest_hugo="UBR1";vest_pval=0.01832;vest_score=0.85;vest_transcript="ENST00000546274.6"	GT:AD:DP:GQ:PL	1/1:0,2:2:6:68,6,0
+chr16	11877517	.	C	T	41.64	PASS	AC=1;AF=0.5;AN=2;ANN=T|missense_variant|MODERATE|GSPT1|GSPT1|transcript|NM_002094.3|Coding|12/15|c.1492G>A|p.Glu498Lys|1740/7153|1492/1914|498/637||,T|missense_variant|MODERATE|GSPT1|GSPT1|transcript|NM_001130006.1|Coding|12/15|c.1489G>A|p.Glu497Lys|1737/7150|1489/1911|497/636||,T|missense_variant|MODERATE|GSPT1|GSPT1|transcript|NM_001130007.1|Coding|12/15|c.1078G>A|p.Glu360Lys|1761/7174|1078/1500|360/499||;BaseQRankSum=-1.383;COSMIC_ID=COSV70452841;DP=4;Entropy=1.449;ExcessHet=3.0103;FATHMM=PATHOGENIC;FS=0;GENE=GSPT1;MLEAC=1;MLEAF=0.5;MQ=60;MQRankSum=0;QD=10.41;ReadPosRankSum=-0.674;SOMATIC;SOR=0.693;TISSUE=large_intestine;TUMOR=carcinoma_--_adenocarcinoma;base_achange="p.Glu498Lys";base_all_mappings=ENST00000420576.6:GSPT1:P15170:missense_variant:p.Glu360Lys:c.1078G>A&ENST00000434724.7:GSPT1:P15170:missense_variant:p.Glu498Lys:c.1492G>A&ENST00000439887.6:GSPT1:P15170:missense_variant:p.Glu497Lys:c.1489G>A&ENST00000563468.5:GSPT1:P15170:missense_variant:p.Glu360Lys:c.1078G>A&ENST00000574364.1:AC007216.4::intron_variant,lnc_RNA::;base_cchange="c.1492G>A";base_coding="Yes";base_hugo="GSPT1";base_numsample=1;base_samples="DRR131564_sra";base_so="missense_variant";base_transcript="ENST00000434724.7";chasmplus_pval=0.197;chasmplus_results="*ENST00000563468.5:(0.098:0.197),NM_001130006.1:(0.126:0.136),NM_001130007.1:(0.079:0.255),NM_002094.3:(0.126:0.136)";chasmplus_score=0.098;chasmplus_transcript="ENST00000563468.5";mupit_hugo="GSPT1";mupit_link="http://www.cravat.us/MuPIT_Interactive?gm=chr16:11877517";vest_all_results="ENST00000420576.6(0.801:0.03178),*ENST00000439887.6(0.864:0.01579),ENST00000563468.5(0.841:0.02004)";vest_hugo="GSPT1";vest_pval=0.01579;vest_score=0.864;vest_transcript="ENST00000439887.6"	GT:AD:DP:GQ:PL	0/1:2,2:4:49:49,0,57
+chr16	23690035	.	C	T	60.32	PASS	AC=2;AF=1;AN=2;ANN=T|missense_variant|MODERATE|PLK1|PLK1|transcript|NM_005030.3|Coding|10/10|c.1784C>T|p.Ser595Leu|1837/2169|1784/1812|595/603||;COSMIC_ID=COSV55623104;DP=2;Entropy=1.449;ExcessHet=3.0103;FATHMM=PATHOGENIC;FS=0;GENE=PLK1;MLEAC=1;MLEAF=0.5;MQ=60;QD=30.16;SOMATIC;SOR=2.303;TISSUE=lung;TUMOR=carcinoma_--_adenocarcinoma;base_achange="p.Ser595Leu";base_all_mappings=ENST00000256797.9:AC008870.1:Q76MJ5:2kb_downstream_variant::c.*796G>A&ENST00000300093.9:PLK1:P53350:missense_variant:p.Ser595Leu:c.1784C>T&ENST00000457008.6:AC008870.1::2kb_downstream_variant::c.*796G>A;base_cchange="c.1784C>T";base_coding="Yes";base_hugo="PLK1";base_numsample=1;base_samples="DRR131564_sra";base_so="missense_variant";base_transcript="ENST00000300093.9";chasmplus_pval=0.0144;chasmplus_results="*NM_005030.4:(0.281:0.0144)";chasmplus_score=0.281;chasmplus_transcript="NM_005030.4";mupit_hugo="PLK1";mupit_link="http://www.cravat.us/MuPIT_Interactive?gm=chr16:23690035"	GT:AD:DP:GQ:PL	1/1:0,2:2:6:72,6,0
+chr19	10491905	.	C	A	59.32	PASS	AC=2;AF=1;AN=2;ANN=A|missense_variant|MODERATE|KEAP1|KEAP1|transcript|NM_012289.3|Coding|3/6|c.997G>T|p.Gly333Cys|1153/2563|997/1875|333/624||,A|missense_variant|MODERATE|KEAP1|KEAP1|transcript|NM_203500.1|Coding|3/6|c.997G>T|p.Gly333Cys|1182/2592|997/1875|333/624||;COSMIC_ID=COSV50262468;DP=2;Entropy=1.379;ExcessHet=3.0103;FATHMM=PATHOGENIC;FS=0;GENE=KEAP1;MLEAC=1;MLEAF=0.5;MQ=60;QD=29.66;SOMATIC;SOR=0.693;TISSUE=lung;TUMOR=carcinoma_--_adenocarcinoma;base_achange="p.Gly333Cys";base_all_mappings=ENST00000171111.10:KEAP1:Q14145:missense_variant:p.Gly333Cys:c.997G>T&ENST00000393623.6:KEAP1:Q14145:missense_variant:p.Gly333Cys:c.997G>T&ENST00000588024.1:KEAP1::2kb_downstream_variant,processed_transcript::&ENST00000592671.1:AC011461.1::2kb_upstream_variant,lnc_RNA::;base_cchange="c.997G>T";base_coding="Yes";base_hugo="KEAP1";base_numsample=1;base_samples="DRR131564_sra";base_so="missense_variant";base_transcript="ENST00000171111.10";chasmplus_pval=4.64e-05;chasmplus_results="NM_012289.3:(0.572:4.18e-05),*NM_203500.1:(0.566:4.64e-05)";chasmplus_score=0.566;chasmplus_transcript="NM_203500.1";mupit_hugo="KEAP1";mupit_link="http://www.cravat.us/MuPIT_Interactive?gm=chr19:10491905";vest_all_results="*ENST00000393623.6(0.787:0.03714)";vest_hugo="KEAP1";vest_pval=0.03714;vest_score=0.787;vest_transcript="ENST00000393623.6"	GT:AD:DP:GQ:PL	1/1:0,2:2:6:71,6,0
+chr20	57366816	.	C	G	64.64	PASS	AC=1;AF=0.5;AN=2;ANN=G|missense_variant|MODERATE|RAE1|RAE1|transcript|NM_001015885.1|Coding|6/12|c.385C>G|p.Pro129Ala|750/1836|385/1107|129/368||,G|missense_variant|MODERATE|RAE1|RAE1|transcript|NM_003610.3|Coding|6/12|c.385C>G|p.Pro129Ala|726/1812|385/1107|129/368||;BaseQRankSum=0.842;DP=6;Entropy=1.557;ExcessHet=3.0103;FS=3.979;GENE=RAE1;MLEAC=1;MLEAF=0.5;MQ=60;MQRankSum=0;QD=10.77;ReadPosRankSum=0.253;SOR=2.225;base_achange="p.Pro129Ala";base_all_mappings=ENST00000371242.6:RAE1:P78406:missense_variant:p.Pro129Ala:c.385C>G&ENST00000395840.6:RAE1:P78406:missense_variant:p.Pro129Ala:c.385C>G&ENST00000395841.7:RAE1:P78406:missense_variant:p.Pro129Ala:c.385C>G&ENST00000492498.5:RAE1::missense_variant,NMD_transcript_variant:p.Pro129Ala:c.385C>G&ENST00000527947.5:RAE1::missense_variant:p.Pro129Ala:c.385C>G;base_cchange="c.385C>G";base_coding="Yes";base_hugo="RAE1";base_numsample=1;base_samples="DRR131564_sra";base_so="missense_variant";base_transcript="ENST00000527947.5";chasmplus_pval=0.0439;chasmplus_results="*ENST00000371242.6:(0.209:0.0439),ENST00000527947.5:(0.209:0.0439),NM_001015885.1:(0.202:0.0485),NM_003610.3:(0.202:0.0485)";chasmplus_score=0.209;chasmplus_transcript="ENST00000371242.6";mupit_hugo="RAE1";mupit_link="http://www.cravat.us/MuPIT_Interactive?gm=chr20:57366816";vest_all_results="ENST00000371242.6(0.562:0.14877),ENST00000395840.6(0.548:0.1595),*ENST00000527947.5(0.571:0.14371)";vest_hugo="RAE1";vest_pval=0.14371;vest_score=0.571;vest_transcript="ENST00000527947.5"	GT:AD:DP:GQ:PL	0/1:4,2:6:72:72,0,156
+chr20	57366817	.	C	T	64.64	PASS	AC=1;AF=0.5;AN=2;ANN=T|missense_variant|MODERATE|RAE1|RAE1|transcript|NM_001015885.1|Coding|6/12|c.386C>T|p.Pro129Leu|751/1836|386/1107|129/368||,T|missense_variant|MODERATE|RAE1|RAE1|transcript|NM_003610.3|Coding|6/12|c.386C>T|p.Pro129Leu|727/1812|386/1107|129/368||;BaseQRankSum=-0.674;DP=6;Entropy=1.449;ExcessHet=3.0103;FS=3.979;GENE=RAE1;MLEAC=1;MLEAF=0.5;MQ=60;MQRankSum=0;QD=10.77;ReadPosRankSum=0.524;SOR=2.225;base_achange="p.Pro129Leu";base_all_mappings=ENST00000371242.6:RAE1:P78406:missense_variant:p.Pro129Leu:c.386C>T&ENST00000395840.6:RAE1:P78406:missense_variant:p.Pro129Leu:c.386C>T&ENST00000395841.7:RAE1:P78406:missense_variant:p.Pro129Leu:c.386C>T&ENST00000492498.5:RAE1::missense_variant,NMD_transcript_variant:p.Pro129Leu:c.386C>T&ENST00000527947.5:RAE1::missense_variant:p.Pro129Leu:c.386C>T;base_cchange="c.386C>T";base_coding="Yes";base_hugo="RAE1";base_numsample=1;base_samples="DRR131564_sra";base_so="missense_variant";base_transcript="ENST00000527947.5";chasmplus_pval=0.0391;chasmplus_results="*ENST00000371242.6:(0.217:0.0391),ENST00000527947.5:(0.215:0.0403),NM_001015885.1:(0.205:0.0465),NM_003610.3:(0.205:0.0465)";chasmplus_score=0.217;chasmplus_transcript="ENST00000371242.6";mupit_hugo="RAE1";mupit_link="http://www.cravat.us/MuPIT_Interactive?gm=chr20:57366817";vest_all_results="ENST00000371242.6(0.771:0.04261),ENST00000395840.6(0.75:0.04939),*ENST00000527947.5(0.775:0.04099)";vest_hugo="RAE1";vest_pval=0.04099;vest_score=0.775;vest_transcript="ENST00000527947.5"	GT:AD:DP:GQ:PL	0/1:4,2:6:72:72,0,156
+chrX	47240860	.	T	C	50.64	PASS	AC=1;AF=0.5;AN=2;ANN=C|missense_variant|MODERATE|USP11|USP11|transcript|NM_004651.3|Coding|7/21|c.959T>C|p.Met320Thr|959/3290|959/2892|320/963||;BaseQRankSum=0.967;DP=4;Entropy=1.842;ExcessHet=3.0103;FS=0;GENE=USP11;MLEAC=1;MLEAF=0.5;MQ=60;MQRankSum=0;QD=16.88;ReadPosRankSum=0.967;SOR=0.223;base_achange="p.Met320Thr";base_all_mappings=ENST00000218348.7:USP11:P51784:missense_variant:p.Met320Thr:c.959T>C&ENST00000377107.7:USP11::missense_variant:p.Met277Thr:c.830T>C;base_cchange="c.959T>C";base_coding="Yes";base_hugo="USP11";base_numsample=1;base_samples="DRR131564_sra";base_so="missense_variant";base_transcript="ENST00000218348.7";chasmplus_pval=0.0137;chasmplus_results="ENST00000377107.6:(0.281:0.0144),*NM_004651.3:(0.284:0.0137)";chasmplus_score=0.284;chasmplus_transcript="NM_004651.3";mupit_hugo="USP11";mupit_link="http://www.cravat.us/MuPIT_Interactive?gm=chrX:47240860";vest_all_results="*ENST00000218348.7(0.891:0.01174)";vest_hugo="USP11";vest_pval=0.01174;vest_score=0.891;vest_transcript="ENST00000218348.7"	GT:AD:DP:GQ:PL	0/1:1,2:3:20:58,0,20

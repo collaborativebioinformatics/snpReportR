@@ -2,8 +2,7 @@
 .Rhistory
 .Rproj.user/
 *.sqlite
-
-
+*.RDS
 
 #hidden caches
 ~$*
@@ -39,3 +38,5 @@ pip-delete-this-directory.txt
 
 #OS specific
 .DS_Store
+
+sample_html_report.html

@@ -1,0 +1,89 @@
+---
+title: "Expressed Variant Reporting Results"
+author: "Brandon Michael Blobner, Jenny Leopoldina Smith, and Ahmad Al Khleifat"
+date: "`r format(Sys.Date(), tz = 'America/Los_Angeles')`"
+output:
+  blastula::blastula_email:
+    always_allow_html: yes
+    section_divs: true
+    number_sections: true
+    fig_caption: true
+    includes:
+      before_body: email_header.html
+      after_body: email_footer.html
+    connect_footer: false
+---
+
+
+```{r setup, include=FALSE, echo=FALSE}
+require(knitr)
+knitr::opts_knit$set(root.dir = here::here())
+
+
+knitr::opts_chunk$set(tidy.opts=list(width.cutoff=50),
+                      tidy=TRUE,
+                      fig.align='center',
+                      fig.width = 5, fig.height = 7)
+```
+
+```{r echo=FALSE, message=FALSE}
+library(dplyr)
+library(magrittr)
+library(tidyr)
+library(stringr)
+
+library(here)
+library(ggplot2)
+library(gridExtra)
+library(RColorBrewer)
+```
+
+
+Dear { Patient/Clinician },
+
+We have produced a report of your current genetic report produced by `snpReportR` from {institution}. The following synopsis is provided below and an in-depth description of findings and their potential impact are included in the full HTML report. 
+
+If you encounter questions or concerns, please contact { institution } or { doctorInfo }. 
+
+
+<br><br><br>
+
+# Summary of Findings 
+
+Here are the most relevant findings in your sequencing results
+
+1. GeneA
+2. GeneB
+3. GeneC
+
+
+<br><br><br>
+
+# About snpReportR 
+
+<br><br><br>
+
+
+```{r eval=FALSE, echo=FALSE}
+#cid:foobar #worked on pandoc v2.7.3 not on v2.11.4
+#here("logos/snpReporter_logo.png") #works in pandoc render, NOT in email body
+htmltools::img(src = here("logos/snpReporter_logo.png"),
+               alt = 'logo',
+               style = 'float: center;padding-right:10px;height:a125px;width:250px')
+
+```
+
+```{r echo=FALSE, eval=FALSE}
+#This give me the base64 encoded image, but it will not render into an image in the sent email...
+logo <- htmltools::img(src = knitr::image_uri(here("logos/snpReporter_logo.png")),
+               alt = 'logo',
+               style = 'float: center;padding-right:10px;height:a125px;width:250px')
+
+# # str(logo)
+```
+
+<br><br><br>
+
+
+
+
