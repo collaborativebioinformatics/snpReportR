@@ -1,0 +1,4 @@
+name: email_generation
+description: >
+   Use R Blastula to create an HTML formatted email.
+create_dir: FALSE

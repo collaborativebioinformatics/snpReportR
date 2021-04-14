@@ -1,0 +1,4 @@
+name: expressed_variant_reports
+description: >
+   Creates filtered variant (SNV/indel) reports from RNAseq VCF files.
+create_dir: FALSE

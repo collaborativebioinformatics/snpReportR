@@ -28,7 +28,7 @@ filter_ctat_vcf <- function(vcf.df, vcf.s4){
 
   functional_annots_names <- functional_annots_names["ANN","Description"] %>%
     gsub("^.+\\'(.+)\\'","\\1",.) %>%
-    str_split(., pattern = "\\|") %>%
+    stringr::str_split(., pattern = "\\|") %>%
     unlist() %>%
     gsub("\\s", "", .)
 

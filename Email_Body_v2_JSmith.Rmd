@@ -2,9 +2,9 @@
 title: "Expressed Variant Reporting Results"
 author: "Brandon Michael Blobner, Jenny Leopoldina Smith, and Ahmad Al Khleifat"
 date: "`r format(Sys.Date(), tz = 'America/Los_Angeles')`"
+always_allow_html: yes
 output:
   blastula::blastula_email:
-    always_allow_html: yes
     section_divs: true
     number_sections: true
     fig_caption: true

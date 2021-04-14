@@ -27,8 +27,8 @@ download_gen_refs <- function(URL="ftp://ftp.ebi.ac.uk/pub/databases/gencode/Gen
   #If the files already exist in the current working director
   if(file.exists(rds) & file.exists(sqlite)){
     message(paste("Reference files exist. Using ",sqlite, "and", rds, "."))
-    refs <- list("gtf"=readRDS(rds),
-                 "txdb"=AnnotationDbi::loadDb(sqlite))
+    refs <- list("txdb"=AnnotationDbi::loadDb(sqlite),
+                 "gtf"=readRDS(rds))
 
     return(refs)
   }
