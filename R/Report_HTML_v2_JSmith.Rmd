@@ -169,7 +169,6 @@ p {
   margin: 1rem;
 }
 
-
 ```
 
 
@@ -518,11 +517,33 @@ gene_tracks(vcf_s4 = vcf.s4[top5.coding], txdb=params$txdb) #gff=gff
 
 ```{r echo=FALSE}
 #read in the counts file
-cts_file <-  read.csv(params$counts)
+cts_file <-  read.delim(params$counts, sep="\t")
+
+# dim(cts_file) #28395     7s
 ```
 
 ```{r echo=FALSE}
+#convert entrez gene IDs and gene symbols 
+#convert the raw counts to TPM or RPKM (if too much time, just skip this step for now)
 head(cts_file)
+```
+
+```{r}
+reformat_counts <- function(counts_matrix, gene=MyGene){
+  df <- counts_matrix %>% 
+    as.data.frame() %>% 
+  filter(geneSymbol==gene) %>%
+  gather(Sample, TPM, -geneSymbol) %>% 
+  mutate(my_charactistic=c("Yellow","Blue"))
+  
+  return(df)
+}
+
+
+my_plot_function <- function(df){
+  ggplot2::ggplot(df, aes(y=TPM, color=my_charactistic)) +
+  geom_violin() #boxplots, heatmaps, whatever
+}
 ```
 
 # DE genes by condition

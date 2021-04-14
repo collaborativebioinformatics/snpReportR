@@ -33,6 +33,8 @@ Sys.setenv(RSTUDIO_PANDOC=rmarkdown::find_pandoc(cache = FALSE)$dir)
 
 #---------------------------------Define Parameters----------------------------------------------
 
+
+#define a single input_file <- vcf_files[1] for testing purposes, rather than run the whole For Loop
 for (input_file in vcf_files){
   #Define the output HTML report file
   filename <- paste0(gsub("_applied.cancer.vcf|.wAnnot.vcf.gz","", basename(input_file)), "_snpReport.html")
