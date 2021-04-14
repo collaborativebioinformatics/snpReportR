@@ -1,10 +1,10 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.21 (TeX Live 2020) (preloaded format=pdflatex 2021.3.23)  11 APR 2021 12:58
+This is pdfTeX, Version 3.14159265-2.6-1.40.21 (TeX Live 2020) (preloaded format=pdflatex 2021.3.23)  14 APR 2021 10:58
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
-**/Users/jlsmith3/expressed-variant-reporting/Reports/Report_HTML_v2_JSmith.tex
+**/Users/jlsmith3/expressed-variant-reporting/reports/Report_HTML_v2_JSmith.tex
 
-(/Users/jlsmith3/expressed-variant-reporting/Reports/Report_HTML_v2_JSmith.tex
+(/Users/jlsmith3/expressed-variant-reporting/reports/Report_HTML_v2_JSmith.tex
 LaTeX2e <2020-10-01> patch level 4
 L3 programming layer <2021-02-18> (/Users/jlsmith3/Library/TinyTeX/texmf-dist/t
 ex/latex/base/article.cls
@@ -479,13 +479,13 @@ LaTeX Font Info:    Trying to load font information for T1+lmtt on input line 1
 (/Users/jlsmith3/Library/TinyTeX/texmf-dist/tex/latex/lm/t1lmtt.fd
 File: t1lmtt.fd 2009/10/30 v1.6 Font defs for Latin Modern
 )
-</Users/jlsmith3/expressed-variant-reporting/Reports/Report_HTML_v2_JSmith_file
+</Users/jlsmith3/expressed-variant-reporting/reports/Report_HTML_v2_JSmith_file
 s/figure-latex/unnamed-chunk-9-1.pdf, id=20, 1003.75pt x 621.32124pt>
-File: /Users/jlsmith3/expressed-variant-reporting/Reports/Report_HTML_v2_JSmith
+File: /Users/jlsmith3/expressed-variant-reporting/reports/Report_HTML_v2_JSmith
 _files/figure-latex/unnamed-chunk-9-1.pdf Graphic file (type pdf)
-<use /Users/jlsmith3/expressed-variant-reporting/Reports/Report_HTML_v2_JSmith_
+<use /Users/jlsmith3/expressed-variant-reporting/reports/Report_HTML_v2_JSmith_
 files/figure-latex/unnamed-chunk-9-1.pdf>
-Package pdftex.def Info: /Users/jlsmith3/expressed-variant-reporting/Reports/Re
+Package pdftex.def Info: /Users/jlsmith3/expressed-variant-reporting/reports/Re
 port_HTML_v2_JSmith_files/figure-latex/unnamed-chunk-9-1.pdf  used on input lin
 e 186.
 (pdftex.def)             Requested size: 469.75618pt x 290.77907pt.
@@ -493,7 +493,7 @@ LaTeX Font Info:    Trying to load font information for TS1+lmr on input line 1
 99.
 (/Users/jlsmith3/Library/TinyTeX/texmf-dist/tex/latex/lm/ts1lmr.fd
 File: ts1lmr.fd 2009/10/30 v1.6 Font defs for Latin Modern
-) [2 </Users/jlsmith3/expressed-variant-reporting/Reports/Report_HTML_v2_JSmith
+) [2 </Users/jlsmith3/expressed-variant-reporting/reports/Report_HTML_v2_JSmith
 _files/figure-latex/unnamed-chunk-9-1.pdf>]
 LaTeX Font Info:    External font `lmex10' loaded for size
 (Font)              <10> on input line 244.
