@@ -7,8 +7,10 @@ library(snpReportR)
 
 
 #How can I parameterize this so that its not a `for loop`?
+sample_names <- c()
 for (input_file in dir("data-raw", pattern = "applied.cancer.vcf", full.names = TRUE)){
   sample_name <- paste0(gsub("_applied.cancer.vcf(.gz)?|init.wAnnot.vcf(.gz)?","", basename(input_file)))
+  sample_names <- c(sample_names, sample_name)
 
   #As a dataframe
   vcf <-  suppressMessages(vcfR::read.vcfR(input_file))
@@ -33,4 +35,12 @@ for (input_file in dir("data-raw", pattern = "applied.cancer.vcf", full.names = 
   do.call("use_data", list(as.name(sample_name), overwrite = TRUE))
 }
 
+#Save vector of sample IDs/ sample names
+use_data(sample_names, overwrite = TRUE)
 
+#Save RNAseq Data
+counts <- read.delim("data-raw/edgeR_normcounts.tsv")
+use_data(counts,overwrite = TRUE)
+
+degs <- read.delim("data-raw/edgeR_test_results.tsv")
+use_data(degs, overwrite = TRUE)

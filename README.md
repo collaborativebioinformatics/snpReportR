@@ -1,6 +1,6 @@
 # expressed-variant-reporting
 
-![](https://github.com/collaborativebioinformatics/expressed-variant-reporting/blob/main/snpReportR.png)
+snpReportR <img src='man/figures/logo.png' align="right" height="244" />
 
 # Contributors
 Jenny Smith

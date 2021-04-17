@@ -4,10 +4,14 @@
 \alias{setup}
 \title{Set-up the project directories}
 \usage{
-setup(sample_name, directory = "reports")
+setup(sample_names, counts, degs, directory = "reports")
 }
 \arguments{
-\item{sample_name}{sample_name is a character string for the sample identifier, which must be included in the VCF filename}
+\item{sample_names}{a character vector of the sample names/ sample IDs of the VCF files}
+
+\item{counts}{a data.frame object or a filepath with the tab separated RNAseq counts}
+
+\item{degs}{a data.frame object or a filepath with the tab separated results of EdgeR DE analysis.}
 
 \item{directory}{a character string for the name of the directory where reports will be saved.}
 }
@@ -18,5 +22,5 @@ setup(sample_name, directory = "reports")
 Set-up the project directories
 }
 \examples{
-setup("my_reports")
+setup(sample_names=c("DRR131561_dx.variants.HC_hard_cutoffs",counts=counts,degs=degs, directory="my_reports")
 }
