@@ -23,7 +23,7 @@ recipients     <- c('jennyl.smith.workonly@gmail.com')
 #Must provide path to pandoc since Rscript does not natively know where to find it,
 #unlike running rmakrdown::render() interactively
 Sys.setenv(RSTUDIO_PANDOC=rmarkdown::find_pandoc(cache = FALSE)$dir)
-
+print(Sys.getenv("RSTUDIO_PANDOC"))
 
 #Step 2.
 #Define Common Input Parameters and files
@@ -33,16 +33,22 @@ Sys.setenv(RSTUDIO_PANDOC=rmarkdown::find_pandoc(cache = FALSE)$dir)
   gen_refs <- suppressMessages(snpReportR::download_gen_refs())
 
   #4B. define the parameterized inputs as a list
-  rnaseq <- list(counts=if(class({{{ counts }}}) == "character"){
-                          read.delim(counts, sep="\t")
-                        }else{
-                          {{{ counts }}}
-                        },
-                 degs=if(class({{{ degs }}})=="character"){
-                          read.delim(degs, sep="\t")
-                      }else{
-                         {{{ degs }}}
-                      })
+  counts <- {{{ counts }}}
+  if(exists(counts)){
+    suppressMessages(get(counts))
+  }else{
+    read.delim(counts, sep="\t")
+  }
+
+  degs <- {{{ degs }}}
+  if(exists(degs)){
+    suppressMessages(get(degs))
+  }else{
+    read.delim(degs, sep="\t")
+  }
+
+  rnaseq <- list(counts=counts,
+                 degs=degs)
 
   Params <- c(gen_refs, rnaseq)
 
@@ -50,7 +56,9 @@ Sys.setenv(RSTUDIO_PANDOC=rmarkdown::find_pandoc(cache = FALSE)$dir)
 # Create the Analysis reports "in batch" for the sample IDs provided
 # Data should already be prepared according to  step 0 as an .rda object (need to workout the logic on how to sub in an rda object)
 outfiles <- list()
-render_reports <- lapply({{{ sample_names }}}, function(sample_name){
+sample_names <- {{{ sample_names }}}
+
+render_reports <- lapply(sample_names, function(sample_name){
 
   #3A. Read in the VCF data
   vcf_obj <- if (exists(sample_name)){
