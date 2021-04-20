@@ -47,6 +47,7 @@ Imports:
     htmltools,
     usethis,
     fs,
-    gmailr
+    gmailr,
+    rmarkdown
 Depends: 
     R (>= 2.10)

@@ -18,10 +18,10 @@ output:
       after_body: report_footer.html
   pdf_document:
     latex_engine: pdflatex
+    highlight: breezedark
     toc: true
     toc_depth: 3
     number_sections: true
-    highlight: breezedark
 params:
   data:
     label: "Enter the filtered VCF data.frame object:"

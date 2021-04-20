@@ -2,25 +2,26 @@
 % Please edit documentation in R/setup.R
 \name{setup}
 \alias{setup}
-\title{Set-up the project directories}
+\title{Set-up the project analysis directories}
 \usage{
-setup(sample_names, counts, degs, directory = "reports")
+setup(sample_names, counts_results, degs_results, directory = "reports")
 }
 \arguments{
-\item{sample_names}{a character vector of the sample names/ sample IDs of the VCF files}
-
-\item{counts}{a data.frame object or a filepath with the tab separated RNAseq counts}
-
-\item{degs}{a data.frame object or a filepath with the tab separated results of EdgeR DE analysis.}
+\item{sample_names}{a character vector of the sample names/ sample IDs of the VCF files.}
 
 \item{directory}{a character string for the name of the directory where reports will be saved.}
+
+\item{counts}{a character vector of the variable name of the data.frame object OR a filepath with the tab separated RNAseq counts.}
+
+\item{degs}{a character vector of the variable name of the data.frame object OR a filepath with the tab separated results of EdgeR DE analysis.}
 }
 \value{
 
 }
 \description{
-Set-up the project directories
+Set-up the project analysis directories
 }
 \examples{
-setup(sample_names=c("DRR131561_dx.variants.HC_hard_cutoffs",counts=counts,degs=degs, directory="my_reports")
+library(snpReportR)
+setup(sample_names=sample_names, counts_results="counts_results",degs_results="degs_results", directory="my_reports")
 }

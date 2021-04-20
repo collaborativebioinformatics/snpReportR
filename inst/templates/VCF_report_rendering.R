@@ -6,11 +6,13 @@ library(dplyr)
 library(tidyr)
 library(rmarkdown)
 library(here)
+library(snpReportR)
 
 #Step 0.
 #Prepare the vcf files  and the RNAseq counts in data/ directory.
 #VCF Data must be saved with {{{ sample_name }}}.vcf or {{{ sample_name }}}.vcf.gz
-#RNAseq data must have generic names degs and counts.
+#RNAseq data must have generic names degs_results and counts.
+
 
 #Step 1.
 #Configure gmailr package and pandoc
@@ -19,11 +21,10 @@ gmailr::gm_auth_configure() #this needs to be run at the top of the script to se
 sender         <- 'jennyl.smith.workonly@gmail.com'
 recipients     <- c('jennyl.smith.workonly@gmail.com')
 
-#pandoc path
-#Must provide path to pandoc since Rscript does not natively know where to find it,
-#unlike running rmakrdown::render() interactively
+#pandoc path: Must provide path to pandoc since Rscript does not natively know where to find it, unlike running rmakrdown::render() interactively
 Sys.setenv(RSTUDIO_PANDOC=rmarkdown::find_pandoc(cache = FALSE)$dir)
 print(Sys.getenv("RSTUDIO_PANDOC"))
+
 
 #Step 2.
 #Define Common Input Parameters and files
@@ -33,38 +34,39 @@ print(Sys.getenv("RSTUDIO_PANDOC"))
   gen_refs <- suppressMessages(snpReportR::download_gen_refs())
 
   #4B. define the parameterized inputs as a list
-  counts <- {{{ counts }}}
-  if(exists(counts)){
-    suppressMessages(get(counts))
+  counts_var <- "{{{ counts_results }}}"
+  if(exists(counts_var)){
+    counts_results <- suppressMessages(get(counts_var))
   }else{
-    read.delim(counts, sep="\t")
+    counts_results <- read.delim(counts_var, sep="\t")
   }
 
-  degs <- {{{ degs }}}
-  if(exists(degs)){
-    suppressMessages(get(degs))
+  degs_var <- "{{{ degs_results }}}"
+  if(exists(degs_var)){
+    degs_results <- suppressMessages(get(degs_var))
   }else{
-    read.delim(degs, sep="\t")
+    degs_results <- read.delim(degs_var, sep="\t")
   }
 
-  rnaseq <- list(counts=counts,
-                 degs=degs)
+  rnaseq <- list(counts=counts_results,
+                 degs=degs_results)
 
   Params <- c(gen_refs, rnaseq)
+
 
 #Step3.
 # Create the Analysis reports "in batch" for the sample IDs provided
 # Data should already be prepared according to  step 0 as an .rda object (need to workout the logic on how to sub in an rda object)
 outfiles <- list()
-sample_names <- {{{ sample_names }}}
+sample_list <- unlist(strsplit("{{{ sample_names }}}",split = ","))
 
-render_reports <- lapply(sample_names, function(sample_name){
+rendered_reports <- lapply(sample_list, function(sample_name){
 
   #3A. Read in the VCF data
   vcf_obj <- if (exists(sample_name)){
     suppressMessages(get(sample_name))
   }else{
-    suppressMessages(get(load(paste0(sample_name, ".rda"))))
+    suppressMessages(get(load(paste0("data/",sample_name, ".rda"))))
   }
 
   #3B. update the params for this individual sample
@@ -73,15 +75,15 @@ render_reports <- lapply(sample_names, function(sample_name){
 
   #3C. Define the output HTML report file
   filename <- paste0(sample_name, "_snpReport.html")
-  outfile <- here({{{ directory }}}, filename)
+  outfile <- here("{{{ directory }}}", filename)
   outfiles[[sample_name]] <- outfile
 
   rmarkdown::render(input = here("inst/templates/Report_HTML_v3_JSmith.Rmd"),
-                    # output_format="html", #change to `all`, but having an error in latex pdf conversion
+                    output_format="html_document", #change to `all`, but having an error in latex pdf conversion
                     output_file=filename,
-                    output_dir = {{{ directory }}},
+                    output_dir = "{{{ directory }}}",
                     params=Params)
-
+  return(outfiles)
 
 })
 
@@ -89,16 +91,18 @@ render_reports <- lapply(sample_names, function(sample_name){
 
 #Step 5.
 #Send the automated email message
-#here('inst/rmarkdown/templates/email_generation/skeleton/skeleton.Rmd')
-email_message <- blastula::render_email(here("Email_Body_v2_JSmith.Rmd"))
 
-send_emails <- lapply(names(outfiles), function(sample_name){
-      email <- gmailr::gm_mime() %>%
+send_emails <- lapply(1:length(rendered_reports), function(i){
+
+  sample_name <- suppressMessages(names(rendered_reports[[i]]))
+  report <- suppressMessages(rendered_reports[[i]])
+  email_message <- blastula::render_email(here("inst/templates/Email_Body_v2_JSmith.Rmd"))
+  email <- gmailr::gm_mime() %>%
         gmailr::gm_to(recipients) %>%
         gmailr::gm_from(sender) %>%
         gmailr::gm_subject("snpReportR") %>%
         gmailr::gm_html_body(email_message$html_html)
-        gmailr::gm_attach_file(outfiles[[sample_name]])
+        gmailr::gm_attach_file(report)
         # gmailr::gm_attach_file(here::here("snpReporter_logo.png"),id = "foobar")
 
 
@@ -108,7 +112,14 @@ send_emails <- lapply(names(outfiles), function(sample_name){
 })
 
 
+# Notes and Issues
 
-
+#ISSUE: if using the pre-build dataset in snpReportR::setup(),
+#inputting the `snpReportR::counts_results` and snpReporR::degs_results object results with the entire dataframe printed out to this R script.
+#This makes the script too large (>5Mb) to open in Rstudio...
+#Not sure how to address this, bc that actually makes the script more reproducible...
+#but makes it much less editable and readable...
+# so this works  setup(sample_names=sample_names, counts_results="counts_results",degs_results="degs_results", directory="my_reports")
+# and this does not b/c filesize setup(sample_names=sample_names, counts_results=counts_results,degs_results=degs_results, directory="my_reports")
 
 

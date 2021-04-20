@@ -39,8 +39,8 @@ for (input_file in dir("data-raw", pattern = "applied.cancer.vcf", full.names = 
 use_data(sample_names, overwrite = TRUE)
 
 #Save RNAseq Data
-counts <- read.delim("data-raw/edgeR_normcounts.tsv")
-use_data(counts,overwrite = TRUE)
+counts_results <- read.delim("data-raw/edgeR_normcounts.tsv")
+use_data(counts_results,overwrite = TRUE)
 
-degs <- read.delim("data-raw/edgeR_test_results.tsv")
-use_data(degs, overwrite = TRUE)
+degs_results <- read.delim("data-raw/edgeR_test_results.tsv")
+use_data(degs_results, overwrite = TRUE)
