@@ -44,6 +44,19 @@ head(counts_results)
 head(degs_results)
 ```
 
+3. Results of set-up
+
+Running `snpReportR::setup()` will produce a new directory (if it doesn't exist yet), and will populate the HTML reports and the code that was used to generate it, in a R script. 
+```
+my_reports
+├── 2021-04-19_VCF_report_rendering.R
+├── DRR131561_dx.variants.HC_hard_cutoffs_snpReport.html
+├── DRR131564_dx.variants.HC_hard_cutoffs_snpReport.html
+├── DRR131565_dx.variants.HC_hard_cutoffs_snpReport.html
+├── DRR131587_dx.variants.HC_hard_cutoffs_snpReport.html
+└── DRR131593_dx.variants.HC_hard_cutoffs_snpReport.html
+```
+
 *** 
 
 # Methods
