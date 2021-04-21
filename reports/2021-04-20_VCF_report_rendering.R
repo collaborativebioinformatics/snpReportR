@@ -75,14 +75,14 @@ rendered_reports <- lapply(sample_list, function(sample_name){
 
   #3C. Define the output HTML report file
   filename <- paste0(sample_name, "_snpReport.html")
-  outfile <- here("my_reports", filename)
+  outfile <- here("reports", filename)
   outfiles[[sample_name]] <- outfile
 
-  # rmarkdown::render(input = here("inst/templates/Report_HTML_v3_JSmith.Rmd"),
-  #                   output_format="html_document", #change to `all`, but having an error in latex pdf conversion
-  #                   output_file=filename,
-  #                   output_dir = "my_reports",
-  #                   params=Params)
+  rmarkdown::render(input = here("inst/templates/Report_HTML_v3_JSmith.Rmd"),
+                    output_format="html_document", #change to `all`, but having an error in latex pdf conversion
+                    output_file=filename,
+                    output_dir = "reports",
+                    params=Params)
   return(outfiles)
 
 })

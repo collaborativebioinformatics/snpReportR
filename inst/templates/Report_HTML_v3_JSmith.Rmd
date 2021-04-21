@@ -290,7 +290,9 @@ header_info <- info(header_data) %>%
 #  str(header_info)
 #  header_info
 
-DT::datatable(header_info, class = 'cell-border stripe',
+DT::datatable(header_info, 
+              options = list(dom = 'ft'),
+              class = 'cell-border stripe',
               caption="Table 1. Column names and descriptions for the CTAT Mutation Pipeline Results.")
 ```
 
@@ -372,8 +374,6 @@ DT::datatable(types,class = 'cell-border stripe',
 
 ```{r echo=FALSE, results="hide"}
 library(InterMineR)
-# source(here::here("R/HumanMine_query_functions.R"))
-# source(here::here("R/query_get_and_filter_function.R"))
 ```
 
 ```{r echo=FALSE}
@@ -394,36 +394,51 @@ annots <- snpReportR::query_get_and_filter(gene.names=genes)
 ```{r echo=FALSE}
 gene.expn.regex <- paste(paste(genes,"Top.Expression", sep="."), collapse = "|")
 top.gene.expn <- annots[grep(gene.expn.regex, names(annots))] %>%
-  bind_rows()
+  bind_rows() %>% 
+  mutate(Expression_Rank=1:nrow(.)) %>% 
+  dplyr::select(Expression_Rank, everything())
 
 
 DT::datatable(top.gene.expn, class = 'cell-border stripe',
               caption="Table 3. Expression of Gene in Various Tissues from Top Variant Hits")
 ```
 
-```{r  fig.width=10, fig.height=15, echo=FALSE, fig.cap="Expression of Genes with identified variants/SNVs in Normal Tissues."}
+```{r  fig.width=10, fig.height=10, echo=FALSE, fig.cap="Expression of Genes with identified variants/SNVs in Normal Tissues."}
+#https://stackoverflow.com/questions/60685631/using-ggplotly-and-dt-from-a-for-loop-in-rmarkdown
 gene.expn.val.regex <- paste(paste(genes,"Expression", sep="."), collapse = "|")
 top.gene.expn.val <- annots[grep(gene.expn.val.regex, names(annots))] %>%
-  bind_rows()
+  bind_rows() %>% 
+  mutate_at(vars(Gene.rnaSeqResults.expressionScore), ~as.numeric(.)) %>% 
+  group_by(Gene.symbol) %>% 
+  arrange(Gene.rnaSeqResults.expressionScore) %>% 
+  ungroup() %>% 
+  mutate(Index=factor(1:nrow(.))) %>% 
+  arrange(Index)
+
 
 #  head(top.gene.expn.val)
-bar.plot <- ggplot(top.gene.expn.val,
-       aes(x=Gene.rnaSeqResults.tissue,
-           y=Gene.rnaSeqResults.expressionScore,
-           fill=Gene.rnaSeqResults.tissue)) +
+bar.plot <- ggplot(top.gene.expn.val, aes(tidytext::reorder_within(Gene.rnaSeqResults.tissue,
+                                                                   Gene.rnaSeqResults.expressionScore, 
+                                                                   Gene.symbol,
+                                                                   sep=":"), 
+                                          Gene.rnaSeqResults.expressionScore,
+                                          fill=Gene.rnaSeqResults.tissue)) +
   geom_col() +
   coord_flip() +
-  facet_wrap(~Gene.symbol) +
   theme_classic() +
-  labs(x="Tissue", y="Expression Score", title="Expression in Normal Tissues") +
+  labs(x="Tissue", y="Expression Score", title="Expression in Normal Tissues (TPM)") +
+  # scale_x_discrete(labels=top.gene.expn.val$Gene.rnaSeqResults.tissue) +
+  facet_wrap(~Gene.symbol, scales="free_y") +
   theme(panel.border = element_rect(color="black", fill=NA),
         strip.text = element_text(size=16, face="bold"),
         axis.text.y = element_text(angle = 25, hjust=1, vjust=1,size=10),
         axis.text.x = element_text(angle = 25, hjust=1, vjust=1),
-        legend.position = "top",
-        legend.text = element_text(size=16))
+        legend.position = "bottom",
+        legend.text = element_text(size=12),
+        legend.title = element_blank())
 
-bar.plot
+bar.plot %>% 
+  plotly::ggplotly(width=900, height=700)
 ```
 
 
@@ -437,13 +452,18 @@ Included here are two tables for different gene types. Coding refers to genes th
 
 ## Coding Genes
 
-```{r echo=FALSE}
+```{r echo=FALSE, results='asis'}
 DT::datatable(dplyr::filter(variants.df,
                      Transcript_BioType_1 == "Coding") %>%
-                dplyr::select(GENE:protein_change_1,protein_change_1) %>%
+                dplyr::select(GENE:POS, protein_change_1,FATHMM,
+                              clinvar_disease_names,clinvar_disease_refs) %>%
                 dplyr::slice(1:10),
                class = 'cell-border stripe',
-              caption = "Table 4. Protein Coding Variants, possibly pathogenic.")
+              caption = "Table 4. Protein Coding Variants, possibly pathogenic.",
+              extensions = c('FixedColumns',"FixedHeader"),
+              options = list(scrollX = TRUE, 
+                         paging=FALSE,
+                         fixedHeader=TRUE))
 ```
 
 ## Non-Coding Genes
@@ -451,9 +471,14 @@ DT::datatable(dplyr::filter(variants.df,
 ```{r echo=FALSE}
 DT::datatable(dplyr::filter(variants.df,
                      Transcript_BioType_1 == "Noncoding") %>%
-                dplyr::select(GENE:protein_change_1,protein_change_1),
+                dplyr::select(GENE:POS, protein_change_1,FATHMM,
+                              clinvar_disease_names,clinvar_disease_refs),
               class = 'cell-border stripe',
-              caption = "Table 5. Non-Coding Variants, possibly pathogenic")
+              caption = "Table 5. Non-Coding Variants, possibly pathogenic",
+              extensions = c('FixedColumns',"FixedHeader"),
+              options = list(scrollX = TRUE, 
+                         paging=FALSE,
+                         fixedHeader=TRUE))
 ```
 
 ***
@@ -464,12 +489,9 @@ DT::datatable(dplyr::filter(variants.df,
 suppressPackageStartupMessages(library(Gviz))
 suppressPackageStartupMessages(library(GenomicRanges))
 options(ucscChromosomeNames=FALSE)
-
-#Sourced before building the R package 
-# source("R/donut_plots.R")
-# source(here::here("R/Gviz_tracks.R"))
 ```
 
+<div class="styleTable">
 
 ```{r echo=FALSE}
 knitr::kable(data.frame("Type"=c("coding:",
@@ -492,11 +514,11 @@ knitr::kable(data.frame("Type"=c("coding:",
   kableExtra::kable_paper("hover", full_width = F, position = "float_left")
 ```
 
-
+</div>
 
 ***
 
-```{r message=FALSE,fig.width=5, fig.height=7, echo=FALSE, fig.show=TRUE, fig.cap="Figure 1. Percentage of different types of mutations identified."}
+```{r message=FALSE,fig.width=3, fig.height=3, echo=FALSE, fig.align='left', fig.show=TRUE, fig.cap="Figure 1. Percentage of different types of mutations identified."}
 # source(here("R/donut_plots.R"))
 snpReportR::donut_plot(variants.df)
 ```
@@ -515,10 +537,9 @@ top5.coding <- dplyr::filter(variants.df, Transcript_BioType_1 == "Coding") %>%
 
 ```
 
-```{r fig.width=9, fig.show=TRUE, echo=FALSE, fig.subcap="A vizualization of the SNVs", message=FALSE, warning=FALSE}
-# source(here("R/Gviz_tracks.R"))
+```{r fig.width=7,fig.height=5, fig.show=TRUE, echo=FALSE, fig.subcap="A vizualization of the SNVs", message=FALSE, warning=FALSE}
 # will include #gff=params$gff to make to gene names 
-snpReportR::gene_tracks(vcf_s4 = params$vcf.s4[top5.coding], txdb=params$txdb) 
+snpReportR::gene_tracks(vcf_s4 = params$vcf.s4[top5.coding], txdb=params$txdb)
 ```
 
 
@@ -529,9 +550,9 @@ snpReportR::gene_tracks(vcf_s4 = params$vcf.s4[top5.coding], txdb=params$txdb)
 ```
 
 
-#  Expression of Genes with Mutations
+#  Expression of Genes with Mutations {.tabset}
 
-# boxplots/violin plots
+## boxplots/violin plots
 
 ```{r echo=FALSE}
 #read in the counts file
@@ -539,15 +560,42 @@ cts_file <-  params$counts
 # head(cts_file)
 ```
 
-```{r echo=FALSE}
-head(cts_file) %>% 
-  mutate_at(vars(matches("HISAT2")), ~round(., digits = 2)) %>% 
-  kableExtra::kbl() %>% 
-  # kableExtra:: kable_material(c("striped", "hover")) %>% 
+```{r echo=FALSE, fig.cap="Table 7. Expression of Gene Variants in the RNAseq"}
+subset_cts <- cts_file %>% 
+  filter(Symbol %in% variants.df$GENE)  
+
+
+subset_cts %>% 
+  mutate_at(vars(matches(".bam")), ~round(., digits = 2)) %>%
+  kableExtra::kbl() %>%
+  # kableExtra:: kable_material(c("striped", "hover")) %>%
   kableExtra::kable_styling(bootstrap_options = c("striped", "hover"))
 ```
 
-# DE genes by condition
+```{r echo=FALSE, fig.height=5, fig.width=5, fig.show=TRUE, fig.cap="Expression of the genes with pathogenic variants identified."}
+subset_cts.long <- subset_cts %>% 
+  gather( Sample,Counts, -Symbol, -GeneID) %>% 
+  mutate(Group=stringr::str_split_fixed(Sample, pattern = "_", n=3)[,2])
+
+
+violins <- ggplot(subset_cts.long, aes(x=Symbol, y=Counts, fill=Group)) +
+  geom_violin(draw_quantiles = c(0.5)) +
+  # facet_wrap(~Symbol) +
+  labs(title="Expression of Genes with Possible Pathogenic Variants") +
+  theme_classic() +
+  theme(panel.border = element_rect(color="black", fill=NA),
+        strip.text = element_text(size=16, face="bold"),
+        axis.text.y = element_text(angle = 0, hjust=1, vjust=1,size=10),
+        axis.text.x = element_text(angle = 0, hjust=1, vjust=1),
+        legend.position = "bottom",
+        legend.text = element_text(size=12),
+        legend.title = element_blank())
+
+violins %>% 
+  plotly::ggplotly(width=900, height=700)
+```
+
+## DE genes by condition
 
 ```{r echo=FALSE}
 # Read in differntial expression results
@@ -560,22 +608,39 @@ diff.ex<-diff.ex[which(diff.ex$PValue<0.05),]
 diff.ex<-diff.ex[order(diff.ex$logFC, decreasing = T),]
 
 # Extract top (greatest logFC) five upregulated and downregulated genes
-top.diff.ex.up<-head(diff.ex, n=5)
-top.diff.ex.down<-tail(diff.ex, n=5)
+top.diff.ex.up<-head(diff.ex, n=10)
+top.diff.ex.down<-tail(diff.ex, n=10)
 top.diff.ex<-rbind(top.diff.ex.up, top.diff.ex.down)
+```
 
-# Extract gene ID
-gene.names <- top.diff.ex[,1]
+```{r echo=FALSE}
+diff.ex %>% 
+  mutate_at(vars(logFC:F, ), ~round(., digits = 2)) %>% 
+  mutate_at(vars(PValue, ), ~round(., digits = 4)) %>% 
+  filter(Symbol %in% variants.df$GENE) %>% 
+  DT::datatable(.,
+               class = 'cell-border stripe',
+                caption = "Table 8. Differntial Expression of Gene Variants, possibly pathogenic.",
+                extensions = c('FixedColumns',"FixedHeader"),
+                options = list(scrollX = TRUE, 
+                         paging=FALSE,
+                         fixedHeader=TRUE))
 ```
 
 ```{r echo=FALSE}
 top.diff.ex %>% 
   mutate_at(vars(logFC:F, ), ~round(., digits = 2)) %>% 
   mutate_at(vars(PValue, ), ~round(., digits = 4)) %>% 
-  kableExtra::kbl() %>% 
-  # kableExtra:: kable_material(c("striped", "hover")) %>% 
-  kableExtra::kable_styling(bootstrap_options = c("striped", "hover"))
+  DT::datatable(.,
+               class = 'cell-border stripe',
+                caption = "Table 9. Resutls for 20 Most Differentially Expressed Genes",
+                extensions = c('FixedColumns',"FixedHeader"),
+                options = list(scrollX = TRUE, 
+                         paging=FALSE,
+                         fixedHeader=TRUE))
 ```
+
+
 
 # Sommelier results: Haplyotype/PCA
 
@@ -622,12 +687,6 @@ Can you please add this message in the next steps section, if the report show an
 #  More information
 
 ## Recent Publications
-
-Quitting from lines 517-529 (Report_v2_JSmith.Rmd) 
-Error: Problem with `mutate()` input `GENE`.
-✖ Input `GENE` can't be recycled to size 20.
-ℹ Input `GENE` is `rep(genes, each = 5)`.
-ℹ Input `GENE` must be size 20 or 1, not 25.
 
 ```{r echo=FALSE}
 gene.pub.regex <- paste(paste(genes,"Recent.Publications", sep="."), collapse = "|")
@@ -709,7 +768,7 @@ Also, interactive shiny widgets make this less portable.
 # }
 ```
 
-```{r}
+```{r echo=FALSE}
 # Need to have runtime: shiny in the YAML header
 # but this makes the Rmd essentially a shiny server which limits portability AFAIK
 # patient_signature()
@@ -741,15 +800,21 @@ Also, interactive shiny widgets make this less portable.
 
 # References:
 
-<div class="styleTable">
+
+<div class="styleTwoColumnContainer" >
+
+<div class="style25PercentContent" >
 
 ## Citations
+
+<div class="styleTable">
 
 *Smith RN, et al. InterMine: a flexible data warehouse system for the integration and analysis of heterogeneous biological data. Bioinformatics. 2012 Dec 1;28(23):3163-5.*
 
 </div>
 
 ##  Genome References and Software
+
 
 <div class="styleTable">
 
@@ -765,6 +830,9 @@ Also, interactive shiny widgets make this less portable.
 <br>
 
 </div>
+</div>
+</div>
+
 
 
 <br><br><br>
