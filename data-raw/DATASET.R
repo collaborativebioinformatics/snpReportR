@@ -3,6 +3,7 @@
 suppressPackageStartupMessages(library(vcfR))
 suppressPackageStartupMessages(library(VariantAnnotation))
 library(tibble)
+library(dplyr)
 library(snpReportR)
 
 
@@ -38,9 +39,18 @@ for (input_file in dir("data-raw", pattern = "applied.cancer.vcf", full.names = 
 #Save vector of sample IDs/ sample names
 use_data(sample_names, overwrite = TRUE)
 
+
 #Save RNAseq Data
-counts_results <- read.delim("data-raw/edgeR_normcounts.tsv")
+IDmap <- read.delim("data-raw/geneID_map.csv", sep=",")
+
+counts_results <- read.delim("data-raw/edgeR_normcounts.tsv") %>%
+  left_join(., IDmap, by=c("GeneID")) %>%
+  dplyr::select(Symbol, everything())
+
 use_data(counts_results,overwrite = TRUE)
 
-degs_results <- read.delim("data-raw/edgeR_test_results.tsv")
+degs_results <- read.delim("data-raw/edgeR_test_results.tsv") %>%
+  left_join(., IDmap, by=c("GeneID")) %>%
+  dplyr::select(Symbol, everything())
+
 use_data(degs_results, overwrite = TRUE)

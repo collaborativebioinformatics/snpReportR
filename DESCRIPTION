@@ -48,6 +48,8 @@ Imports:
     usethis,
     fs,
     gmailr,
-    rmarkdown
+    rmarkdown,
+    tidytext,
+    plotly
 Depends: 
     R (>= 2.10)
