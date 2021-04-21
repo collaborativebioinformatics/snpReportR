@@ -23,6 +23,9 @@ There are several practical challenges when processing NGS data. For example, 40
 
 # Installation 
 
+0. Configure `gmailr` package for sending emails via Google API. Links and instructions on found on in the wiki tab on this github repo. 
+
+
 1. Install the package
 ```
 devtools::install_github("collaborativebioinformatics/snpReportR")
@@ -46,7 +49,7 @@ head(degs_results)
 
 3. Results of set-up
 
-Running `snpReportR::setup()` will produce a new directory (if it doesn't exist yet), and will populate the HTML reports and the code that was used to generate it, in a R script. 
+Running `snpReportR::setup()` will produce a new directory (if it doesn't exist yet), and will populate the HTML reports and the code that was used to generate it, in a R script. The current examples of the HTML output are in the `reports` directory here. 
 ```
 my_reports
 ├── 2021-04-19_VCF_report_rendering.R
