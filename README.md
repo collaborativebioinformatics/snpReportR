@@ -1,6 +1,6 @@
 # expressed-variant-reporting
 
-![](https://github.com/collaborativebioinformatics/expressed-variant-reporting/blob/main/snpReportR.png)
+snpReportR <img src='man/figures/logo.png' align="right" height="244" />
 
 # Contributors
 Jenny Smith
@@ -19,7 +19,49 @@ The tool generates two reports, one is aimed for clinical use and the second aim
 Producing sequencing data, whether it is whole genome sequencing (WGS), whole exome sequencing (WES) or targeted gene panels, is common practice for the study of genetic bases of biological processes. In biomedical research, NGS data are widely used to investigate the genetic causes of disease, allowing for the study of genomic variants including single nucleotide variations, small insertions or deletions of a few bases, as well as structural variants.
 There are several practical challenges when processing NGS data. For example, 40x WGS data for one sample produced on the Illumina Hiseq 2000, one of the most popular sequencers, is about 400 gigabytes in its raw format (fastq format). Such big files are not easy to handle for the average non-specialised scientist or lab, since they require sophisticated tools, bioinformatics skills and high-performance computing for their analysis. Furthermore, with the increasing availability of next-generation sequencing data, non-specialists, including health care professionals and patients, are obtaining their genomic information without a corresponding ability to analyse and interpret it as the relevance of novel or existing variants in genes of interest is not always apparent. In this context, research and medical workers, with different scientific backgrounds and levels of bioinformatics skills, deal with NGS data constantly. Here we describe SNP-ReprteR, an extremely fast, accurate and computationally light bioinformatics pipeline for the analysis, annotation and visualisation of DNA NGS data. 
 
+***
 
+# Installation 
+
+1. Install the package
+```
+devtools::install_github("collaborativebioinformatics/snpReportR")
+```
+
+2. Run the set-up R script. 
+
+Note: the quotes are necessary for counts and degs results, even if stored as data.frame objects in memory. 
+```
+library(snpReportR)
+snpReportR::setup(sample_names=sample_names, counts_results="counts_results",degs_results="degs_results", directory="my_reports")
+```
+The package includes the necessary data to produce 5 example HTML reports. The objects sample_names, counts_results, degs_results, and the associated VCF files for each of the samples is available to be examined. 
+
+```
+class(DRR131561_dx.variants.HC_hard_cutoffs)
+str(DRR131561_dx.variants.HC_hard_cutoffs) #large object
+head(counts_results)
+head(degs_results)
+```
+
+3. Results of set-up
+
+Running `snpReportR::setup()` will produce a new directory (if it doesn't exist yet), and will populate the HTML reports and the code that was used to generate it, in a R script. 
+```
+my_reports
+├── 2021-04-19_VCF_report_rendering.R
+├── DRR131561_dx.variants.HC_hard_cutoffs_snpReport.html
+├── DRR131564_dx.variants.HC_hard_cutoffs_snpReport.html
+├── DRR131565_dx.variants.HC_hard_cutoffs_snpReport.html
+├── DRR131587_dx.variants.HC_hard_cutoffs_snpReport.html
+└── DRR131593_dx.variants.HC_hard_cutoffs_snpReport.html
+```
+
+The setup script will also generate HTML formatted emails using `blastula` R package, which are sent through gmail API application run by `gmailr` package. An example of the output is here below:
+
+![](logos/example_blastula_email.png)
+
+*** 
 
 # Methods
 

@@ -44,4 +44,10 @@ Imports:
     Gviz,
     VariantAnnotation,
     rtracklayer,
-    htmltools
+    htmltools,
+    usethis,
+    fs,
+    gmailr,
+    rmarkdown
+Depends: 
+    R (>= 2.10)

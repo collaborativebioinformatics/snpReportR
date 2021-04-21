@@ -2,9 +2,9 @@
 title: "Expressed Variant Reporting Results"
 author: "Brandon Michael Blobner, Jenny Leopoldina Smith, and Ahmad Al Khleifat"
 date: "`r format(Sys.Date(), tz = 'America/Los_Angeles')`"
+always_allow_html: yes
 output:
   blastula::blastula_email:
-    always_allow_html: yes
     section_divs: true
     number_sections: true
     fig_caption: true
@@ -12,6 +12,11 @@ output:
       before_body: email_header.html
       after_body: email_footer.html
     connect_footer: false
+params: 
+  name: 
+    label: "The name of the recipient"
+    value: "DRR131561"
+    input: string
 ---
 
 
@@ -39,7 +44,7 @@ library(RColorBrewer)
 ```
 
 
-Dear { Patient/Clinician },
+Dear {{{ sample_name }}},
 
 We have produced a report of your current genetic report produced by `snpReportR` from {institution}. The following synopsis is provided below and an in-depth description of findings and their potential impact are included in the full HTML report. 
 

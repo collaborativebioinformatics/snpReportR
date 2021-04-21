@@ -24,23 +24,33 @@ output:
     highlight: breezedark
 params:
   data:
-    label: "Enter the VCF Dataset:"
-    value: "data-raw/DRR131565_dx.variants.HC_hard_cutoffs_applied.cancer.vcf"
+    label: "Enter the filtered VCF data.frame object:"
+    value: "data/DRR131561_dx.variants.HC_hard_cutoffs.rda"
     input: file
-  counts: 
+  vcf.df:
+    label: "Enter the full VCF data.frame object:"
+    value: "data/DRR131561_dx.variants.HC_hard_cutoffs.rda"
+    input: file
+  vcf.s4:
+    label: "Enter the filtered VCF S4 Bioconductor object:"
+    value: "data/DRR131561_dx.variants.HC_hard_cutoffs.rda"
+    input: file
+  txdb:
+    label: "A bioconductor Transcript Database (TxDB)"
+    value: "gencode.v22.annotation.gff3.sqlite"
+    input: file
+  gtf:
+    label: "A bioconductor GRanges object of reference GFF"
+    value: "gencode.v22.annotation.gff3.RDS"
+    input: file
+  counts:
     label: "Enter RNAseq counts matrix"
     value: "data-raw/edgeR_normcounts.tsv"
     input: file
   degs:
     label: "Enter the differentially expressed genes dataset"
     value: "data-raw/edgeR_test_results.tsv"
-    input: file 
-  txdb:
-    label: "A bioconductor Transcript Database (TxDB)"
-    value: "gencode.v22.annotation.gff3.sqlite"
-  gtf: 
-    label: "A bioconductor GRanges object of reference GFF"
-    value: "gencode.v22.annotation.gff3.RDS"
+    input: file
 ---
 
 ```{r setup, include=FALSE, echo=FALSE}
@@ -70,6 +80,8 @@ library(shiny)
 library(ggplot2)
 library(gridExtra)
 library(RColorBrewer)
+library(snpReportR) #The custom R package
+
 
 suppressPackageStartupMessages(library(vcfR))
 suppressPackageStartupMessages(library(VariantAnnotation))
@@ -81,7 +93,7 @@ suppressPackageStartupMessages(library(VariantAnnotation))
 /*property is a simple color, measurement, etc. while a function is like the linear-gradient() */
 /*note: make alpahabetical for each parameter changed*/
 .styleTitleHeader {   
-  color: white; 
+  color: white;
   padding: 2.25rem;
   margin-top: 1rem;
   background-image: linear-gradient(#406b7a, #008cba);
@@ -108,11 +120,11 @@ suppressPackageStartupMessages(library(VariantAnnotation))
 }
 
 
-body { 
+body {
   font-size: 14px;
-  background-color: gray; 
+  background-color: gray;
 }
-p { 
+p {
   line-height: 1.5em;
 }
 
@@ -173,7 +185,7 @@ p {
 
 
 <!-- Notes on the image logo for header (dont want to hardcode)
-try setting a parameter such as this: 
+try setting a parameter such as this:
 https://stackoverflow.com/questions/31861569/setting-document-title-in-rmarkdown-from-parameters
 https://community.rstudio.com/t/r-markdown-html-output-title/47294
 Then include the image src tag as the paramter:
@@ -197,13 +209,13 @@ knitr::include_graphics(here::here("logos/snpReporter_logo.png"))
 <div class="styleTable">
 ```{r echo=FALSE, message=FALSE, warning=FALSE}
 #These need to become API queries to an EHR database or other clinical database which has the patient information and the test information
-pt.info <- data.frame("Information"=c("Name:", 
+pt.info <- data.frame("Information"=c("Name:",
                                         "DOB:",
                                         "Sex:",
-                                        "Sample Type:"), 
+                                        "Sample Type:"),
                         "Value"=c("Jane Doe","01/01/1900","F","RNA"))
-                                          
-knitr::kable(pt.info, caption = "Patient details:",align="l") %>% 
+
+knitr::kable(pt.info, caption = "Patient details:",align="l") %>%
   kableExtra::kable_paper(full_width = F, position = "left")
 
 ```
@@ -213,17 +225,18 @@ knitr::kable(pt.info, caption = "Patient details:",align="l") %>%
 ```{r echo=FALSE, message=FALSE, warning=FALSE}
 #These need to become API queries to an EHR database or other clinical database which has the patient information and the test information
 
-dr.info <- data.frame("Information"=c("Name:", 
+dr.info <- data.frame("Information"=c("Name:",
                                         "Doctor identification number:",
-                                        "Hospital:"), 
+                                        "Hospital:"),
                         "Value"=c("Dr.X", "12345", "NCI"))
 
-knitr::kable(dr.info, caption = "Test ordered by:", align="l") %>% 
+knitr::kable(dr.info, caption = "Test ordered by:", align="l") %>%
   kableExtra::kable_paper(full_width = F, position = "float_left")
 ```
 </div>
 
-```{r echo=FALSE, message=FALSE, results="hide", warning=FALSE}
+<!--
+#echo=FALSE, message=FALSE, results="hide", warning=FALSE
 # https://gist.github.com/sephraim/3d352ba4893df07a2c35d8f227ab17ac
 
 vcf <-  suppressMessages(vcfR::read.vcfR(params$data))
@@ -233,27 +246,26 @@ vcf <-  suppressMessages(vcfR::read.vcfR(params$data))
 # vcf.df <- vcfR::vcfR2tidy(vcf, .name_repair="unique")
 
 vcf.df <- cbind(as.data.frame(getFIX(vcf)),
-                   INFO2df(vcf)) %>% 
+                   INFO2df(vcf)) %>%
    as_tibble(.,  .name_repair = "unique")
-  
+
 
  # head(vcf.df)
  # dim(vcf.df)
-```
 
-```{r warning=FALSE, echo=FALSE, message=FALSE}
 vcf.s4 <- suppressMessages(VariantAnnotation::readVcf(params$data))
 
 #  head(vcf.s4)
 #  str(vcf)
-```
+-->
 
 </div>
 
+
 <div class="style75PercentContent" >
 
-```{r echo=F}
-header_data <- suppressMessages(VariantAnnotation::header(vcf.s4))
+```{r echo=F, message=FALSE}
+header_data <- suppressMessages(VariantAnnotation::header(params$vcf.s4))
 SampleName <- header_data@samples
 ```
 
@@ -263,6 +275,7 @@ While a variant may have been detected, the associations with the variant are no
 
 
 ***
+
 </div>
 </div>
 
@@ -304,7 +317,7 @@ DT::datatable(header_info, class = 'cell-border stripe',
 *The top variants were ranked by the following attributes:*
 
 * FATHMM predicted pathogenicty or splice adjacent
-* CHASMplus predicts driver mutations 
+* CHASMplus predicts driver mutations
 * genes with larger number of SNVs prioritized
 * high or moderate impact on the structure of the gene
 * CADD Score/Polyphen Score (not done yet)
@@ -315,7 +328,7 @@ DT::datatable(header_info, class = 'cell-border stripe',
 
 <div class="styleTable">
 
-*Interpretation of attributes* 
+*Interpretation of attributes*
 
 * "[FATHMM] weighted algorithm is capable of adjusting our conservation-based predictions to account for the tolerance of related sequences to mutations" (http://fathmm.biocompute.org.uk/inherited.html)
 * "CHASMplus scores range from 0 to 1, with higher scores meaning more likely to be a cancer driver mutation." (https://chasmplus.readthedocs.io/en/latest/)
@@ -327,7 +340,8 @@ DT::datatable(header_info, class = 'cell-border stripe',
 
 
 
-```{r echo=FALSE, results='hide', message=FALSE, warning=FALSE}
+<!--
+# echo=FALSE, results='hide', message=FALSE, warning=FALSE
 source(here::here("R/filter_reformat_vcf_df.R"))
 variants.df <- filter_ctat_vcf(vcf.df=vcf.df, vcf.s4=vcf.s4)
 
@@ -336,16 +350,18 @@ head(variants.df)
 dim(variants.df)
 # length(unique(variants.df$GENE))
 # write.csv(variants.df, "Variants_df.csv", row.names = FALSE)
-```
+-->
 
 ```{r echo=FALSE, message=FALSE}
+variants.df <- params$data
+
 types <- variants.df %>%
   dplyr::group_by(FATHMM, SPLICEADJ,Annotation_Impact_1) %>%
   summarize(Number_of_Genes=n()) %>%
   ungroup()
 
 
-DT::datatable(types,class = 'cell-border stripe', 
+DT::datatable(types,class = 'cell-border stripe',
               caption = "Table 2. Summary of Expressed Genetic Variants with potential for Pathegenicity.")
 ```
 
@@ -355,8 +371,8 @@ DT::datatable(types,class = 'cell-border stripe',
 
 ```{r echo=FALSE, results="hide"}
 library(InterMineR)
-source(here::here("R/HumanMine_query_functions.R"))
-source(here::here("R/query_get_and_filter_function.R"))
+# source(here::here("R/HumanMine_query_functions.R"))
+# source(here::here("R/query_get_and_filter_function.R"))
 ```
 
 ```{r echo=FALSE}
@@ -367,7 +383,7 @@ genes <- variants.df %>%
   unique()
 
 message("Retrieving Annotations for Genes.")
-annots <- query_get_and_filter(gene.names=genes)
+annots <- snpReportR::query_get_and_filter(gene.names=genes)
 
 #  str(annots)
 #  length(annots)
@@ -448,7 +464,7 @@ suppressPackageStartupMessages(library(Gviz))
 suppressPackageStartupMessages(library(GenomicRanges))
 options(ucscChromosomeNames=FALSE)
 
-#Sourced before building the R package 
+#Sourced before building the R package
 # source("R/donut_plots.R")
 # source(here::here("R/Gviz_tracks.R"))
 ```
@@ -480,8 +496,8 @@ knitr::kable(data.frame("Type"=c("coding:",
 ***
 
 ```{r message=FALSE,fig.width=5, fig.height=7, echo=FALSE, fig.show=TRUE, fig.cap="Figure 1. Percentage of different types of mutations identified."}
-source(here("R/donut_plots.R"))
-donut_plot(variants.df)
+# source(here("R/donut_plots.R"))
+snpReportR::donut_plot(variants.df)
 ```
 
 ***
@@ -499,15 +515,16 @@ top5.coding <- dplyr::filter(variants.df, Transcript_BioType_1 == "Coding") %>%
 ```
 
 ```{r fig.width=9, fig.show=TRUE, echo=FALSE, fig.subcap="A vizualization of the SNVs", message=FALSE, warning=FALSE}
-source(here("R/Gviz_tracks.R"))
-gene_tracks(vcf_s4 = vcf.s4[top5.coding], txdb=params$txdb) #gff=gff
+# source(here("R/Gviz_tracks.R"))
+# will include #gff=params$gff to make to gene names
+snpReportR::gene_tracks(vcf_s4 = vcf.s4[top5.coding], txdb=params$txdb)
 ```
 
 
 ***
 
 ```{r}
-#Add Lollipop plot - interactive 
+#Add Lollipop plot - interactive
 ```
 
 
@@ -517,25 +534,26 @@ gene_tracks(vcf_s4 = vcf.s4[top5.coding], txdb=params$txdb) #gff=gff
 
 ```{r echo=FALSE}
 #read in the counts file
-cts_file <-  read.delim(params$counts, sep="\t")
-
-# dim(cts_file) #28395     7s
+cts_file <-  params$counts
+# head(cts_file)
 ```
 
 ```{r echo=FALSE}
-#convert entrez gene IDs and gene symbols 
-#convert the raw counts to TPM or RPKM (if too much time, just skip this step for now)
-head(cts_file)
+head(cts_file) %>%
+  mutate_at(vars(matches("HISAT2")), ~round(., digits = 2)) %>%
+  kableExtra::kbl() %>%
+  # kableExtra:: kable_material(c("striped", "hover")) %>%
+  kableExtra::kable_styling(bootstrap_options = c("striped", "hover"))
 ```
 
 ```{r}
 reformat_counts <- function(counts_matrix, gene=MyGene){
-  df <- counts_matrix %>% 
-    as.data.frame() %>% 
+  df <- counts_matrix %>%
+    as.data.frame() %>%
   filter(geneSymbol==gene) %>%
-  gather(Sample, TPM, -geneSymbol) %>% 
+  gather(Sample, TPM, -geneSymbol) %>%
   mutate(my_charactistic=c("Yellow","Blue"))
-  
+
   return(df)
 }
 
@@ -550,7 +568,7 @@ my_plot_function <- function(df){
 
 ```{r echo=FALSE}
 # Read in differntial expression results
-diff.ex <- read.table(params$degs, header = T)
+diff.ex <- params$degs
 
 # Filter significant results
 diff.ex<-diff.ex[which(diff.ex$PValue<0.05),]
@@ -564,11 +582,16 @@ top.diff.ex.down<-tail(diff.ex, n=5)
 top.diff.ex<-rbind(top.diff.ex.up, top.diff.ex.down)
 
 # Extract gene ID
-gene.names<-top.diff.ex[,1]
+gene.names <- top.diff.ex[,1]
 ```
 
 ```{r echo=FALSE}
-head(top.diff.ex)
+top.diff.ex %>%
+  mutate_at(vars(logFC:F, ), ~round(., digits = 2)) %>%
+  mutate_at(vars(PValue, ), ~round(., digits = 4)) %>%
+  kableExtra::kbl() %>%
+  # kableExtra:: kable_material(c("striped", "hover")) %>%
+  kableExtra::kable_styling(bootstrap_options = c("striped", "hover"))
 ```
 
 # Sommelier results: Haplyotype/PCA
@@ -592,7 +615,7 @@ Can you please add this message in the next steps section, if the report show an
   1. how your family members may be affected if the test shows a serious health condition runs in your family.
   2. the risk of you and your partner passing on a health condition to your children
   your options if you have a child with an inherited health condition and you do not want your next child to inherit it
-  3. genetic counsellor can also direct you to relevant patient support group
+  3. genetic counselor can also direct you to relevant patient support group
 
 
 ```{css echo=FALSE}
@@ -617,7 +640,7 @@ Can you please add this message in the next steps section, if the report show an
 
 ## Recent Publications
 
-Quitting from lines 517-529 (Report_v2_JSmith.Rmd) 
+Quitting from lines 517-529 (Report_v2_JSmith.Rmd)
 Error: Problem with `mutate()` input `GENE`.
 ✖ Input `GENE` can't be recycled to size 20.
 ℹ Input `GENE` is `rep(genes, each = 5)`.
@@ -627,9 +650,9 @@ Error: Problem with `mutate()` input `GENE`.
 gene.pub.regex <- paste(paste(genes,"Recent.Publications", sep="."), collapse = "|")
 
 recent.pubs <- annots[grep(gene.pub.regex, names(annots))] %>%
-  bind_rows() 
+  bind_rows()
 
-#Must fix this: 
+#Must fix this:
 # each <- nrow(recent.pubs)/length(genes)
 # mutate(GENE=rep(genes, each=each)) %>%
 #   dplyr::select(GENE, everything())
@@ -675,7 +698,7 @@ Can search for additional drugs that may target the mutant genes online using [D
 #  Consent for Analysis
 
 This should simply be a copy of the consent form the patient has already signed.
-Also, interactive shiny widgets make this less portable. 
+Also, interactive shiny widgets make this less portable.
 
 ```{r echo=FALSE}
 # message("Please Sign Form. Acknowledgment of informed consent is provided upon signing.")
@@ -723,7 +746,7 @@ Also, interactive shiny widgets make this less portable.
 ## Sequencing Depth and QC
 
 ```{r}
-#include Deeptools plots for coverage, average base quality scores, alignment quality scores, etc. 
+#include Deeptools plots for coverage, average base quality scores, alignment quality scores, etc.
 ```
 
 <br><br><br>
@@ -735,13 +758,17 @@ Also, interactive shiny widgets make this less portable.
 
 # References:
 
+<div class="styleTable">
+
 ## Citations
 
 *Smith RN, et al. InterMine: a flexible data warehouse system for the integration and analysis of heterogeneous biological data. Bioinformatics. 2012 Dec 1;28(23):3163-5.*
 
+</div>
+
 ##  Genome References and Software
 
-<div class="boxBorder">
+<div class="styleTable">
 
 ## Additional information about the pipelines used, check out the github repositories listed below:
 
@@ -757,7 +784,9 @@ Also, interactive shiny widgets make this less portable.
 </div>
 
 
-<br><br><br><br>
+<br><br><br>
+
+<div class="styleTable">
 
 ```{r echo=FALSE}
 # Should not hardcode the different annotation algorithms used.
@@ -769,13 +798,20 @@ keep.dat <- as.data.frame(lapply(keep.dat,function(x) as.data.frame(x)))
 
 DT::datatable(keep.dat, class = 'cell-border stripe', caption = "Table 7. Software and Version Numbers.")
 ```
+</div>
 
+<br><br><br>
+
+<div class="styleTable">
 
 ```{r echo=FALSE}
 message("Information about the Transcript Annotation Database.")
 params$txdb
 ```
 
+</div>
+
+<br><br><br>
 
 ##  Session Information
 
