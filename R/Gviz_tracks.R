@@ -50,8 +50,14 @@ gene_tracks <- function(vcf_s4, txdb, genome="hg38") {
                   transcript=TXNAME)
                   # symbol=geneSymbol) #will need to use a GFF merged in
 
-  for (chr in chrs){
+  ncols <- 2
+  nrows <- ceiling(length(chrs) / ncols)
+  grid.newpage()
+  pushViewport(viewport(layout = grid.layout(nrows, ncols)))
+  for (i in seq_along(chrs)){
+
     #Subset each gene of interest by chromosome
+    chr <- chrs[i]
     ranges.sub <- vcf.ranges[GenomeInfoDb::seqnames(vcf.ranges)==chr]
     ranges.sub$ID <- names(ranges.sub)
 
@@ -74,6 +80,26 @@ gene_tracks <- function(vcf_s4, txdb, genome="hg38") {
                                # collapseTranscripts="longest",
                                showId=TRUE)
 
-    Gviz::plotTracks(c(itrack,gtrack,indeltrack,grtrack), collapse=FALSE)
+    # Gviz::plotTracks(c(itrack,gtrack,indeltrack,grtrack), collapse=FALSE)
+    pushViewport(viewport(layout.pos.col = ((i - 1) %% ncols) + 1,
+                          layout.pos.row = (((i) - 1) %/% ncols) + 1))
+                          plotTracks(list(itrack, gtrack, indeltrack, grtrack),
+                                       chromosome = chr, add = TRUE)
+                          popViewport(1)
   }
 }
+
+
+
+#https://bioconductor.org/packages/release/bioc/vignettes/Gviz/inst/doc/Gviz.html#7_Composite_plots_for_multiple_chromosomes
+# ncols <- 2
+# nrows <- length(chroms) %/% ncols
+# grid.newpage()
+# pushViewport(viewport(layout = grid.layout(nrows, ncols)))
+# for(i in seq_along(chroms)) {
+#   pushViewport(viewport(layout.pos.col = ((i - 1) %% ncols) + 1,
+#                         layout.pos.row = (((i) - 1) %/% ncols) + 1))
+#   plotTracks(list(itrack, maTrack, mdTrack, mgTrack),
+#              chromosome = chroms[i], add = TRUE)
+#   popViewport(1)
+# }
