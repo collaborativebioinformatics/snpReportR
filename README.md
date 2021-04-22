@@ -49,7 +49,23 @@ head(degs_results)
 
 3. Results of set-up
 
-Running `snpReportR::setup()` will produce a new directory (if it doesn't exist yet), and will populate the HTML reports and the code that was used to generate it, in a R script. The current examples of the HTML output are in the `reports` directory here. 
+Running `snpReportR::setup()` will produce a new directory (if it doesn't exist yet), and it will open a new R script with the pattern `{DATE}_VCF_report_rendering.R` where DATE is the current date in YYYY-MM-DD format. The R script is saved in the analysis directory you've provided in the the setup step. 
+
+```
+my_reports
+├── 2021-04-19_VCF_report_rendering.R
+```
+
+4. Run the `{DATE}_VCF_report_rendering.R` that opens in your editor (eg Rstudio if running interactively). 
+
+This will populate the HTML reports and the code that was used to generate it, in a R script. The current examples of the HTML output are in the `reports` directory here. 
+
+```
+source(2021-04-19_VCF_report_rendering.R)
+```
+
+And the final output directory structure looks like this below:
+
 ```
 my_reports
 ├── 2021-04-19_VCF_report_rendering.R
