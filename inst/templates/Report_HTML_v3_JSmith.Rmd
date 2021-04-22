@@ -57,15 +57,19 @@ params:
 require(knitr)
 knitr::opts_knit$set(root.dir = here::here())
 
-
 knitr::opts_chunk$set(tidy.opts=list(width.cutoff=50),
                       tidy=TRUE,
+                      rows.print=6,
                       fig.align='center',
                       fig.width = 5, fig.height = 7,
                       message=FALSE,
                       warning=FALSE)
 
 rmarkdown::find_pandoc(cache = FALSE)
+options(DT.options = list(scrollX = TRUE, 
+                         paging=TRUE,
+                         fixedHeader=TRUE,
+                         pageLength = 8))
 ```
 
 ```{r echo=FALSE, message=FALSE}
@@ -355,6 +359,9 @@ dim(variants.df)
 # write.csv(variants.df, "Variants_df.csv", row.names = FALSE)
 -->
 
+
+
+
 ```{r echo=FALSE, message=FALSE}
 variants.df <- params$data
 
@@ -367,6 +374,7 @@ types <- variants.df %>%
 DT::datatable(types,class = 'cell-border stripe', 
               caption = "Table 2. Summary of Expressed Genetic Variants with potential for Pathegenicity.")
 ```
+
 
 ***
 
@@ -391,24 +399,34 @@ annots <- snpReportR::query_get_and_filter(gene.names=genes)
 #  names(annots)
 ```
 
-```{r echo=FALSE}
+```{r echo=FALSE, rows.print=6}
 gene.expn.regex <- paste(paste(genes,"Top.Expression", sep="."), collapse = "|")
 top.gene.expn <- annots[grep(gene.expn.regex, names(annots))] %>%
   bind_rows() %>% 
-  mutate(Expression_Rank=1:nrow(.)) %>% 
-  dplyr::select(Expression_Rank, everything())
+  gather(Gene, Tissue) %>% 
+  group_by(Gene) %>% 
+  mutate(Expression_Rank_Per_Gene=paste0("#",1:n())) %>%
+  mutate(Gene=gsub(".Top.Expression", "", Gene)) %>% 
+  ungroup() %>% 
+  dplyr::select(Gene, Tissue, Expression_Rank_Per_Gene, everything())
+
 
 
 DT::datatable(top.gene.expn, class = 'cell-border stripe',
-              caption="Table 3. Expression of Gene in Various Tissues from Top Variant Hits")
+              caption="Table 3. Expression of Gene in Various Tissues from Top Variant Hits",
+              options = list(scrollX = TRUE, 
+                         paging=TRUE,
+                         fixedHeader=TRUE,
+                         pageLength = 8))
 ```
 
-```{r  fig.width=10, fig.height=10, echo=FALSE, fig.cap="Expression of Genes with identified variants/SNVs in Normal Tissues."}
+
+```{r  fig.width=20, fig.height=10, echo=FALSE, fig.cap="Expression of Genes with identified variants/SNVs in Normal Tissues.", fig.align='left'}
 #https://stackoverflow.com/questions/60685631/using-ggplotly-and-dt-from-a-for-loop-in-rmarkdown
 gene.expn.val.regex <- paste(paste(genes,"Expression", sep="."), collapse = "|")
 top.gene.expn.val <- annots[grep(gene.expn.val.regex, names(annots))] %>%
   bind_rows() %>% 
-  mutate_at(vars(Gene.rnaSeqResults.expressionScore), ~as.numeric(.)) %>% 
+  mutate_at(vars(Gene.rnaSeqResults.expressionScore), ~log2(as.numeric(.)+1)) %>% 
   group_by(Gene.symbol) %>% 
   arrange(Gene.rnaSeqResults.expressionScore) %>% 
   ungroup() %>% 
@@ -416,7 +434,9 @@ top.gene.expn.val <- annots[grep(gene.expn.val.regex, names(annots))] %>%
   arrange(Index)
 
 
-#  head(top.gene.expn.val)
+# nc <- min(3, length(genes))
+# nr <- ceiling(nc/length(genes)) 
+
 bar.plot <- ggplot(top.gene.expn.val, aes(tidytext::reorder_within(Gene.rnaSeqResults.tissue,
                                                                    Gene.rnaSeqResults.expressionScore, 
                                                                    Gene.symbol,
@@ -426,19 +446,22 @@ bar.plot <- ggplot(top.gene.expn.val, aes(tidytext::reorder_within(Gene.rnaSeqRe
   geom_col() +
   coord_flip() +
   theme_classic() +
-  labs(x="Tissue", y="Expression Score", title="Expression in Normal Tissues (TPM)") +
+  labs(x="Tissue", y="Log2 Expression Score", title="Expression in Normal Tissues (TPM)") +
   # scale_x_discrete(labels=top.gene.expn.val$Gene.rnaSeqResults.tissue) +
-  facet_wrap(~Gene.symbol, scales="free_y") +
+  facet_wrap(~Gene.symbol, scales="free_y") + # ncol=nc,nrow=nr
   theme(panel.border = element_rect(color="black", fill=NA),
         strip.text = element_text(size=16, face="bold"),
+        plot.margin = margin(t = 5, r = 5, b = 5, l = 0, "mm"),
+        panel.spacing = unit(2.5, "mm"),
+        
         axis.text.y = element_text(angle = 25, hjust=1, vjust=1,size=10),
-        axis.text.x = element_text(angle = 25, hjust=1, vjust=1),
+        axis.text.x = element_text(angle = 0, hjust=1, vjust=1),
         legend.position = "bottom",
         legend.text = element_text(size=12),
         legend.title = element_blank())
 
 bar.plot %>% 
-  plotly::ggplotly(width=900, height=700)
+  plotly::ggplotly(width=975, height=800)
 ```
 
 
@@ -457,12 +480,12 @@ DT::datatable(dplyr::filter(variants.df,
                      Transcript_BioType_1 == "Coding") %>%
                 dplyr::select(GENE:POS, protein_change_1,FATHMM,
                               clinvar_disease_names,clinvar_disease_refs) %>%
-                dplyr::slice(1:10),
+                dplyr::slice(1:20),
                class = 'cell-border stripe',
               caption = "Table 4. Protein Coding Variants, possibly pathogenic.",
               extensions = c('FixedColumns',"FixedHeader"),
               options = list(scrollX = TRUE, 
-                         paging=FALSE,
+                         paging=TRUE,
                          fixedHeader=TRUE))
 ```
 
@@ -477,7 +500,7 @@ DT::datatable(dplyr::filter(variants.df,
               caption = "Table 5. Non-Coding Variants, possibly pathogenic",
               extensions = c('FixedColumns',"FixedHeader"),
               options = list(scrollX = TRUE, 
-                         paging=FALSE,
+                         paging=TRUE,
                          fixedHeader=TRUE))
 ```
 
@@ -491,8 +514,11 @@ suppressPackageStartupMessages(library(GenomicRanges))
 options(ucscChromosomeNames=FALSE)
 ```
 
-<div class="styleTable">
 
+<div class="styleTwoColumnContainer" >
+
+<div class="style75PercentContent" >
+<div class="styleTable">
 ```{r echo=FALSE}
 knitr::kable(data.frame("Type"=c("coding:",
                                  "5prime_UTR:",
@@ -511,17 +537,24 @@ knitr::kable(data.frame("Type"=c("coding:",
                                         "Missense variant is a mutation in an exon that results in a different amino acid (changed codon)",
                                         "Mutation is within a start/stop codon.")),
              caption = "Table 6. Types of Expressed Variants", align = "l") %>%
-  kableExtra::kable_paper("hover", full_width = F, position = "float_left")
+  kableExtra::kable_paper("hover", full_width = F, position = "left")
 ```
 
 </div>
+</div>
+
 
 ***
 
-```{r message=FALSE,fig.width=3, fig.height=3, echo=FALSE, fig.align='left', fig.show=TRUE, fig.cap="Figure 1. Percentage of different types of mutations identified."}
+<div class="style25PercentContent" >
+<div class="styleTable">
+```{r message=FALSE,fig.width=4, fig.height=4, echo=FALSE, fig.align='right', fig.show=TRUE, fig.cap="Figure 1. Percentage of different types of mutations identified."}
 # source(here("R/donut_plots.R"))
 snpReportR::donut_plot(variants.df)
 ```
+</div>
+</div>
+</div>
 
 ***
 
@@ -537,7 +570,7 @@ top5.coding <- dplyr::filter(variants.df, Transcript_BioType_1 == "Coding") %>%
 
 ```
 
-```{r fig.width=7,fig.height=5, fig.show=TRUE, echo=FALSE, fig.subcap="A vizualization of the SNVs", message=FALSE, warning=FALSE}
+```{r fig.width=9,fig.height=8, fig.show=TRUE, echo=FALSE, fig.subcap="A vizualization of the SNVs Positition in the Transcript Isoforms", message=FALSE, warning=FALSE}
 # will include #gff=params$gff to make to gene names 
 snpReportR::gene_tracks(vcf_s4 = params$vcf.s4[top5.coding], txdb=params$txdb)
 ```
@@ -567,24 +600,34 @@ subset_cts <- cts_file %>%
 
 subset_cts %>% 
   mutate_at(vars(matches(".bam")), ~round(., digits = 2)) %>%
-  kableExtra::kbl() %>%
-  # kableExtra:: kable_material(c("striped", "hover")) %>%
-  kableExtra::kable_styling(bootstrap_options = c("striped", "hover"))
+  DT::datatable(.,
+               class = 'cell-border stripe',
+                caption = "Table 7. Expression of Gene Variants in the RNAseq",
+                extensions = c('FixedColumns',"FixedHeader"),
+                options = list(scrollX = TRUE, 
+                         paging=TRUE,
+                         fixedHeader=TRUE))
+  # kableExtra::kbl() %>%
+  # # kableExtra:: kable_material(c("striped", "hover")) %>%
+  # kableExtra::kable_styling(bootstrap_options = c("striped", "hover"))
 ```
 
-```{r echo=FALSE, fig.height=5, fig.width=5, fig.show=TRUE, fig.cap="Expression of the genes with pathogenic variants identified."}
+```{r echo=FALSE, fig.height=4, fig.width=4, fig.show=TRUE, fig.cap="Expression of the genes with pathogenic variants identified."}
 subset_cts.long <- subset_cts %>% 
   gather( Sample,Counts, -Symbol, -GeneID) %>% 
   mutate(Group=stringr::str_split_fixed(Sample, pattern = "_", n=3)[,2])
 
 
 violins <- ggplot(subset_cts.long, aes(x=Symbol, y=Counts, fill=Group)) +
-  geom_violin(draw_quantiles = c(0.5)) +
-  # facet_wrap(~Symbol) +
+  # geom_violin(draw_quantiles = c(0.5)) +
+  geom_boxplot(color="black", size=0.25) +
+  # facet_wrap(~Symbol,scale="free", nrow=length(genes)) +
   labs(title="Expression of Genes with Possible Pathogenic Variants") +
   theme_classic() +
   theme(panel.border = element_rect(color="black", fill=NA),
         strip.text = element_text(size=16, face="bold"),
+        plot.margin = margin(t = 5, r = 5, b = 5, l = 5, "mm"),
+        panel.spacing = unit(8, "mm"),
         axis.text.y = element_text(angle = 0, hjust=1, vjust=1,size=10),
         axis.text.x = element_text(angle = 0, hjust=1, vjust=1),
         legend.position = "bottom",
@@ -592,7 +635,9 @@ violins <- ggplot(subset_cts.long, aes(x=Symbol, y=Counts, fill=Group)) +
         legend.title = element_blank())
 
 violins %>% 
-  plotly::ggplotly(width=900, height=700)
+  #width = 1500,height = 1500, originalData=TRUE
+  plotly::ggplotly(width=800) %>% 
+  plotly::layout(boxmode='group')
 ```
 
 ## DE genes by condition
@@ -602,15 +647,16 @@ violins %>%
 diff.ex <- params$degs
 
 # Filter significant results
-diff.ex<-diff.ex[which(diff.ex$PValue<0.05),]
+diff.ex<-diff.ex[which(diff.ex$FDR<0.05),]
+
 
 # Sort significant results by log fold change
 diff.ex<-diff.ex[order(diff.ex$logFC, decreasing = T),]
 
 # Extract top (greatest logFC) five upregulated and downregulated genes
-top.diff.ex.up<-head(diff.ex, n=10)
-top.diff.ex.down<-tail(diff.ex, n=10)
-top.diff.ex<-rbind(top.diff.ex.up, top.diff.ex.down)
+# top.diff.ex.up<-head(diff.ex, n=10)
+# top.diff.ex.down<-tail(diff.ex, n=10)
+# top.diff.ex<-rbind(top.diff.ex.up, top.diff.ex.down)
 ```
 
 ```{r echo=FALSE}
@@ -623,12 +669,12 @@ diff.ex %>%
                 caption = "Table 8. Differntial Expression of Gene Variants, possibly pathogenic.",
                 extensions = c('FixedColumns',"FixedHeader"),
                 options = list(scrollX = TRUE, 
-                         paging=FALSE,
+                         paging=TRUE,
                          fixedHeader=TRUE))
 ```
 
 ```{r echo=FALSE}
-top.diff.ex %>% 
+diff.ex %>% 
   mutate_at(vars(logFC:F, ), ~round(., digits = 2)) %>% 
   mutate_at(vars(PValue, ), ~round(., digits = 4)) %>% 
   DT::datatable(.,
@@ -636,8 +682,30 @@ top.diff.ex %>%
                 caption = "Table 9. Resutls for 20 Most Differentially Expressed Genes",
                 extensions = c('FixedColumns',"FixedHeader"),
                 options = list(scrollX = TRUE, 
-                         paging=FALSE,
+                         paging=TRUE,
                          fixedHeader=TRUE))
+```
+
+```{r echo=FALSE, fig.show=TRUE, fig.height=5,fig.width=5}
+de <- diff.ex
+de$fill <- ifelse(diff.ex$logFC > 1, "Up-Regulated", "Down-Regulated")
+
+volcano <- ggplot(de, aes(x=logFC, y=-log10(FDR), fill=fill, color=fill, group=Symbol)) +
+  geom_point() +
+  theme_classic() +
+  scale_color_manual(values=c("red","blue")) +
+  theme(panel.border = element_rect(color="black", fill=NA),
+        strip.text = element_text(size=16, face="bold"),
+        plot.margin = margin(t = 5, r = 5, b = 5, l = 5, "mm"),
+        panel.spacing = unit(8, "mm"),
+        axis.text.y = element_text(angle = 0, hjust=1, vjust=1,size=10),
+        axis.text.x = element_text(angle = 0, hjust=1, vjust=1),
+        legend.position = "bottom",
+        legend.text = element_text(size=12),
+        legend.title = element_blank())
+
+volcano %>% 
+  plotly::ggplotly(width = 700, height = 500, tooltip=c("y","x","colour","group"))
 ```
 
 
