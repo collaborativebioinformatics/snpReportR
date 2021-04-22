@@ -2,15 +2,15 @@
 #Jenny Smith
 #4/11/21
 
-library(dplyr)
-library(tidyr)
-library(rmarkdown)
-library(here)
-library(snpReportR)
+suppressPackageStartupMessages(library(dplyr))
+suppressPackageStartupMessages(library(tidyr))
+suppressPackageStartupMessages(library(rmarkdown))
+suppressPackageStartupMessages(library(here))
+suppressPackageStartupMessages(library(snpReportR))
 
 #Step 0.
 #Prepare the vcf files  and the RNAseq counts in data/ directory.
-#VCF Data must be saved with {{{ sample_name }}}.vcf or {{{ sample_name }}}.vcf.gz
+#VCF Data must be saved with `{ sample_name }.vcf` or `{ sample_name }.vcf.gz`
 #RNAseq data must have generic names degs_results and counts.
 
 
@@ -18,8 +18,8 @@ library(snpReportR)
 #Configure gmailr package and pandoc
 #https://cran.r-project.org/web/packages/gmailr/vignettes/gmailr.html
 gmailr::gm_auth_configure() #this needs to be run at the top of the script to send emails
-sender         <- 'jennyl.smith.workonly@gmail.com'
-recipients     <- c('jennyl.smith.workonly@gmail.com')
+sender         <- 'my_email@gmail.com'
+recipients     <- c('person1@gmail.com')
 
 #pandoc path: Must provide path to pandoc since Rscript does not natively know where to find it, unlike running rmakrdown::render() interactively
 Sys.setenv(RSTUDIO_PANDOC=rmarkdown::find_pandoc(cache = FALSE)$dir)
@@ -95,13 +95,13 @@ rendered_reports <- lapply(sample_list, function(sample_name){
 send_emails <- lapply(1:length(rendered_reports), function(i){
 
   sample_name <- suppressMessages(names(rendered_reports[[i]]))
-  report <- suppressMessages(rendered_reports[[i]])
+  report <- suppressMessages(unlist(rendered_reports[[i]]))
   email_message <- blastula::render_email(here("inst/templates/Email_Body_v2_JSmith.Rmd"))
   email <- gmailr::gm_mime() %>%
         gmailr::gm_to(recipients) %>%
         gmailr::gm_from(sender) %>%
         gmailr::gm_subject("snpReportR") %>%
-        gmailr::gm_html_body(email_message$html_html)
+        gmailr::gm_html_body(email_message$html_html) %>%
         gmailr::gm_attach_file(report)
         # gmailr::gm_attach_file(here::here("snpReporter_logo.png"),id = "foobar")
 
@@ -114,7 +114,7 @@ send_emails <- lapply(1:length(rendered_reports), function(i){
 
 # Notes and Issues
 
-#ISSUE: if using the pre-build dataset in snpReportR::setup(),
+#ISSUE: if using the pre-built dataset in snpReportR::setup(),
 #inputting the `snpReportR::counts_results` and snpReporR::degs_results object results with the entire dataframe printed out to this R script.
 #This makes the script too large (>5Mb) to open in Rstudio...
 #Not sure how to address this, bc that actually makes the script more reproducible...

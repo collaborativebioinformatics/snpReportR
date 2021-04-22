@@ -448,7 +448,7 @@ bar.plot <- ggplot(top.gene.expn.val, aes(tidytext::reorder_within(Gene.rnaSeqRe
   theme_classic() +
   labs(x="Tissue", y="Log2 Expression Score", title="Expression in Normal Tissues (TPM)") +
   # scale_x_discrete(labels=top.gene.expn.val$Gene.rnaSeqResults.tissue) +
-  facet_wrap(~Gene.symbol, scales="free_y") + # ncol=nc,nrow=nr
+  facet_wrap(~Gene.symbol, scales="free_y", ncol=2) + # ncol=nc,nrow=nr
   theme(panel.border = element_rect(color="black", fill=NA),
         strip.text = element_text(size=16, face="bold"),
         plot.margin = margin(t = 5, r = 5, b = 5, l = 0, "mm"),
@@ -693,7 +693,7 @@ de$fill <- ifelse(diff.ex$logFC > 1, "Up-Regulated", "Down-Regulated")
 volcano <- ggplot(de, aes(x=logFC, y=-log10(FDR), fill=fill, color=fill, group=Symbol)) +
   geom_point() +
   theme_classic() +
-  scale_color_manual(values=c("red","blue")) +
+  scale_color_manual(values=c("Up-Regulated"="red","Down-Regulated"="blue")) +
   theme(panel.border = element_rect(color="black", fill=NA),
         strip.text = element_text(size=16, face="bold"),
         plot.margin = margin(t = 5, r = 5, b = 5, l = 5, "mm"),
