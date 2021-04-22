@@ -79,7 +79,7 @@ my_reports
 └── DRR131593_dx.variants.HC_hard_cutoffs_snpReport.html
 ```
 
-The setup script will also generate HTML formatted emails using `blastula` R package, which are sent through gmail API application run by `gmailr` package. An example of the output is here below:
+The setup script will also generate HTML formatted emails using `blastula` R package, which are sent through gmail API application run by `gmailr` package. The HTML report will be sent as an attachment to the email. An example of the email message is below:
 
 ![](logos/example_blastula_email.png)
 
